@@ -4,12 +4,12 @@ This version uses React, Redux, Express, Passport, and PostgreSQL (a full list o
 
 We **STRONGLY** recommend following these instructions carefully. It's a lot, and will take some time to set up, but your life will be much easier this way in the long run.
 
-## Use the Template for This Repository (Don't Clone)
+## Use the Template for This Repository (Don't Clone) //DONE 
 
 - Don't Fork or Clone. Instead, click the `Use this Template` button, and make a copy to your personal account. Make the project `PUBLIC`!
 
 
-## Prerequisites
+## Prerequisites //DONE 
 
 Before you get started, make sure you have the following software installed on your computer:
 
@@ -17,7 +17,7 @@ Before you get started, make sure you have the following software installed on y
 - [PostrgeSQL](https://www.postgresql.org/)
 - [Nodemon](https://nodemon.io/)
 
-## Create database and table
+## Create database and table //DONE 
 
 Create a new database called `prime_app` and create a `user` table:
 
@@ -31,7 +31,7 @@ CREATE TABLE "user" (
 
 If you would like to name your database something else, you will need to change `prime_app` to the name of your new database name in `server/modules/pool.js`
 
-## Development Setup Instructions
+## Development Setup Instructions //DONE except random string 
 
 - Run `npm install`
 - Create a `.env` file at the root of the project and paste this line into the file:
@@ -40,7 +40,7 @@ If you would like to name your database something else, you will need to change 
   ```
   While you're in your new `.env` file, take the time to replace `superDuperSecret` with some long random string like `25POUbVtx6RKVNWszd9ERB9Bb6` to keep your application secure. Here's a site that can help you: [https://passwordsgenerator.net/](https://passwordsgenerator.net/). If you don't do this step, create a secret with less than eight characters, or leave it as `superDuperSecret`, you will get a warning.
 - Start postgres if not running already by using `brew services start postgresql`
-- Run `npm run server`
+- Run `npm run server` - changed proxy/server to 5007 
 - Run `npm run client`
 - Navigate to `localhost:3000`
 
