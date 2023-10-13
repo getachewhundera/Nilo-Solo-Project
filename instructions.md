@@ -13,9 +13,9 @@ We **STRONGLY** recommend following these instructions carefully. It's a lot, an
 
 Before you get started, make sure you have the following software installed on your computer:
 
-- [Node.js](https://nodejs.org/en/)
-- [PostrgeSQL](https://www.postgresql.org/)
-- [Nodemon](https://nodemon.io/)
+- [Node.js](https://nodejs.org/en/) //DONE
+- [PostrgeSQL](https://www.postgresql.org/) //DONE
+- [Nodemon](https://nodemon.io/)  //DONE
 
 ## Create database and table //DONE 
 
@@ -77,13 +77,13 @@ Before pushing to Heroku, run `npm run build` in terminal. This will create a bu
 - Run `npm start`
 - Navigate to `localhost:5000`
 
-## Lay of the Land
+## Lay of the Land //DONE 
 
 There are a few videos linked below that show a walkthrough the client and sever setup to help acclimatize to the boilerplate. Please take some time to watch the videos in order to get a better understanding of what the boilerplate is like.
 
-- [Initial Set](https://vimeo.com/453297271)
-- [Server Walkthrough](https://vimeo.com/453297212)
-- [Client Walkthrough](https://vimeo.com/453297124)
+- [Initial Set](https://vimeo.com/453297271) //DONE 
+- [Server Walkthrough](https://vimeo.com/453297212) //DONE 
+- [Client Walkthrough](https://vimeo.com/453297124) //DONE 
 
 Directory Structure:
 
