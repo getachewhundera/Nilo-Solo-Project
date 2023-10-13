@@ -33,9 +33,9 @@ function RegisterForm() {
           {errors.registrationMessage}
         </h3>
       )}
+      {/* added the inputs for first and last name  */}
       <div>
-  {/* added the inputs for first and last name  */}
-      <label htmlFor="firstname">
+        <label htmlFor="firstname">
           First Name:
           <input
             type="text"
@@ -45,7 +45,8 @@ function RegisterForm() {
             onChange={(event) => setFirstname(event.target.value)}
           />
         </label>
-
+      </div>
+      <div>
         <label htmlFor="lastname">
           Last name:
           <input
@@ -56,7 +57,8 @@ function RegisterForm() {
             onChange={(event) => setLastname(event.target.value)}
           />
         </label>
-
+      </div>
+      <div>
         <label htmlFor="username">
           Username:
           <input
