@@ -19,8 +19,8 @@ function RegisterForm() {
       payload: {
         username: username,
         password: password,
-        firstname: firstname, 
-        lastname: lastname, 
+        firstname: firstname, //added the firstname property to get dispatched. 
+        lastname: lastname, //added the lastname property to get dispatched. 
       },
     });
   }; // end registerUser
@@ -34,6 +34,7 @@ function RegisterForm() {
         </h3>
       )}
       <div>
+  {/* added the inputs for first and last name  */}
       <label htmlFor="firstname">
           First Name:
           <input
