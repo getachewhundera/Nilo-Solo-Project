@@ -26,14 +26,14 @@ import ViewMyListPage from '../ViewMyListPage/ViewMyListPage';
 import CompletedListPage from '../CompletedListPage/CompletedListPage';
 import MapPage from '../MapPage/MapPage';
 import UploadPage from '../UploadPage/UploadPage';
-import UploadSuccessfulPag from '../UploadSuccessfulPage/UploadSuccessfulPage.jsx'; 
+import UploadSuccessfulPage from '../UploadSuccessfulPage/UploadSuccessfulPage.jsx'; 
 
 
 
 
 
 import './App.css';
-import UploadSuccessfulPage from '../UploadSuccessfulPage/UploadSuccessfulPage.jsx';
+
 
 function App() {
   const dispatch = useDispatch();

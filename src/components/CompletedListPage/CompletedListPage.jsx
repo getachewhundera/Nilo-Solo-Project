@@ -1,7 +1,8 @@
 import React from "react";
 
 
-import MyListButtons from "../../MyListButtons/MyListButtons";
+
+import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../../MyListButtons/MyListButtons.jsx";
 
 
 
@@ -12,9 +13,13 @@ function CompletedListPage() {
 
 
     return (
-        <> 
-        <MyListButtons />
-        <h1> this is the Completed List Item Page. </h1>
+        <>
+            <AddListItemButton />
+            <ViewMyListButton />
+            <CompletedButton />
+            <MapPageButton />
+
+            <h1> this is the Completed List Item Page. </h1>
 
 
         </>

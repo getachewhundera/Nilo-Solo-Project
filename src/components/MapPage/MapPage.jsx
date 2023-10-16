@@ -1,6 +1,6 @@
 import React from "react";
 
-import MyListButtons from "../../MyListButtons/MyListButtons";
+import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../../MyListButtons/MyListButtons";
 
 
 
@@ -14,7 +14,10 @@ function MapPage() {
 
     return (
         <> 
-        <MyListButtons />
+        <AddListItemButton/>
+        <ViewMyListButton />
+        <CompletedButton />
+        <MapPageButton />
         <h1> this is the Map Page. </h1>
 
 

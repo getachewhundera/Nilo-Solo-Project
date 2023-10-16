@@ -1,16 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Buttons() {
 
+
+export function HomeButton() {
     return (
-        <div className="buttons-container">
-
-            <Link to="/UserPage"><button> My Feed </button></Link>
-            <Link to="/ViewMyListPage"><button> View My List </button></Link>
-            <Link to="/UploadPage"><button> Upload </button></Link>
-        </div>
+        <Link to="/UserPage"><button> My Feed </button></Link>
     );
-}
+};
+export function ViewMyListPageButton() {
+    return (
+        <Link to="/ViewMyListPage"><button> View My List </button></Link>
+    );
+};
 
-export default Buttons;
+export function UploadPageButton() {
+    return (
+        <Link to="/UploadPage"><button> Upload </button></Link>
+    );
+};
+
+
+
+
