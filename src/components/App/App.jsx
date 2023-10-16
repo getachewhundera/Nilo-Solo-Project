@@ -20,8 +20,20 @@ import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 
-//NewPages 
+//NewPages
+import AddListItemPage from '../AddListItemPage/AddListItemPage';
+import ViewMyListPage from '../ViewMyListPage/ViewMyListPage';
+import CompletedListPage from '../CompletedListPage/CompletedListPage';
+import MapPage from '../MapPage/MapPage';
+import UploadPage from '../UploadPage/UploadPage';
+import UploadSuccessfulPag from '../UploadSuccessfulPage/UploadSuccessfulPage.jsx'; 
+
+
+
+
+
 import './App.css';
+import UploadSuccessfulPage from '../UploadSuccessfulPage/UploadSuccessfulPage.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -62,22 +74,23 @@ function App() {
           </ProtectedRoute>
 
           <ProtectedRoute path="/AddListItemPage" >
-            <UserPage />
+            <AddListItemPage />
           </ProtectedRoute>
           <ProtectedRoute path="/ViewMyListPage" >
-            <UserPage />
+            <ViewMyListPage />
           </ProtectedRoute>
           <ProtectedRoute path="/CompletedListPage" >
-            <UserPage />
+            <CompletedListPage />
           </ProtectedRoute>
           <ProtectedRoute path="/MapPage" >
-            <UserPage />
-          </ProtectedRoute>
-          <ProtectedRoute path="/UserPage" >
-            <UserPage />
+            <MapPage />
           </ProtectedRoute>
           <ProtectedRoute path="/UploadPage" >
-            <UserPage />
+            <UploadPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute path="/UploadSuccessfulPage" >
+            <UploadSuccessfulPage />
           </ProtectedRoute>
 
           <ProtectedRoute
