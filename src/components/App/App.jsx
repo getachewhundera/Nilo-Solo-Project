@@ -20,6 +20,7 @@ import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 
+//NewPages 
 import './App.css';
 
 function App() {
@@ -57,6 +58,25 @@ function App() {
             exact
             path="/user"
           >
+            <UserPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute path="/AddListItemPage" >
+            <UserPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/ViewMyListPage" >
+            <UserPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/CompletedListPage" >
+            <UserPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/MapPage" >
+            <UserPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/UserPage" >
+            <UserPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/UploadPage" >
             <UserPage />
           </ProtectedRoute>
 
