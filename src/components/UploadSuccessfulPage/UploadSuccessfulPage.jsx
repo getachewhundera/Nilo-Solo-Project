@@ -6,13 +6,15 @@ import { Link } from "react-router-dom"
 //Material UI dialog box 
 import Button from '@mui/material/Button';
 
-
+import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
 
 function UploadSuccessfulPage() {
 
 
     return(
         <>
+           <ViewMyListPageButton />
+            <UploadPageButton />
         <h1> Upload complete! </h1> 
 
 

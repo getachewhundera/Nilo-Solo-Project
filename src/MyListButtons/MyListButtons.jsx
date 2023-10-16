@@ -12,7 +12,7 @@ export function AddListItemButton() {
 
 export function ViewMyListButton() {
     return (
-        <Link to="/ViewMyListPage"><button> View My List </button></Link>
+        <Link to="/ViewMyListPage"><button> List </button></Link>
     );
 };
 export function CompletedButton() {
