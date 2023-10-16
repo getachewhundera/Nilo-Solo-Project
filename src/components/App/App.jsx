@@ -20,7 +20,20 @@ import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 
+//NewPages
+import AddListItemPage from '../AddListItemPage/AddListItemPage';
+import ViewMyListPage from '../ViewMyListPage/ViewMyListPage';
+import CompletedListPage from '../CompletedListPage/CompletedListPage';
+import MapPage from '../MapPage/MapPage';
+import UploadPage from '../UploadPage/UploadPage';
+import UploadSuccessfulPage from '../UploadSuccessfulPage/UploadSuccessfulPage.jsx'; 
+
+
+
+
+
 import './App.css';
+
 
 function App() {
   const dispatch = useDispatch();
@@ -58,6 +71,26 @@ function App() {
             path="/user"
           >
             <UserPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute path="/AddListItemPage" >
+            <AddListItemPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/ViewMyListPage" >
+            <ViewMyListPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/CompletedListPage" >
+            <CompletedListPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/MapPage" >
+            <MapPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/UploadPage" >
+            <UploadPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute path="/UploadSuccessfulPage" >
+            <UploadSuccessfulPage />
           </ProtectedRoute>
 
           <ProtectedRoute
