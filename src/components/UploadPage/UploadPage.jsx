@@ -13,6 +13,17 @@ import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteBut
 
 function UploadPage() {
 
+    const [Description, setDescription] = useState('');
+    const [location, setLocation] = useState('');
+    const [price, setPrice] = useState(Number['']);
+    const [rating, setRating] = useState(Number['']);
+    const [individualSelection, setIndividualSelecton] = useState('');
+
+    const handleSubmit = () => {
+
+    };
+
+
 
 
 
@@ -23,12 +34,26 @@ function UploadPage() {
             <ViewMyListPageButton />
             <UploadPageButton />
 
-            <Button
-                component={Link}
-                to={"/UploadSuccessfulPage"}
-                variant="contained"
-                color="primary"
-            > Upload </Button>
+            <h1> Upload files </h1>
+
+            <form>
+                <input
+                    type="text"
+                    placeholder="Description"
+                    Value />
+
+
+                <Button
+                    component={Link}
+                    to={"/UploadSuccessfulPage"}
+                    variant="contained"
+                    color="primary"
+                > Upload </Button>
+
+            </form>
+
+
+
 
 
         </>
