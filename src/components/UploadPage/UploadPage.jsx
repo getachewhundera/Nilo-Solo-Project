@@ -10,14 +10,20 @@ import Button from '@mui/material/Button';
 
 
 import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
-import { use } from "passport";
+
 
 
 
 function UploadPage() {
+    //State variable for file uploads 
     const [file, setFile] = useState(null)
-    const [ progress, setProgress ] = useState({ started: false, pc: 0 }); 
-    const [ msg, setMsg ] = useState(null); 
+
+    //storing the url of the preview 
+    const [previewUrl, setPreviewUrl] = useState(null);
+
+    // const [ progress, setProgress ] = useState({ started: false, pc: 0 }); 
+    // const [ msg, setMsg ] = useState(null); 
+
     const [Description, setDescription] = useState('');
     const [houseNumber, setHouseNumber] = useState('');
     const [streetAddress, setStreetAddress] = useState('');
@@ -29,27 +35,46 @@ function UploadPage() {
     const [rating, setRating] = useState(Number['']);
     const [individualSelection, setIndividualSelecton] = useState('');
 
+//triggered when user selects a file 
+    const fileChangedHandler = (event) => {
+        const file = event.target.files[0]; //assumes a single file is selected 
+        setFile(file); //updates the file state with the selected file 
 
-    function handleFileUpload() {
-        if (!file) {
-            console.log("No file selected")
-            return; 
-        }
+        const reader = new FileReader();  //allows you to read the contents of the selected file for previewing. 
+        //event handler that is called when the readAsDataURL operation is completed. updates the previewUrl with the data URL of the loaded file(used for previewing). 
+        reader.onloadend = () => {         
+            setPreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
 
-        const fd = new FormData(); 
-        fd.append('file', file); 
+    const submitHandler = () => {
+        // Dispatch the action to upload the file
+        dispatch(uploadFileAction({ file, description }));
+    };
 
 
-        axios.post('http://httpbin.org/post', fd, {
-            onUploadProgress: (progressEvent) => { console.log(progressEvent.progress*100) },  
-            headers: {
-                "Custom-Header": "value", 
-            } 
-        })
-        .then(res => console.log(res.data))
-        .catch(err => console.error(err)); 
 
-    }
+    // function handleFileUpload() {
+    //     if (!file) {
+    //         console.log("No file selected")
+    //         return; 
+    //     }
+
+    //     const fd = new FormData(); 
+    //     fd.append('file', file); 
+
+
+    //     axios.post('http://httpbin.org/post', fd, {
+    //         onUploadProgress: (progressEvent) => { console.log(progressEvent.progress*100) },  
+    //         headers: {
+    //             "Custom-Header": "value", 
+    //         } 
+    //     })
+    //     .then(res => console.log(res.data))
+    //     .catch(err => console.error(err)); 
+
+    // }
 
 
     const handleChangeFor = (value) => {
@@ -92,12 +117,15 @@ function UploadPage() {
 
             <h1> Upload files </h1>
 
-            <input
-                type="file"
-                name="file"
-                onChange={(e) => { setFile(e.target.file[0]) }}
-            />
-            <button onClick={handleFileUpload}> Upload Image </button>
+            <div className="upload-container">
+                <div className="image-preview">
+                    {previewUrl && <img src={previewUrl} alt="Preview" />}
+                    {!previewUrl && <p>Please select an image or video.</p>}
+                </div>
+                <input type="file" onChange={fileChangedHandler} />
+
+                <button onClick={submitHandler}>Upload File </button>
+            </div>
 
             <form>
 
