@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom"
 import { useState } from "react";
+import axios from "axios";
 
 
 
@@ -14,7 +15,9 @@ import { use } from "passport";
 
 
 function UploadPage() {
-    const [image, setImage] = useState('')
+    const [file, setFile] = useState(null)
+    const [ progress, setProgress ] = useState({ started: false, pc: 0 }); 
+    const [ msg, setMsg ] = useState(null); 
     const [Description, setDescription] = useState('');
     const [houseNumber, setHouseNumber] = useState('');
     const [streetAddress, setStreetAddress] = useState('');
@@ -27,9 +30,25 @@ function UploadPage() {
     const [individualSelection, setIndividualSelecton] = useState('');
 
 
-    const handleImage = () => {
-        console.log('file event happened');
-        setImage('');
+    function handleFileUpload() {
+        if (!file) {
+            console.log("No file selected")
+            return; 
+        }
+
+        const fd = new FormData(); 
+        fd.append('file', file); 
+
+
+        axios.post('http://httpbin.org/post', fd, {
+            onUploadProgress: (progressEvent) => { console.log(progressEvent.progress*100) },  
+            headers: {
+                "Custom-Header": "value", 
+            } 
+        })
+        .then(res => console.log(res.data))
+        .catch(err => console.error(err)); 
+
     }
 
 
@@ -54,7 +73,7 @@ function UploadPage() {
             type: 'SEND_POST_SERVER', payload: image, Description, houseNumber, streetAddress,
             city, state, zipcode, country, price, rating, individualSelection
         });
-        setImage(null);
+        setFile(null);
         setDescription(null);
         setLocation(null);
         setPrice('');
@@ -73,13 +92,16 @@ function UploadPage() {
 
             <h1> Upload files </h1>
 
+            <input
+                type="file"
+                name="file"
+                onChange={(e) => { setFile(e.target.file[0]) }}
+            />
+            <button onClick={handleFileUpload}> Upload Image </button>
+
             <form>
 
-                <input
-                    type="file"
-                    name="file"
-                    onChange={handleImage}
-                />
+
                 <input
                     type="text"
                     style={{ width: '100px', height: '30px' }}
