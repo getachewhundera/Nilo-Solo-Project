@@ -16,10 +16,10 @@ import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteBut
 
 function UploadPage() {
     //State variable for file uploads 
-    const [file, setFile] = useState(null)
+    const [files, setFiles] = useState(null)
 
     //storing the url of the preview 
-    const [previewUrl, setPreviewUrl] = useState(null);
+    const [previewUrls, setPreviewUrls] = useState(null);
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     // const [ progress, setProgress ] = useState({ started: false, pc: 0 }); 
     // const [ msg, setMsg ] = useState(null); 
@@ -35,26 +35,38 @@ function UploadPage() {
     const [rating, setRating] = useState(Number['']);
     const [individualSelection, setIndividualSelecton] = useState('');
 
-//triggered when user selects a file 
-    const fileChangedHandler = (event) => {
-        const file = event.target.files[0]; //assumes a single file is selected 
-        setFile(file); //updates the file state with the selected file 
 
-        const reader = new FileReader();  //allows you to read the contents of the selected file for previewing. 
-        //event handler that is called when the readAsDataURL operation is completed.
-        //  updates the previewUrl with the data URL of the loaded file(used for previewing). 
-        reader.onloadend = () => {         
-            setPreviewUrl(reader.result);
-        };
-        reader.readAsDataURL(file);
+
+    const fileChangedHandler = (event) => {
+        const selectedFiles = event.target.files;
+        let newFilesArray = [...files]; // Create a copy of the current files array
+        let newPreviewUrlsArray = [...previewUrls]; // Create a copy of the current preview URLs array
+
+        // Loop through all selected files
+        for (let i = 0; i < selectedFiles.length; i++) {
+            newFilesArray.push(selectedFiles[i]); // Add the file to the new files array
+
+            // Read the file for preview
+            const reader = new FileReader();
+            reader.onload = () => {
+                newPreviewUrlsArray.push(reader.result); // Add the data URL to the new preview URLs array
+            };
+            reader.readAsDataURL(selectedFiles[i]);
+        }
+
+        // Update state with the new arrays
+        setFiles(newFilesArray);
+        setPreviewUrls(newPreviewUrlsArray);
         setIsFileUploaded(true);
     };
 
-    const submitHandler = () => {
-        // Dispatch the action to upload the file
-        dispatch(uploadFileAction({ file, description }));
+    const goToNextPreview = () => {
+        setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % files.length); // Go to the next preview, loop back to the first after the last
     };
 
+    const goToPreviousPreview = () => {
+        setCurrentPreviewIndex((prevIndex) => (prevIndex - 1 + files.length) % files.length); // Go to the previous preview, loop back to the last after the first
+    };
 
     const handleCancelUpload = () => {
         //  cancel the file upload and reset state variables
@@ -63,8 +75,8 @@ function UploadPage() {
         setIsFileUploaded(false);
     };
 
-    const handleChangeFile = () => { 
-        setFile(''); 
+    const handleChangeFile = () => {
+        setFile('');
     }
 
 
@@ -86,12 +98,17 @@ function UploadPage() {
         event.preventDefault();
         console.log('action was dispatched')
         dispatch({
-            type: 'SEND_POST_SERVER', payload: image, Description, houseNumber, streetAddress,
+            type: 'SEND_POST_SERVER', payload: files, Description, houseNumber, streetAddress,
             city, state, zipcode, country, price, rating, individualSelection
         });
-        setFile(null);
-        setDescription(null);
-        setLocation(null);
+        setFiles(null);
+        setDescription('');
+        setHouseNumber(''); 
+        setStreetAddress(''); 
+        setCity(''); 
+        setState(''); 
+        setZipCode(''); 
+        setCountry(''); 
         setPrice('');
         setRating('');
         setIndividualSelecton('');
@@ -111,25 +128,22 @@ function UploadPage() {
             <div className="upload-container">
                 {!isFileUploaded && (
                     <>
-                        {/* <button className="button-left">Left</button>
-                        <button className="button-right">Right</button> */}
-                     
-                        <input type="file" onChange={fileChangedHandler} />
+                        <input type="file" onChange={fileChangedHandler} multiple /> {/* Allow multiple files to be selected */}
                     </>
                 )}
-                {isFileUploaded && (
+                {isFileUploaded && previewUrls.length > 0 && ( // Check if there are any previews
                     <div className="image-preview">
-                        {previewUrl && <img src={previewUrl} alt="Preview" />}
-                        {!previewUrl && <p>Please select an image or video.</p>}
-                        <button className="button-left">Left</button>
-                        <button className="button-right">Right</button>
+                        <img src={previewUrls[currentPreviewIndex]} alt="Preview" /> {/* Show the current preview */}
+                        <button className="button-left" onClick={goToPreviousPreview}>Left</button>
+                        <button className="button-right" onClick={goToNextPreview}>Right</button>
                         <button className="plus-button" onClick={handleChangeFile}>+</button>
                         <button className="cancel-button" onClick={handleCancelUpload}>X</button>
                     </div>
                 )}
-                 <button onClick={submitHandler}>Upload File </button>
+                {/* <button onClick={handleChangeFile}>Upload File</button> */}
             </div>
 
+            <div className="formContainer"> 
 
             <form>
 
@@ -146,42 +160,42 @@ function UploadPage() {
                     style={{ width: '100px', height: '30px' }}
                     placeholder="House Number"
                     value={houseNumber || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
                 <input
                     type="text"
                     style={{ width: '100px', height: '30px' }}
                     placeholder="Street Address"
                     value={streetAddress || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
                 <input
                     type="text"
                     style={{ width: '100px', height: '30px' }}
                     placeholder="City"
                     value={city || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
                 <input
                     type="text"
                     style={{ width: '100px', height: '30px' }}
                     placeholder="State"
                     value={state || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
                 <input
                     type="number"
                     style={{ width: '100px', height: '30px' }}
                     placeholder="Zipcode"
                     value={zipcode || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
                 <input
                     type="text"
                     style={{ width: '100px', height: '30px' }}
                     placeholder="Country"
                     value={country || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
 
                 <input
@@ -189,7 +203,7 @@ function UploadPage() {
                     style={{ width: '100px', height: '30px' }}
                     placeholder="Price"
                     value={price || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
 
                 <input
@@ -198,14 +212,14 @@ function UploadPage() {
                     min={1} max={10}
                     placeholder="rating: 1-10"
                     value={rating || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
                 <input
                     type="text"
                     style={{ width: '100px', height: '30px' }}
                     placeholder="Solo or Group"
                     value={individualSelection || ''}
-                    onChange={(event) => handleChangeFor(event.target.value)} 
+                    onChange={(event) => handleChangeFor(event.target.value)}
                 />
 
 
@@ -218,6 +232,8 @@ function UploadPage() {
                 > Upload </Button>
 
             </form>
+
+            </div> 
 
 
 
