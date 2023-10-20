@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom"
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 
 
@@ -15,12 +16,15 @@ import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteBut
 
 
 function UploadPage() {
-    //State variable for file uploads 
-    const [files, setFiles] = useState(null)
 
+    const dispatch = useDispatch(); 
+    //State variable for file uploads 
+    const [files, setFiles] = useState([])
+
+    const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0); // initialized with 0
     //storing the url of the preview 
-    const [previewUrls, setPreviewUrls] = useState(null);
-    const [isFileUploaded, setIsFileUploaded] = useState(false);
+    const [previewUrls, setPreviewUrls] = useState([]);
+    const [isFileUploaded, setIsFileUploaded] = useState(false); // boolean. no files are being uploaded initially 
     // const [ progress, setProgress ] = useState({ started: false, pc: 0 }); 
     // const [ msg, setMsg ] = useState(null); 
 
@@ -70,13 +74,13 @@ function UploadPage() {
 
     const handleCancelUpload = () => {
         //  cancel the file upload and reset state variables
-        setFile(null);
-        setPreviewUrl(null);
-        setIsFileUploaded(false);
+        setFiles([]); // reset to initial state. 
+        setPreviewUrls([]); // reset to initial state
+        setIsFileUploaded(false); // no files uploaded
     };
 
     const handleChangeFile = () => {
-        setFile('');
+        setFiles([]); //reset to initial state. 
     }
 
 
