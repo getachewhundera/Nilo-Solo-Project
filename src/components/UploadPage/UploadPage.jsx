@@ -74,6 +74,7 @@ function UploadPage() {
         setFiles([]);
         setPreviewUrls([]);
         setIsFileUploaded(false);
+        setCurrentPreviewIndex(0); // Reset the preview index
     };
 
 
@@ -155,7 +156,7 @@ function UploadPage() {
                                         type="text"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Description"
-                                        Value={Description}
+                                        value={Description}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
                                     <input
