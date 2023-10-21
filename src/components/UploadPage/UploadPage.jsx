@@ -23,7 +23,7 @@ function UploadPage() {
 
     //data within the form that will be sent to the server then database. 
     const [uploadFormData, setUploadFormData] = useState({
-        files: [], 
+        files: [],
         Description: '',
         houseNumber: '',
         streetAddress: '',
@@ -78,33 +78,25 @@ function UploadPage() {
 
 
 
-    const handleChangeFor = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setUploadFormData(prevState => ({
             ...prevState,
             [name]: value
         }));
     };
-    
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('action was dispatched')
         dispatch({
-            type: 'SEND_POST_SERVER', payload: files, Description, houseNumber, streetAddress,
-            city, state, zipcode, country, price, rating, individualSelection
+            type: 'SEND_POST_SERVER', payload: uploadFormData
         });
-        setFiles(null);
-        setDescription('');
-        setHouseNumber('');
-        setStreetAddress('');
-        setCity('');
-        setState('');
-        setZipCode('');
-        setCountry('');
-        setPrice('');
-        setRating('');
-        setIndividualSelecton('');
+     
+
+        uploadFormData.files(null);
+        uploadFormData('')
     };
 
 
@@ -152,7 +144,7 @@ function UploadPage() {
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Description"
                                         value={uploadFormData.Description}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
                                     <input
                                         name="houseNumber"
@@ -160,7 +152,7 @@ function UploadPage() {
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="House Number"
                                         value={uploadFormData.houseNumber || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
                                     <input
                                         name="streetAddress"
@@ -168,7 +160,7 @@ function UploadPage() {
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Street Address"
                                         value={uploadFormData.streetAddress || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
                                     <input
                                         name="city"
@@ -176,7 +168,8 @@ function UploadPage() {
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="City"
                                         value={uploadFormData.city || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
+                                        
                                     />
                                     <input
                                         name="state"
@@ -184,15 +177,15 @@ function UploadPage() {
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="State"
                                         value={uploadFormData.state || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
                                     <input
-                                        name="Zipcode"
+                                        name="zipcode"
                                         type="number"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Zipcode"
                                         value={uploadFormData.zipcode || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
                                     <input
                                         name="country"
@@ -200,7 +193,7 @@ function UploadPage() {
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Country"
                                         value={uploadFormData.country || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
 
                                     <input
@@ -209,7 +202,7 @@ function UploadPage() {
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Price"
                                         value={uploadFormData.price || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
 
                                     <input
@@ -219,7 +212,7 @@ function UploadPage() {
                                         min={1} max={10}
                                         placeholder="rating: 1-10"
                                         value={uploadFormData.rating || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
                                     <input
                                         name="individualSelection"
@@ -227,7 +220,7 @@ function UploadPage() {
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Solo or Group"
                                         value={uploadFormData.individualSelection || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                        onChange={handleChange}
                                     />
 
                                 </div>
