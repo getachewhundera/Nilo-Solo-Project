@@ -126,7 +126,7 @@ function UploadPage() {
                 <form>
                     <div className="grid-container">
                         <div className="grid-item">
-                            <div className="uploadfilecontainer">
+                            <div id="uploadfilecontainer">
                                 <div className="upload-container">
                                     {!isFileUploaded && (
                                         <>
@@ -148,7 +148,7 @@ function UploadPage() {
 
 
                         <div className="grid-item">
-                            <div className="uploadformcontainer">
+                            <div id="uploadformcontainer">
                                 <div className="formContainer">
 
                                     <input

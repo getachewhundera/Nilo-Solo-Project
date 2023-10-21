@@ -4,38 +4,43 @@
     display: grid;
     grid-template-columns: 1fr 1fr; /* two columns of equal width */
     gap: 5px; /*  gap between the two divs */
+    
 }
 
-.grid-item {
+.grid-item #uploadfilecontainer{
     /* Styles for the item */
-}
-
-/* css for files */
-.uploadfilecontainer {
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    justify-content: center;
-    box-sizing: border-box; /*box-sizing is to include the padding and border in elements total width and height*/
-    border: 2px dashed #000;
+    object-fit: cover;  
     position: relative;
-    width: 50%; 
-    height: 700px; 
-    object-fit: cover; 
+    border: 2px dashed #000;
+    min-height: 750px;
 }
 
-
+.grid-item #uploadformcontainer{
+    /* Styles for the item */
+    border: 2px solid black;
+    min-height: 750px;
+}
 
 .image-preview {
-    width: 50%;
-    /* Adjust as needed */
-    position: relative;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    height: 100%; 
+    max-height: 750px; 
+    width: 100%; /*  full width of parent */
+    overflow: hidden; /* img won't overflow */
 }
 
+
 .image-preview img {
-    max-width: 100%;
-    display: block;
+    max-height: 100%; /* image won't go past the contianers height */
+    max-width: 100%; /* img won't go past the containers width  */
+    display: block; /* no space around image */
+    object-fit: contain; /* maintains img ratio */
 }
+
+
+
 
 /* Style the buttons */
 .button-left,
