@@ -16,31 +16,30 @@ import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteBut
 
 
 function UploadPage() {
-    //State variable for file uploads 
-    const [files, setFiles] = useState([])
-
-
+    //State variable for file uploads that are not being sent with the form(to separate them out).
     const [previewUrls, setPreviewUrls] = useState([]);
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
 
-
-    const [Description, setDescription] = useState('');
-    const [houseNumber, setHouseNumber] = useState('');
-    const [streetAddress, setStreetAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [zipcode, setZipCode] = useState('');
-    const [country, setCountry] = useState('');
-    const [price, setPrice] = useState(Number['']);
-    const [rating, setRating] = useState(Number['']);
-    const [individualSelection, setIndividualSelecton] = useState('');
-
+    //data within the form that will be sent to the server then database. 
+    const [uploadFormData, setUploadFormData] = useState({
+        files: [], 
+        Description: '',
+        houseNumber: '',
+        streetAddress: '',
+        city: '',
+        state: '',
+        zipcode: '',
+        country: '',
+        price: Number[''],
+        rating: Number[''],
+        individualSelection: ''
+    });
 
 
     //switched from using for loop to promise loop to allow uploads to happen at the same time. 
     const fileChangedHandler = (event) => {
-        const selectedFiles = Array.from(event.target.files); // directly converting FileList to array
+        const selectedFiles = Array.from(event.target.uploadFormData.files); // directly converting FileList to array
 
         const newPreviewUrlsArray = [];
 
@@ -54,7 +53,7 @@ function UploadPage() {
             });
         })).then(results => {
             const newPreviewUrlsArray = results.map(result => result.status === "fulfilled" ? result.value : null);
-            setFiles(selectedFiles);
+            uploadFormData.files(selectedFiles);
             setPreviewUrls(newPreviewUrlsArray);
             setCurrentPreviewIndex(0); // Reset the preview index
             setIsFileUploaded(true); // Indicate that files are uploaded
@@ -71,7 +70,7 @@ function UploadPage() {
 
     const handleCancelUpload = () => {
         //  cancel the file upload and reset state variables
-        setFiles([]);
+        uploadFormData.files([]);
         setPreviewUrls([]);
         setIsFileUploaded(false);
         setCurrentPreviewIndex(0); // Reset the preview index
@@ -79,19 +78,14 @@ function UploadPage() {
 
 
 
-    const handleChangeFor = (value) => {
-        console.log('event happened');
-        setDescription('');
-        setHouseNumber(Number(value));
-        setStreetAddress('');
-        setCity('');
-        setState('');
-        setZipCode(Number(value));
-        setCountry('');
-        setPrice(Number(value));
-        setRating(Number(value));
-        setIndividualSelecton('');
+    const handleChangeFor = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -131,7 +125,7 @@ function UploadPage() {
                                 <div className="upload-container">
                                     {!isFileUploaded && (
                                         <>
-                                            <input type="file" onChange={fileChangedHandler} multiple />
+                                            <input name="files" type="file" onChange={fileChangedHandler} multiple />
                                         </>
                                     )}
                                     {isFileUploaded && previewUrls.length > 0 && (
@@ -153,76 +147,86 @@ function UploadPage() {
                                 <div className="formContainer">
 
                                     <input
+                                        name="Description"
                                         type="text"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Description"
-                                        value={Description}
+                                        value={uploadFormData.Description}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
                                     <input
+                                        name="houseNumber"
                                         type="number"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="House Number"
-                                        value={houseNumber || ''}
+                                        value={uploadFormData.houseNumber || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
                                     <input
+                                        name="streetAddress"
                                         type="text"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Street Address"
-                                        value={streetAddress || ''}
+                                        value={uploadFormData.streetAddress || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
                                     <input
+                                        name="city"
                                         type="text"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="City"
-                                        value={city || ''}
+                                        value={uploadFormData.city || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
                                     <input
+                                        name="state"
                                         type="text"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="State"
-                                        value={state || ''}
+                                        value={uploadFormData.state || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
                                     <input
+                                        name="Zipcode"
                                         type="number"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Zipcode"
-                                        value={zipcode || ''}
+                                        value={uploadFormData.zipcode || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
                                     <input
+                                        name="country"
                                         type="text"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Country"
-                                        value={country || ''}
+                                        value={uploadFormData.country || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
 
                                     <input
+                                        name="price"
                                         type="number"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Price"
-                                        value={price || ''}
+                                        value={uploadFormData.price || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
 
                                     <input
+                                        name="rating"
                                         type="number"
                                         style={{ width: '100px', height: '30px' }}
                                         min={1} max={10}
                                         placeholder="rating: 1-10"
-                                        value={rating || ''}
+                                        value={uploadFormData.rating || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
                                     <input
+                                        name="individualSelection"
                                         type="text"
                                         style={{ width: '100px', height: '30px' }}
                                         placeholder="Solo or Group"
-                                        value={individualSelection || ''}
+                                        value={uploadFormData.individualSelection || ''}
                                         onChange={(event) => handleChangeFor(event.target.value)}
                                     />
 
@@ -253,6 +257,6 @@ function UploadPage() {
     );
 };
 
-export default UploadPage; 
+export default UploadPage;
 
 //U4
