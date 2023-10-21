@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { useState } from "react";
 import axios from "axios";
 
+import './UploadPage.css';
 
 
 //Material UI dialog box 
@@ -115,136 +116,139 @@ function UploadPage() {
 
 
     return (
-        <>
+        <div id="uploadpage">
 
             <ViewMyListPageButton />
             <UploadPageButton />
 
             <h1> Upload files </h1>
             <div className="mainuploadcontainer">
-
-                <div className="uploadfilecontainer">
-
-                    <div className="upload-container">
-                        {!isFileUploaded && (
-                            <>
-                                <input type="file" onChange={fileChangedHandler} multiple />
-                            </>
-                        )}
-                        {isFileUploaded && previewUrls.length > 0 && (
-                            <div className="image-preview">
-                                <img src={previewUrls[currentPreviewIndex]} alt="Preview" />
-                                <button className="button-left" onClick={goToPreviousPreview}>Left</button>
-                                <button className="button-right" onClick={goToNextPreview}>Right</button>
-                                {/* <button className="plus-button" onClick={handleChangeFile}>+</button> */}
-                                <button className="cancel-button" onClick={handleCancelUpload}>X</button>
+                <form>
+                    <div className="grid-container">
+                        <div className="grid-item">
+                            <div className="uploadfilecontainer">
+                                <div className="upload-container">
+                                    {!isFileUploaded && (
+                                        <>
+                                            <input type="file" onChange={fileChangedHandler} multiple />
+                                        </>
+                                    )}
+                                    {isFileUploaded && previewUrls.length > 0 && (
+                                        <div className="image-preview">
+                                            <img src={previewUrls[currentPreviewIndex]} alt="Preview" />
+                                            <button className="button-left" onClick={goToPreviousPreview}>Left</button>
+                                            <button className="button-right" onClick={goToNextPreview}>Right</button>
+                                            {/* <button className="plus-button" onClick={handleChangeFile}>+</button> */}
+                                            <button className="cancel-button" onClick={handleCancelUpload}>X</button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        )}
+                        </div>
+
+
+                        <div className="grid-item">
+                            <div className="uploadformcontainer">
+                                <div className="formContainer">
+
+                                    <input
+                                        type="text"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="Description"
+                                        Value={Description}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+                                    <input
+                                        type="number"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="House Number"
+                                        value={houseNumber || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="Street Address"
+                                        value={streetAddress || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="City"
+                                        value={city || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="State"
+                                        value={state || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+                                    <input
+                                        type="number"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="Zipcode"
+                                        value={zipcode || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="Country"
+                                        value={country || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+
+                                    <input
+                                        type="number"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="Price"
+                                        value={price || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+
+                                    <input
+                                        type="number"
+                                        style={{ width: '100px', height: '30px' }}
+                                        min={1} max={10}
+                                        placeholder="rating: 1-10"
+                                        value={rating || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        style={{ width: '100px', height: '30px' }}
+                                        placeholder="Solo or Group"
+                                        value={individualSelection || ''}
+                                        onChange={(event) => handleChangeFor(event.target.value)}
+                                    />
+
+                                </div>
+
+                                <Button
+                                    onClick={handleSubmit}
+                                    component={Link}
+                                    to={"/UploadSuccessfulPage"}
+                                    variant="contained"
+                                    color="primary"
+                                > Upload </Button>
+
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div className="uploadformcontainer">
+                </form>
 
 
-                    <div className="formContainer">
 
-                        <form>
-
-
-                            <input
-                                type="text"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="Description"
-                                Value={Description}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-                            <input
-                                type="number"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="House Number"
-                                value={houseNumber || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-                            <input
-                                type="text"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="Street Address"
-                                value={streetAddress || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-                            <input
-                                type="text"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="City"
-                                value={city || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-                            <input
-                                type="text"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="State"
-                                value={state || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-                            <input
-                                type="number"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="Zipcode"
-                                value={zipcode || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-                            <input
-                                type="text"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="Country"
-                                value={country || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-
-                            <input
-                                type="number"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="Price"
-                                value={price || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-
-                            <input
-                                type="number"
-                                style={{ width: '100px', height: '30px' }}
-                                min={1} max={10}
-                                placeholder="rating: 1-10"
-                                value={rating || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-                            <input
-                                type="text"
-                                style={{ width: '100px', height: '30px' }}
-                                placeholder="Solo or Group"
-                                value={individualSelection || ''}
-                                onChange={(event) => handleChangeFor(event.target.value)}
-                            />
-
-
-                            <Button
-                                onClick={handleSubmit}
-                                component={Link}
-                                to={"/UploadSuccessfulPage"}
-                                variant="contained"
-                                color="primary"
-                            > Upload </Button>
-
-                        </form>
-
-                    </div>
-                </div>
             </div>
 
 
 
 
 
-        </>
+        </div>
     );
 };
 
