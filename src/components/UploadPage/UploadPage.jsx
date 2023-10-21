@@ -1,7 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom"
+import * as React from 'react';
+import { Link } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+
+
+
+//Import for dropdown selection for individualselection input. 
+
+import { useTheme } from '@mui/material/styles';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 import './UploadPage.css';
 
@@ -13,9 +23,51 @@ import Button from '@mui/material/Button';
 import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
 
 
-
-
 function UploadPage() {
+
+// For IndividualSelectio dropdown select: 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+const individualSelectOptions = [
+    'Solo',
+    'Group',
+];
+
+function getStyles(selectOption, option, theme) {
+    return {
+        fontWeight:
+            option.indexOf(selectOption) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
+    };
+}
+
+
+const theme = useTheme();
+const [option, setOption] = useState([]);
+
+const handleOptionChange = (event) => {
+    const {
+        target: { value },
+    } = event;
+    setOption(
+        // On autofill we get a stringified value.
+        typeof value === 'string' ? value.split(',') : value,
+    );
+};
+
+
+
+
     //State variable for file uploads that are not being sent with the form(to separate them out).
     const [previewUrls, setPreviewUrls] = useState([]);
     const [isFileUploaded, setIsFileUploaded] = useState(false);
@@ -33,7 +85,7 @@ function UploadPage() {
         country: '',
         price: Number[''],
         rating: Number[''],
-        individualSelection: ''
+        individualSelection: []
     });
 
 
@@ -93,7 +145,7 @@ function UploadPage() {
         dispatch({
             type: 'SEND_POST_SERVER', payload: uploadFormData
         });
-     
+
 
         uploadFormData.files(null);
         uploadFormData('')
@@ -169,7 +221,7 @@ function UploadPage() {
                                         placeholder="City"
                                         value={uploadFormData.city || ''}
                                         onChange={handleChange}
-                                        
+
                                     />
                                     <input
                                         name="state"
@@ -214,14 +266,32 @@ function UploadPage() {
                                         value={uploadFormData.rating || ''}
                                         onChange={handleChange}
                                     />
-                                    <input
-                                        name="individualSelection"
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Solo or Group"
-                                        value={uploadFormData.individualSelection || ''}
-                                        onChange={handleChange}
-                                    />
+
+                                    <FormControl sx={{ m: 1, width: 300 }}>
+                                        <InputLabel id="demo-multiple-option-label">Choose Selection </InputLabel>
+                                        <Select
+                                            labelId="demo-multiple-option-label"
+                                            id="demo-multiple-option"                    
+                                            multiple
+                                            name="individualSelection"
+                                            value={[uploadFormData.option]}
+                                            onChange={handleOptionChange}
+                                            input={<OutlinedInput label="Choose Selection" />}
+                                            MenuProps={MenuProps}
+                                        >
+                                            {individualSelectOptions.map((selectOption) => (
+                                                <MenuItem
+                                                    key={selectOption}
+                                                    value={selectOption}
+                                                    style={getStyles(selectOption, option, theme)}
+                                                >
+                                                    {selectOption}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+            
 
                                 </div>
 
