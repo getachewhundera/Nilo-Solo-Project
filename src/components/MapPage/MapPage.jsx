@@ -22,7 +22,9 @@ function MapPage() {
 
     return (
         <>
-
+        
+     
+        
             <UploadPageButton />
             <br></br>
             <AddListItemButton />
