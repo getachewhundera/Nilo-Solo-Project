@@ -25,42 +25,42 @@ import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteBut
 
 function UploadPage() {
 
-// For the individualSelection dropdown select: 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
+    // For the individualSelection dropdown select: 
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
         },
-    },
-};
-
-const individualSelectOptions = [
-    'Solo',
-    'Group',
-];
-
-function getStyles(selectOption, uploadFormData, theme) {
-    return {
-        fontWeight:
-            uploadFormData.individualSelection.indexOf(selectOption) === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
     };
-}
+
+    const individualSelectOptions = [
+        'Solo',
+        'Group',
+    ];
+
+    function getStyles(selectOption, uploadFormData, theme) {
+        return {
+            fontWeight:
+                uploadFormData.individualSelection.indexOf(selectOption) === -1
+                    ? theme.typography.fontWeightRegular
+                    : theme.typography.fontWeightMedium,
+        };
+    }
 
 
-const theme = useTheme();
+    const theme = useTheme();
 
-const handleOptionChange = (event) => {
-    const newSelection = event.target.value;
-    setUploadFormData(prevState => ({
-        ...prevState,
-        individualSelection: newSelection, // updates the individualSelection field within the state object.
-    }));
-};
+    const handleOptionChange = (event) => {
+        const newSelection = event.target.value;
+        setUploadFormData(prevState => ({
+            ...prevState,
+            individualSelection: newSelection, // updates the individualSelection field within the state object.
+        }));
+    };
 
 
 
@@ -141,10 +141,25 @@ const handleOptionChange = (event) => {
         dispatch({
             type: 'SEND_POST_SERVER', payload: uploadFormData
         });
+        // Reset the state to initial values
+        setUploadFormData({
+            files: [],
+            Description: '',
+            houseNumber: '',
+            streetAddress: '',
+            city: '',
+            state: '',
+            zipcode: '',
+            country: '',
+            price: '',
+            rating: '',
+            individualSelection: ''
+        });
+        
+        setPreviewUrls([]);
+        setIsFileUploaded(false);
+        setCurrentPreviewIndex(0); 
 
-
-        uploadFormData.files(null);
-        uploadFormData('')
     };
 
 
@@ -267,7 +282,7 @@ const handleOptionChange = (event) => {
                                         <InputLabel id="demo-option-label">Choose Selection </InputLabel>
                                         <Select
                                             labelId="demo--option-label"
-                                            id="demo-option"             
+                                            id="demo-option"
                                             name="individualSelection"
                                             value={uploadFormData.individualSelection}
                                             onChange={handleOptionChange}
@@ -286,7 +301,7 @@ const handleOptionChange = (event) => {
                                         </Select>
                                     </FormControl>
 
-            
+
 
                                 </div>
 
