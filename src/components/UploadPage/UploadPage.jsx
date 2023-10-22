@@ -25,7 +25,7 @@ import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteBut
 
 function UploadPage() {
 
-// For IndividualSelectio dropdown select: 
+// For the individualSelection dropdown select: 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -42,10 +42,10 @@ const individualSelectOptions = [
     'Group',
 ];
 
-function getStyles(selectOption, option, theme) {
+function getStyles(selectOption, uploadFormData, theme) {
     return {
         fontWeight:
-            option.indexOf(selectOption) === -1
+            uploadFormData.individualSelection.indexOf(selectOption) === -1
                 ? theme.typography.fontWeightRegular
                 : theme.typography.fontWeightMedium,
     };
@@ -53,18 +53,14 @@ function getStyles(selectOption, option, theme) {
 
 
 const theme = useTheme();
-const [option, setOption] = useState([]);
 
 const handleOptionChange = (event) => {
-    const {
-        target: { value },
-    } = event;
-    setOption(
-        // On autofill we get a stringified value.
-        typeof value === 'string' ? value.split(',') : value,
-    );
+    const newSelection = event.target.value;
+    setUploadFormData(prevState => ({
+        ...prevState,
+        individualSelection: newSelection, // updates the individualSelection field within the state object.
+    }));
 };
-
 
 
 
@@ -85,7 +81,7 @@ const handleOptionChange = (event) => {
         country: '',
         price: Number[''],
         rating: Number[''],
-        individualSelection: []
+        individualSelection: '',
     });
 
 
@@ -268,13 +264,12 @@ const handleOptionChange = (event) => {
                                     />
 
                                     <FormControl sx={{ m: 1, width: 300 }}>
-                                        <InputLabel id="demo-multiple-option-label">Choose Selection </InputLabel>
+                                        <InputLabel id="demo-option-label">Choose Selection </InputLabel>
                                         <Select
-                                            labelId="demo-multiple-option-label"
-                                            id="demo-multiple-option"                    
-                                            multiple
+                                            labelId="demo--option-label"
+                                            id="demo-option"             
                                             name="individualSelection"
-                                            value={[uploadFormData.option]}
+                                            value={uploadFormData.individualSelection}
                                             onChange={handleOptionChange}
                                             input={<OutlinedInput label="Choose Selection" />}
                                             MenuProps={MenuProps}
@@ -283,7 +278,7 @@ const handleOptionChange = (event) => {
                                                 <MenuItem
                                                     key={selectOption}
                                                     value={selectOption}
-                                                    style={getStyles(selectOption, option, theme)}
+                                                    style={getStyles(selectOption, uploadFormData, theme)}
                                                 >
                                                     {selectOption}
                                                 </MenuItem>
