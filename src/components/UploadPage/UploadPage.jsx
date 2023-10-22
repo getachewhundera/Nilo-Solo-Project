@@ -72,7 +72,7 @@ function UploadPage() {
     //data within the form that will be sent to the server then database. 
     const [uploadFormData, setUploadFormData] = useState({
         files: [],
-        Description: '',
+        description: '',
         houseNumber: '',
         streetAddress: '',
         city: '',
@@ -144,7 +144,7 @@ function UploadPage() {
         // Reset the state to initial values
         setUploadFormData({
             files: [],
-            Description: '',
+            description: '',
             houseNumber: '',
             streetAddress: '',
             city: '',
@@ -155,10 +155,10 @@ function UploadPage() {
             rating: '',
             individualSelection: ''
         });
-        
+
         setPreviewUrls([]);
         setIsFileUploaded(false);
-        setCurrentPreviewIndex(0); 
+        setCurrentPreviewIndex(0);
 
     };
 
@@ -201,117 +201,126 @@ function UploadPage() {
                             <div id="uploadformcontainer">
                                 <div className="formContainer">
 
-                                    <input
-                                        name="Description"
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Description"
-                                        value={uploadFormData.Description}
-                                        onChange={handleChange}
-                                    />
-                                    <input
-                                        name="houseNumber"
-                                        type="number"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="House Number"
-                                        value={uploadFormData.houseNumber || ''}
-                                        onChange={handleChange}
-                                    />
-                                    <input
-                                        name="streetAddress"
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Street Address"
-                                        value={uploadFormData.streetAddress || ''}
-                                        onChange={handleChange}
-                                    />
-                                    <input
-                                        name="city"
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="City"
-                                        value={uploadFormData.city || ''}
-                                        onChange={handleChange}
+                                    <div className='textarea-box'>
 
-                                    />
-                                    <input
-                                        name="state"
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="State"
-                                        value={uploadFormData.state || ''}
-                                        onChange={handleChange}
-                                    />
-                                    <input
-                                        name="zipcode"
-                                        type="number"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Zipcode"
-                                        value={uploadFormData.zipcode || ''}
-                                        onChange={handleChange}
-                                    />
-                                    <input
-                                        name="country"
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Country"
-                                        value={uploadFormData.country || ''}
-                                        onChange={handleChange}
-                                    />
+                                        <textarea
+                                            className='description-box'
+                                            name="Description"
+                                            type="text"
+                                            placeholder="Description"
+                                            value={uploadFormData.description}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
 
-                                    <input
-                                        name="price"
-                                        type="number"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Price"
-                                        value={uploadFormData.price || ''}
-                                        onChange={handleChange}
-                                    />
+                                    {/* address inputs are grouped together  */}
+                                    <div className='address-group'>
+                                        <input
+                                            name="houseNumber"
+                                            type="number"
+                                            placeholder="House Number"
+                                            value={uploadFormData.houseNumber || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <input
+                                            name="streetAddress"
+                                            type="text"
+                                            placeholder="Street Address"
+                                            value={uploadFormData.streetAddress || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <input
+                                            name="city"
+                                            type="text"
+                                            placeholder="City"
+                                            value={uploadFormData.city || ''}
+                                            onChange={handleChange}
 
-                                    <input
-                                        name="rating"
-                                        type="number"
-                                        style={{ width: '100px', height: '30px' }}
-                                        min={1} max={10}
-                                        placeholder="rating: 1-10"
-                                        value={uploadFormData.rating || ''}
-                                        onChange={handleChange}
-                                    />
+                                        />
+                                        <input
+                                            name="state"
+                                            type="text"
+                                            placeholder="State"
+                                            value={uploadFormData.state || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <input
+                                            name="zipcode"
+                                            type="number"
+                                            placeholder="Zipcode"
+                                            value={uploadFormData.zipcode || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <input
+                                            name="country"
+                                            type="text"
+                                            placeholder="Country"
+                                            value={uploadFormData.country || ''}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
 
-                                    <FormControl sx={{ m: 1, width: 300 }}>
-                                        <InputLabel id="demo-option-label">Choose Selection </InputLabel>
-                                        <Select
-                                            labelId="demo--option-label"
-                                            id="demo-option"
-                                            name="individualSelection"
-                                            value={uploadFormData.individualSelection}
-                                            onChange={handleOptionChange}
-                                            input={<OutlinedInput label="Choose Selection" />}
-                                            MenuProps={MenuProps}
-                                        >
-                                            {individualSelectOptions.map((selectOption) => (
-                                                <MenuItem
-                                                    key={selectOption}
-                                                    value={selectOption}
-                                                    style={getStyles(selectOption, uploadFormData, theme)}
+                                    {/* price, rating, and selection are grouped together for formatting */}
+
+                                    <div className='bottom-element'>
+                                        <input
+                                            name="price"
+                                            type="number"
+                                            placeholder="Price"
+                                            value={uploadFormData.price || ''}
+                                            onChange={handleChange}
+                                        />
+
+                                        <input
+                                            name="rating"
+                                            type="number"
+                                            min={1} max={10}
+                                            placeholder="rating: 1-10"
+                                            value={uploadFormData.rating || ''}
+                                            onChange={handleChange}
+                                        />
+
+                                        <div className='bottom-element-selection'>
+
+                                            <FormControl sx={{ m: 1, width: 300 }}>
+                                                <InputLabel id="demo-option-label">Choose Selection </InputLabel>
+                                                <Select
+                                                    labelId="demo--option-label"
+                                                    id="demo-option"
+                                                    name="individualSelection"
+                                                    value={uploadFormData.individualSelection}
+                                                    onChange={handleOptionChange}
+                                                    input={<OutlinedInput label="Choose Selection" />}
+                                                    MenuProps={MenuProps}
                                                 >
-                                                    {selectOption}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                                    {individualSelectOptions.map((selectOption) => (
+                                                        <MenuItem
+                                                            key={selectOption}
+                                                            value={selectOption}
+                                                            style={getStyles(selectOption, uploadFormData, theme)}
+                                                        >
+                                                            {selectOption}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        </div>
+
+                                    </div>
 
 
 
                                 </div>
 
-                                <Button
-                                    onClick={handleSubmit}
-                                    component={Link}
-                                    to={"/UploadSuccessfulPage"}
-                                    variant="contained"
-                                    color="primary"
-                                > Upload </Button>
+                                <div className='uploadFormButton'>
+                                    <Button
+                                        onClick={handleSubmit}
+                                        component={Link}
+                                        to={"/UploadSuccessfulPage"}
+                                        variant="contained"
+                                        color="primary"
+                                    > Upload </Button>
+                                </div>
 
                             </div>
                         </div>
