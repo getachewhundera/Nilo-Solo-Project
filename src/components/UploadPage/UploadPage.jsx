@@ -87,7 +87,8 @@ function UploadPage() {
 
     //switched from using for loop to promise loop to allow uploads to happen at the same time. 
     const fileChangedHandler = (event) => {
-        const selectedFiles = Array.from(event.target.uploadFormData.files); // directly converting FileList to array
+        console.log(event.target.value); 
+        const selectedFiles = Array.from(event.target.files); // directly converting FileList to array
 
         const newPreviewUrlsArray = [];
 
@@ -101,7 +102,10 @@ function UploadPage() {
             });
         })).then(results => {
             const newPreviewUrlsArray = results.map(result => result.status === "fulfilled" ? result.value : null);
-            uploadFormData.files(selectedFiles);
+            setUploadFormData(prevState => ({
+                ...prevState,
+                files: selectedFiles
+            }));
             setPreviewUrls(newPreviewUrlsArray);
             setCurrentPreviewIndex(0); // Reset the preview index
             setIsFileUploaded(true); // Indicate that files are uploaded
