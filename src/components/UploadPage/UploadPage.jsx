@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
+
 
 
 
@@ -25,6 +27,8 @@ import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteBut
 
 function UploadPage() {
 
+    const dispatch = useDispatch();
+
     // For the individualSelection dropdown select: 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -42,7 +46,7 @@ function UploadPage() {
         'Group',
     ];
 
-    
+
     function getStyles(selectOption, uploadFormData, theme) {
         return {
             fontWeight:
@@ -88,7 +92,7 @@ function UploadPage() {
 
     //switched from using for loop to promise loop to allow uploads to happen at the same time. 
     const fileChangedHandler = (event) => {
-        console.log(event.target.value); 
+        console.log(event.target.value);
         const selectedFiles = Array.from(event.target.files); // directly converting FileList to array
 
         const newPreviewUrlsArray = [];
@@ -155,10 +159,11 @@ function UploadPage() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('action was dispatched')
+        console.log('payload being recieved', uploadFormData);
         dispatch({
             type: 'SEND_POST_SERVER', payload: uploadFormData
         });
+        console.log('action was dispatched')
         // Reset the state to initial values
         setUploadFormData({
             files: [],
@@ -177,6 +182,7 @@ function UploadPage() {
         setPreviewUrls([]);
         setIsFileUploaded(false);
         setCurrentPreviewIndex(0);
+        console.log('Items were reset')
 
     };
 

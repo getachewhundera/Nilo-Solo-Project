@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
  * POST route template
  */
 router.post('/upload', (req, res) => {
+  console.log(`formdata payload made it to router, ${action.payload}`); 
   const newUpload = req.body;
   const queryText = `INSERT INTO uploadpost ("file_url", "description", "house_number", "street_address", "zip_code" , "city" , "state", "country", 
     "latitude", "longitude", "price", "rating", "individual_selection")
