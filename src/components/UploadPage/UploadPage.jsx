@@ -42,10 +42,11 @@ function UploadPage() {
         'Group',
     ];
 
+    
     function getStyles(selectOption, uploadFormData, theme) {
         return {
             fontWeight:
-                uploadFormData.individualSelection.indexOf(selectOption) === -1
+                uploadFormData.individualSelection.indexOf(selectOption) === -1 //=== -1 ternary conditional expression that checks if the result of indexOf found selectOption if not -1 is returned. 
                     ? theme.typography.fontWeightRegular
                     : theme.typography.fontWeightMedium,
         };
@@ -113,16 +114,29 @@ function UploadPage() {
     };
 
     const goToNextPreview = () => {
-        setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % files.length); // Go to the next preview, loop back to the first after the last
+        setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % uploadFormData.files.length); // Go to the next preview, loop back to the first after the last
     };
 
     const goToPreviousPreview = () => {
-        setCurrentPreviewIndex((prevIndex) => (prevIndex - 1 + files.length) % files.length); // Go to the previous preview, loop back to the last after the first
+        setCurrentPreviewIndex((prevIndex) => (prevIndex - 1 + uploadFormData.files.length) % uploadFormData.files.length); // Go to the previous preview, loop back to the last after the first
     };
 
     const handleCancelUpload = () => {
         //  cancel the file upload and reset state variables
-        uploadFormData.files([]);
+        setUploadFormData({
+            files: [],
+            description: '',
+            houseNumber: '',
+            streetAddress: '',
+            city: '',
+            state: '',
+            zipcode: '',
+            country: '',
+            price: '',
+            rating: '',
+            individualSelection: ''
+        });
+
         setPreviewUrls([]);
         setIsFileUploaded(false);
         setCurrentPreviewIndex(0); // Reset the preview index
@@ -345,4 +359,3 @@ function UploadPage() {
 
 export default UploadPage;
 
-//U4
