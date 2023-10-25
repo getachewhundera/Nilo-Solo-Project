@@ -223,7 +223,7 @@ function UploadPage() {
 
                                         <textarea
                                             className='description-box'
-                                            name="Description"
+                                            name="description"
                                             type="text"
                                             placeholder="Description"
                                             value={uploadFormData.description}

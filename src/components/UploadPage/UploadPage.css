@@ -99,6 +99,7 @@
     margin-right: 10%;
     margin-bottom: 20px;
     margin-left: 10%;
+    resize: vertical; /*ensures that width of the description box can't be changed by users.*/
 }
 
 /* New class for the address group */
