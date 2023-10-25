@@ -24,6 +24,7 @@ app.use(passport.session());
 
 /* Routes */
 app.use('/api/user', userRouter);
+console.log("made it to the server"); 
 app.use('/api/upload', uploadRouter); 
 
 // Serve static files

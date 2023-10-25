@@ -22,4 +22,3 @@ function* uploadPost() {
 
 export default uploadPost;
 
-
