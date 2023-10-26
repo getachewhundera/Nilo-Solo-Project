@@ -13,19 +13,15 @@ function AddListItemPage() {
 
     const dispatch = useDispatch();
 
-    let [addNewItem, setNewItem] = useState('');
-
-    const handleChangeFor = (value) => {
-        console.log('event happened');
-        setNewItem('');
-    };
+    const [addNewItem, setNewItem] = useState('');
 
     const handleInput = (event) => {
-        event.preventDefault();
-        console.log('action was dispatched')
-        dispatch({ type: 'ADD_NEW_ITEM', payload: addNewItem });
-        setNewItem('');
+      event.preventDefault();
+      console.log('Action was dispatched');
+      dispatch({ type: 'ADD_NEW_ITEM', payload: addNewItem });
+      setNewItem('');
     };
+  
 
 
 
@@ -44,20 +40,19 @@ function AddListItemPage() {
             <h1> Add New Experience </h1>
 
             <form>
-                <textarea
-                    type="text"
-                    placeholder="Description"
-                    value={addNewItem}
-                    onChange={(event) => handleChangeFor(event.target.value)}
-                />
+        <textarea
+          type="text"
+          placeholder="Description"
+          value={addNewItem}
+          onChange={(event) => setNewItem(event.target.value)}
+        />
 
-                <Button
-                    onClick={handleInput}
-                    variant="contained"
-                    color="primary"
-                >Add Experience </Button>
+        <Button onClick={handleInput} variant="contained" color="primary">
+          Add Experience
+        </Button>
+      </form>
 
-            </form>
+
 
 
 

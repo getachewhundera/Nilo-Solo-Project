@@ -12,3 +12,59 @@ CREATE TABLE "user" (
     "username" VARCHAR (80) UNIQUE NOT NULL,
     "password" VARCHAR (1000) NOT NULL
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE list(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES "user"(id),
+  description TEXT,
+  is_completed BOOLEAN
+);
