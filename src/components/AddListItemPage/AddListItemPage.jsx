@@ -51,7 +51,6 @@ function AddListItemPage() {
                     onChange={(event) => handleChangeFor(event.target.value)}
                 />
 
-
                 <Button
                     onClick={handleInput}
                     variant="contained"
