@@ -23,6 +23,19 @@ function ViewMyListPage() {
         dispatch(action);
     }, []);
 
+    const handleSave = (item) => {
+        console.log('Save item:', item);
+        dispatch = { 
+            type: "MARK_ITEM_COMPLETE", 
+            payload: 
+        }
+    };
+
+    const handleDelete = (item) => {
+        console.log('Delete item:', item);
+        // Add your delete logic here
+    };
+
 
 
 

@@ -5,6 +5,7 @@ import userSaga from './user.saga';
 import uploadPost from './uploadpost.saga';
 import addItem from './addnewitem.saga';
 import setList from './list.saga';
+import mysaveditemsaga from './saveditem.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -21,6 +22,7 @@ export default function* rootSaga() {
     uploadPost(), 
     addItem(), 
     setList(), 
+    mysaveditemsaga(), 
 
   
   ]);
