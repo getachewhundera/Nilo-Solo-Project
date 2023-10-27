@@ -8,6 +8,8 @@ const listReducer = (state = [], action) => {
             return state.map(item =>
                 item.id === action.payload.id ? { ...item, isCompleted: !item.isCompleted } : item
             );
+        case 'DELETE_LIST_ITEM':
+            return state.filter(item => item.id !== action.payload);
         default:
             return state;
     }

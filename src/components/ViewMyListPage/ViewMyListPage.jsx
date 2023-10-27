@@ -8,6 +8,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+
 
 
 
@@ -23,15 +25,17 @@ function ViewMyListPage() {
         dispatch(action);
     }, []);
 
-    const handleSave = (item) => {
-        console.log('Save item:', item);
-        dispatch({ type: 'MARK_ITEM_COMPLETE', payload: item });
+    const handleSave = (listitem) => {
+        console.log('Save item:', listitem);
+        dispatch({ type: 'MARK_ITEM_COMPLETE', payload: listitem });
       };
 
-    const handleDelete = (item) => {
-        console.log('Delete item:', item);
-        // Add your delete logic here
-    };
+      const handleDelete = (listitem) => {
+        if (window.confirm('Are you sure you want to delete this item?')) {
+          dispatch({ type: 'DELETE_LIST_ITEM_SAGA', payload: listitem });
+        }
+      };
+
 
 
 
@@ -69,7 +73,7 @@ function ViewMyListPage() {
                         <tbody>
                             {list.map((listItem, i) => (
                                 <tr key={i}>
-                                    <td>{listItem.description}</td>
+                                    <td><StarBorderIcon></StarBorderIcon>{listItem.description}</td>
                                     <td>
                                         <button onClick={() => handleSave(listItem)}>Save</button>
                                         <button onClick={() => handleDelete(listItem)}>Delete</button>

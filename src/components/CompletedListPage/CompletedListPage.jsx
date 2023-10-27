@@ -14,8 +14,6 @@ function CompletedListPage() {
 
     return (
         <>
-            
-         
             <UploadPageButton />
             <br></br>
             <AddListItemButton />
@@ -24,6 +22,9 @@ function CompletedListPage() {
             <MapPageButton />
 
             <h1> this is the Completed List Item Page. </h1>
+
+            
+
 
 
         </>

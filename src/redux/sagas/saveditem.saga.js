@@ -4,7 +4,7 @@ import axios from 'axios';
 function* saveListItemSaga(action) {
   try {
     // Make an API call to update the isCompleted status in the database
-    const response = yield call(axios.put, `/api/list/${action.payload.id}`, { isCompleted: !action.payload.isCompleted });
+    const response = yield axios.put(`/api/list/${action.payload.id}`, { isCompleted: !action.payload.isCompleted });
     
     // Dispatch an action to update the Redux store
     yield put({ type: 'UPDATE_LIST_ITEM', payload: response.data });
