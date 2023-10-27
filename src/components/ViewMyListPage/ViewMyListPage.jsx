@@ -1,4 +1,5 @@
 import React from "react";
+import './ViewMyListPage.css';
 
 import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../../MyListButtons/MyListButtons.jsx";
 import { UploadPageButton } from "../RouteButtons/RouteButtons.jsx";
@@ -28,30 +29,53 @@ function ViewMyListPage() {
 
     return (
         <>
-            <UploadPageButton />
-            <br></br>
-            <AddListItemButton />
-            <ViewMyListButton />
-            <CompletedButton />
-            <MapPageButton />
+            <div className="buttons-container">
+                <div className="mylistbuttons">
+                    <AddListItemButton />
+                    <ViewMyListButton />
+                    <CompletedButton />
+                    <MapPageButton />
+
+                </div>
+                <div className="vmluploadpagebutton">
+                    <UploadPageButton />
+                </div>
+            </div>
+
+            <div className="viewmylist-title">
+                <h1> Experiences </h1>
+            </div>
+
+            <div className="bucketlistcontainer">
+                <table className="bucket-list-items">
+                    <div className="tablehead">
+                        <thead>
+                            <tr>
+                                <th>My List: </th>
+                            </tr>
+                        </thead>
+                    </div>
+                    <div className="tablebody">
+                        <tbody>
+                            {list.map((listItem, i) => (
+                                <tr key={i}>
+                                    <td>{listItem.description}</td>
+                                    <td>
+                                        <button onClick={() => handleSave(listItem)}>Save</button>
+                                        <button onClick={() => handleDelete(listItem)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </div>
+
+                </table>
+            </div>
 
 
-            <h1> this is the View My List Item Page. </h1>
 
-            <table className="bucket-list-items">
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {list.map((listItem, i) => (
-                        <tr key={i}>
-                            <td>{listItem.description}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+
+
 
 
 

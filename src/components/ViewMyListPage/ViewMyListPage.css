@@ -1,0 +1,49 @@
+/* css for buttons */
+.mylistbuttons>button,
+.vmluploadpagebutton>button {
+    margin: 0 10px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid black;
+}
+
+.buttons-container>div {
+    margin: 0 10px;
+}
+
+.vmluploadpagebutton {
+    margin-left: 20px;
+}
+
+
+
+.bucket-list-items {
+    border: solid black;
+    width: 100%;
+}
+
+.tablehead {
+    border-bottom: 2px solid black;
+    border-width: 100%; 
+}
+.tablehead th {
+    font-weight: bold;
+    font-size: larger;
+}
+
+.tablebody td {
+    border-bottom: 1px solid black;
+}
+
+.tablebody tr:last-child td {
+    border-bottom: none;
+}
+
+.tablebody td:before {
+    content: "\2022 ";
+    font-weight: bold;
+}
