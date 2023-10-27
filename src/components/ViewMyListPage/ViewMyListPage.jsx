@@ -28,7 +28,8 @@ function ViewMyListPage() {
     const handleSave = (listitem) => {
         console.log('Save item:', listitem);
         dispatch({ type: 'MARK_ITEM_COMPLETE', payload: listitem });
-      };
+        dispatch({ type: 'UPDATE_LIST_ITEM', payload: listitem });
+    };
 
       const handleDelete = (listitem) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
@@ -62,15 +63,14 @@ function ViewMyListPage() {
 
             <div className="bucketlistcontainer">
                 <table className="bucket-list-items">
-                    <div className="tablehead">
-                        <thead>
+                        <thead className="tablehead">
                             <tr>
                                 <th>My List: </th>
                             </tr>
                         </thead>
-                    </div>
-                    <div className="tablebody">
-                        <tbody>
+                 
+                    
+                        <tbody className="tablebody">
                             {list.map((listItem, i) => (
                                 <tr key={i}>
                                     <td><StarBorderIcon></StarBorderIcon>{listItem.description}</td>
@@ -81,7 +81,7 @@ function ViewMyListPage() {
                                 </tr>
                             ))}
                         </tbody>
-                    </div>
+                   
 
                 </table>
             </div>

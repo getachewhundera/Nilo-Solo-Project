@@ -1,14 +1,21 @@
 const express = require('express');
+const {
+  rejectUnauthenticated,
+} = require('../modules/authentication-middleware');
+const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
+const userStrategy = require('../strategies/user.strategy');
 const router = express.Router();
 
 /**
  * GET route template
  */
-router.get('/', (req, res) => {
-  const queryText = 'SELECT * FROM list ';
-  pool.query(queryText)
-    .then((result) => { res.send(result.rows); })
+router.get('/', rejectUnauthenticated, (req, res) => {
+  const userId = req.user.id;
+  const queryText = 'SELECT * FROM list WHERE user_id = $1'; 
+  const queryValues = [userId]
+  pool.query(queryText, queryValues)
+    .then((result) => { res.send(result.rows)})
     .catch((err) => {
       console.log('Error completing SELECT list query', err);
       res.sendStatus(500);
@@ -19,7 +26,7 @@ router.get('/', (req, res) => {
 /**
  * POST route template
  */
-router.post('/', isAuthenticated, (req, res) => {
+router.post('/', (req, res, next) => {
     console.log('Received add item payload:', req.body);
     const newExperience = req.body;
     const userId = req.user.id; // Accessing the user's ID from the req.user object
@@ -46,9 +53,9 @@ module.exports = router;
 /**
  * PUT route template
  */
-router.put('/:id', (req, res) => {
-  const queryText = 'UPDATE list SET is_completed = NOT is_completed WHERE id = $1 RETURNING *';
-  const queryValues = [req.params.id];
+router.put('/:id', rejectUnauthenticated, (req, res) => {
+  const queryText = 'UPDATE list SET is_completed = NOT is_completed WHERE id = $1 AND user_id = $2 RETURNING *';
+  const queryValues = [req.params.id, req.user.id];
 
   pool.query(queryText, queryValues)
     .then((result) => {

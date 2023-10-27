@@ -6,6 +6,9 @@ import store from './redux/store';
 
 import App from './components/App/App';
 
+import axios from 'axios';
+axios.defaults.withCredentials = true; 
+
 
 const root = ReactDOM.createRoot(document.getElementById('react-root'));
 root.render(
