@@ -13,13 +13,13 @@ import { useDispatch, useSelector } from 'react-redux';
 function ViewMyListPage() {
 
     const dispatch = useDispatch();
-    let listItems = useSelector(store => store.rootReducer);
-  
+    let list = useSelector(store => store.listReducer);
+
     // on load, dispatch the saga action
     useEffect(() => {
-      console.log('in useEffect');
-      const action = { type: 'GET_ADDED_LIST_ITEMS' };
-      dispatch(action);
+        console.log('in useEffect');
+        const action = { type: 'GET_ADDED_LIST_ITEMS' };
+        dispatch(action);
     }, []);
 
 
@@ -45,10 +45,11 @@ function ViewMyListPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* Render each item from reducer */}
-                    {.map((, i) => {
-                        return < key={i} ={} />;
-                    })}
+                    {list.map((listItem, i) => (
+                        <tr key={i}>
+                            <td>{listItem.description}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
 
