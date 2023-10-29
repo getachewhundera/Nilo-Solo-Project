@@ -31,15 +31,14 @@ function ViewMyListPage() {
         dispatch({ type: 'UPDATE_LIST_ITEM', payload: listitem });
     };
 
-      const handleDelete = (listitem) => {
+    const handleDelete = (listitem) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
-          dispatch({ type: 'DELETE_LIST_ITEM_SAGA', payload: listitem });
+          dispatch({ type: 'DELETE_LIST_ITEM_SAGA', payload: { ...listitem, isCompleted: false } });
         }
       };
 
 
-
-
+      console.log('List:', list);
 
 
     return (
@@ -69,8 +68,9 @@ function ViewMyListPage() {
                             </tr>
                         </thead>
                  
-                    
+                        
                         <tbody className="tablebody">
+    
                             {list.map((listItem, i) => (
                                 <tr key={i}>
                                     <td><StarBorderIcon></StarBorderIcon>{listItem.description}</td>

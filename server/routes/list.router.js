@@ -2,9 +2,7 @@ const express = require('express');
 const {
   rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
-const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
-const userStrategy = require('../strategies/user.strategy');
 const router = express.Router();
 
 /**
@@ -13,6 +11,18 @@ const router = express.Router();
 router.get('/', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const queryText = 'SELECT * FROM list WHERE user_id = $1'; 
+  const queryValues = [userId]
+  pool.query(queryText, queryValues)
+    .then((result) => { res.send[result.rows]})
+    .catch((err) => {
+      console.log('Error completing SELECT list query', err);
+      res.sendStatus(500);
+    });
+});
+
+router.get('/completed', rejectUnauthenticated, (req, res) => {
+  const userId = req.user.id;
+  const queryText = 'SELECT * FROM list WHERE user_id = $1 AND is_completed = TRUE' ; 
   const queryValues = [userId]
   pool.query(queryText, queryValues)
     .then((result) => { res.send(result.rows)})
@@ -70,9 +80,28 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
 /**
  * DELETE route template
  */
+router.delete('/:id', (req, res) => {
+  const isCompleted = req.query.isCompleted === 'true';
+  const queryText = 'DELETE FROM list WHERE id = $1 AND is_completed = $2';
+  const queryValues = [req.params.id, isCompleted];
+
+  pool.query(queryText, queryValues)
+    .then((result) => {
+      if (result.rowCount > 0) {
+        res.send('List item deleted');
+      } else {
+        res.status(400).send('Item does not exist');
+      }
+    })
+    .catch((err) => {
+      console.error('Error deleting list item:', err);
+      res.status(500).send('Server Error');
+    });
+});
 
 router.delete('/:id', (req, res) => {
-  const queryText = 'DELETE FROM list WHERE id = $1 AND is_completed = false';
+  const queryText = 'DELETE FROM list WHERE id = $1';
+  // const queryText = 'DELETE FROM list WHERE id = $1 AND is_completed = false';
   const queryValues = [req.params.id];
 
   pool.query(queryText, queryValues)
