@@ -1,7 +1,19 @@
-import React from "react";
-import { Link } from "react-router-dom"
+import * as React from 'react';
+import { Link } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import { useDispatch } from 'react-redux';
+
+
+
+
+//Import for dropdown selection for individualselection input. 
+
+import { useTheme } from '@mui/material/styles';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 import './UploadPage.css';
 
@@ -13,33 +25,74 @@ import Button from '@mui/material/Button';
 import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
 
 
-
-
 function UploadPage() {
-    //State variable for file uploads 
-    const [files, setFiles] = useState([])
+
+    const dispatch = useDispatch();
+
+    // For the individualSelection dropdown select: 
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
+
+    const individualSelectOptions = [
+        'Solo',
+        'Group',
+    ];
 
 
+    function getStyles(selectOption, uploadFormData, theme) {
+        return {
+            fontWeight:
+                uploadFormData.individualSelection.indexOf(selectOption) === -1 //=== -1 ternary conditional expression that checks if the result of indexOf found selectOption if not -1 is returned. 
+                    ? theme.typography.fontWeightRegular
+                    : theme.typography.fontWeightMedium,
+        };
+    }
+
+
+    const theme = useTheme();
+
+    const handleOptionChange = (event) => {
+        const newSelection = event.target.value;
+        setUploadFormData(prevState => ({
+            ...prevState,
+            individualSelection: newSelection, // updates the individualSelection field within the state object.
+        }));
+    };
+
+
+
+    //State variable for file uploads that are not being sent with the form(to separate them out).
     const [previewUrls, setPreviewUrls] = useState([]);
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
 
-
-    const [Description, setDescription] = useState('');
-    const [houseNumber, setHouseNumber] = useState('');
-    const [streetAddress, setStreetAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [zipcode, setZipCode] = useState('');
-    const [country, setCountry] = useState('');
-    const [price, setPrice] = useState(Number['']);
-    const [rating, setRating] = useState(Number['']);
-    const [individualSelection, setIndividualSelecton] = useState('');
-
+    //data within the form that will be sent to the server then database. 
+    const [uploadFormData, setUploadFormData] = useState({
+        files: [],
+        description: '',
+        houseNumber: '',
+        streetAddress: '',
+        city: '',
+        state: '',
+        zipcode: '',
+        country: '',
+        price: Number[''],
+        rating: Number[''],
+        individualSelection: '',
+    });
 
 
     //switched from using for loop to promise loop to allow uploads to happen at the same time. 
     const fileChangedHandler = (event) => {
+        console.log(event.target.value);
         const selectedFiles = Array.from(event.target.files); // directly converting FileList to array
 
         const newPreviewUrlsArray = [];
@@ -54,7 +107,10 @@ function UploadPage() {
             });
         })).then(results => {
             const newPreviewUrlsArray = results.map(result => result.status === "fulfilled" ? result.value : null);
-            setFiles(selectedFiles);
+            setUploadFormData(prevState => ({
+                ...prevState,
+                files: selectedFiles
+            }));
             setPreviewUrls(newPreviewUrlsArray);
             setCurrentPreviewIndex(0); // Reset the preview index
             setIsFileUploaded(true); // Indicate that files are uploaded
@@ -62,54 +118,72 @@ function UploadPage() {
     };
 
     const goToNextPreview = () => {
-        setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % files.length); // Go to the next preview, loop back to the first after the last
+        setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % uploadFormData.files.length); // Go to the next preview, loop back to the first after the last
     };
 
     const goToPreviousPreview = () => {
-        setCurrentPreviewIndex((prevIndex) => (prevIndex - 1 + files.length) % files.length); // Go to the previous preview, loop back to the last after the first
+        setCurrentPreviewIndex((prevIndex) => (prevIndex - 1 + uploadFormData.files.length) % uploadFormData.files.length); // Go to the previous preview, loop back to the last after the first
     };
 
     const handleCancelUpload = () => {
         //  cancel the file upload and reset state variables
-        setFiles([]);
+        setUploadFormData({
+            files: [],
+            description: '',
+            houseNumber: '',
+            streetAddress: '',
+            city: '',
+            state: '',
+            zipcode: '',
+            country: '',
+            price: '',
+            rating: '',
+            individualSelection: ''
+        });
+
         setPreviewUrls([]);
         setIsFileUploaded(false);
+        setCurrentPreviewIndex(0); // Reset the preview index
     };
 
 
 
-    const handleChangeFor = (value) => {
-        console.log('event happened');
-        setDescription('');
-        setHouseNumber(Number(value));
-        setStreetAddress('');
-        setCity('');
-        setState('');
-        setZipCode(Number(value));
-        setCountry('');
-        setPrice(Number(value));
-        setRating(Number(value));
-        setIndividualSelecton('');
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setUploadFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('action was dispatched')
+        console.log('payload being recieved', uploadFormData);
         dispatch({
-            type: 'SEND_POST_SERVER', payload: files, Description, houseNumber, streetAddress,
-            city, state, zipcode, country, price, rating, individualSelection
+            type: 'SEND_POST_SERVER', payload: uploadFormData
         });
-        setFiles(null);
-        setDescription('');
-        setHouseNumber('');
-        setStreetAddress('');
-        setCity('');
-        setState('');
-        setZipCode('');
-        setCountry('');
-        setPrice('');
-        setRating('');
-        setIndividualSelecton('');
+        console.log('action was dispatched')
+        // Reset the state to initial values
+        setUploadFormData({
+            files: [],
+            description: '',
+            houseNumber: '',
+            streetAddress: '',
+            city: '',
+            state: '',
+            zipcode: '',
+            country: '',
+            price: '',
+            rating: '',
+            individualSelection: ''
+        });
+
+        setPreviewUrls([]);
+        setIsFileUploaded(false);
+        setCurrentPreviewIndex(0);
+        console.log('Items were reset')
+
     };
 
 
@@ -130,7 +204,7 @@ function UploadPage() {
                                 <div className="upload-container">
                                     {!isFileUploaded && (
                                         <>
-                                            <input type="file" onChange={fileChangedHandler} multiple />
+                                            <input name="files" type="file" onChange={fileChangedHandler} multiple />
                                         </>
                                     )}
                                     {isFileUploaded && previewUrls.length > 0 && (
@@ -151,89 +225,126 @@ function UploadPage() {
                             <div id="uploadformcontainer">
                                 <div className="formContainer">
 
-                                    <input
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Description"
-                                        Value={Description}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
-                                    <input
-                                        type="number"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="House Number"
-                                        value={houseNumber || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Street Address"
-                                        value={streetAddress || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="City"
-                                        value={city || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="State"
-                                        value={state || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
-                                    <input
-                                        type="number"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Zipcode"
-                                        value={zipcode || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Country"
-                                        value={country || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
+                                    <div className='textarea-box'>
 
-                                    <input
-                                        type="number"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Price"
-                                        value={price || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
+                                        <textarea
+                                            className='description-box'
+                                            name="description"
+                                            type="text"
+                                            placeholder="Description"
+                                            value={uploadFormData.description}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
 
-                                    <input
-                                        type="number"
-                                        style={{ width: '100px', height: '30px' }}
-                                        min={1} max={10}
-                                        placeholder="rating: 1-10"
-                                        value={rating || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        style={{ width: '100px', height: '30px' }}
-                                        placeholder="Solo or Group"
-                                        value={individualSelection || ''}
-                                        onChange={(event) => handleChangeFor(event.target.value)}
-                                    />
+                                    {/* address inputs are grouped together  */}
+                                    <div className='address-group'>
+                                        <input
+                                            name="houseNumber"
+                                            type="number"
+                                            placeholder="House Number"
+                                            value={uploadFormData.houseNumber || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <input
+                                            name="streetAddress"
+                                            type="text"
+                                            placeholder="Street Address"
+                                            value={uploadFormData.streetAddress || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <input
+                                            name="city"
+                                            type="text"
+                                            placeholder="City"
+                                            value={uploadFormData.city || ''}
+                                            onChange={handleChange}
+
+                                        />
+                                        <input
+                                            name="state"
+                                            type="text"
+                                            placeholder="State"
+                                            value={uploadFormData.state || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <input
+                                            name="zipcode"
+                                            type="number"
+                                            placeholder="Zipcode"
+                                            value={uploadFormData.zipcode || ''}
+                                            onChange={handleChange}
+                                        />
+                                        <input
+                                            name="country"
+                                            type="text"
+                                            placeholder="Country"
+                                            value={uploadFormData.country || ''}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+
+                                    {/* price, rating, and selection are grouped together for formatting */}
+
+                                    <div className='bottom-element'>
+                                        <input
+                                            name="price"
+                                            type="number"
+                                            placeholder="Price"
+                                            value={uploadFormData.price || ''}
+                                            onChange={handleChange}
+                                        />
+
+                                        <input
+                                            name="rating"
+                                            type="number"
+                                            min={1} max={10}
+                                            placeholder="rating: 1-10"
+                                            value={uploadFormData.rating || ''}
+                                            onChange={handleChange}
+                                        />
+
+                                        <div className='bottom-element-selection'>
+
+                                            <FormControl sx={{ m: 1, width: 300 }}>
+                                                <InputLabel id="demo-option-label">Choose Selection </InputLabel>
+                                                <Select
+                                                    labelId="demo--option-label"
+                                                    id="demo-option"
+                                                    name="individualSelection"
+                                                    value={uploadFormData.individualSelection}
+                                                    onChange={handleOptionChange}
+                                                    input={<OutlinedInput label="Choose Selection" />}
+                                                    MenuProps={MenuProps}
+                                                >
+                                                    {individualSelectOptions.map((selectOption) => (
+                                                        <MenuItem
+                                                            key={selectOption}
+                                                            value={selectOption}
+                                                            style={getStyles(selectOption, uploadFormData, theme)}
+                                                        >
+                                                            {selectOption}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        </div>
+
+                                    </div>
+
+
 
                                 </div>
 
-                                <Button
-                                    onClick={handleSubmit}
-                                    component={Link}
-                                    to={"/UploadSuccessfulPage"}
-                                    variant="contained"
-                                    color="primary"
-                                > Upload </Button>
+                                <div className='uploadFormButton'>
+                                    <Button
+                                        onClick={handleSubmit}
+                                        component={Link}
+                                        to={"/UploadSuccessfulPage"}
+                                        variant="contained"
+                                        color="primary"
+                                    > Upload </Button>
+                                </div>
 
                             </div>
                         </div>
@@ -252,6 +363,6 @@ function UploadPage() {
     );
 };
 
-export default UploadPage; 
+export default UploadPage;
 
-//U4
+//commit css updated 

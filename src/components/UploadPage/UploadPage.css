@@ -1,42 +1,48 @@
-
-
 .grid-container {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* two columns of equal width */
-    gap: 5px; /*  gap between the two divs */
-    
+    grid-template-columns: 1fr 1fr;
+    /* two columns of equal width */
+    gap: 5px;
+    /*  gap between the two divs */
+
 }
 
-.grid-item #uploadfilecontainer{
+.grid-item #uploadfilecontainer {
     /* Styles for the item */
-    object-fit: cover;  
+    object-fit: cover;
     position: relative;
     border: 2px dashed #000;
     min-height: 750px;
 }
 
-.grid-item #uploadformcontainer{
+.grid-item #uploadformcontainer {
     /* Styles for the item */
     border: 2px solid black;
     min-height: 750px;
 }
 
 .image-preview {
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    height: 100%; 
-    max-height: 750px; 
-    width: 100%; /*  full width of parent */
-    overflow: hidden; /* img won't overflow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    max-height: 750px;
+    width: 100%;
+    /*  full width of parent */
+    overflow: hidden;
+    /* img won't overflow */
 }
 
 
 .image-preview img {
-    max-height: 100%; /* image won't go past the contianers height */
-    max-width: 100%; /* img won't go past the containers width  */
-    display: block; /* no space around image */
-    object-fit: contain; /* maintains img ratio */
+    max-height: 100%;
+    /* image won't go past the contianers height */
+    max-width: 100%;
+    /* img won't go past the containers width  */
+    display: block;
+    /* no space around image */
+    object-fit: contain;
+    /* maintains img ratio */
 }
 
 
@@ -85,8 +91,50 @@
 
 /* css for the form inputs  */
 
+/* New class for the description box */
+.description-box {
+    width: 80%;
+    min-height: 200px;
+    margin-top: 20px;
+    margin-right: 10%;
+    margin-bottom: 20px;
+    margin-left: 10%;
+    resize: vertical; /*ensures that width of the description box can't be changed by users.*/
+}
 
+/* New class for the address group */
+.address-group {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-left: 10%;
 
+}
 
+/* Class for the bottom elements */
+/* css for pricing and rating */
+.bottom-element {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 20px;
 
+}
 
+/* css for the Selection box (solo or group) */
+.bottom-element-selection {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    margin-right: 9%; 
+
+}
+
+/* css for the upload form submit button */
+.uploadFormButton{
+    display: flex; 
+    flex-direction: column;
+    width: 15%;
+    margin-left: 75%;   
+}

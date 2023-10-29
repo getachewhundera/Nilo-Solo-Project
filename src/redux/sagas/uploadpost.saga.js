@@ -2,9 +2,11 @@ import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
 // worker Saga: will be fired on "SEND_POST_SERVER" actions
-function* uploadContent() {
+function* uploadContent(action) {
   try {
-    yield axios.post('/api/user', action.payload);
+    console.log('dispatch made it too saga;', action.payload); 
+    const response = yield axios.post('/api/upload', action.payload);
+    console.log('content was sent to server'); 
     yield put({ type: 'SET_UPLOADED_CONTENT', payload: response.data });
   } catch (error) {
     alert('Somthing went wrong'); 
@@ -19,5 +21,4 @@ function* uploadPost() {
 }
 
 export default uploadPost;
-
 
