@@ -55,16 +55,9 @@ CREATE TABLE "user" (
 
 
 
-
-
-
-
-
-
-
 CREATE TABLE list(
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES "user"(id),
   description TEXT,
-  is_completed BOOLEAN
+  is_completed BOOLEAN DEFAULT false
 );
