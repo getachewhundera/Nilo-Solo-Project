@@ -33,5 +33,13 @@ CREATE TABLE uploadpost (
     longitude NUMERIC,
     price NUMERIC, 
     rating INTEGER NOT NULL, 
-    individual_selection TEXT CHECK (individual_selection IN ('Solo', 'Group'))
+    individual_selection TEXT CHECK (individual_selection IN ('Solo', 'Group')));
+
+
+
+CREATE TABLE list(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES "user"(id),
+  description TEXT,
+  is_completed BOOLEAN DEFAULT false
 );

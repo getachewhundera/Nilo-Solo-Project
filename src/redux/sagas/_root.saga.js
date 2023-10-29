@@ -3,6 +3,11 @@ import loginSaga from './login.saga';
 import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
 import uploadPost from './uploadpost.saga';
+import addItem from './addnewitem.saga';
+import setList from './list.saga';
+import mysaveditemsaga from './saveditem.saga';
+import deleteitemSaga from './deleteitemvml.saga';
+import completedListSaga from './completeditem.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -17,5 +22,12 @@ export default function* rootSaga() {
     registrationSaga(),
     userSaga(),
     uploadPost(), 
+    addItem(), 
+    setList(), 
+    mysaveditemsaga(), 
+    deleteitemSaga(), 
+    completedListSaga(), 
+
+  
   ]);
 }
