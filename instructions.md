@@ -127,3 +127,28 @@ Customize this ReadMe and the code comments in this project to read less like a 
 
 
 npm install @mui/icons-material
+
+
+
+`npm install` //DONE 
+
+
+## Setup for File UPload: 
+```
+npm install aws-sdk //DONE 
+npm install express-fileupload //DONE  - helps you interact with files easier similar to body parser. gives you req.files
+```
+
+### `.env`
+
+```
+AWS_REGION=
+AWS_SECRET_ACESS_KEY=
+AWS_ACESS_KEY_ID=
+```
+
+
+
+npm install @aws-sdk/client-s3
+npm install express-fileupload
+npm install browser-image-resizer

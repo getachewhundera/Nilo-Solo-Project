@@ -1,27 +1,18 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
+import './UploadPage.css';
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
-
-
-
-
 //Import for dropdown selection for individualselection input. 
-
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
-import './UploadPage.css';
-
-
 //Material UI dialog box 
 import Button from '@mui/material/Button';
-
-
+//Page Buttons 
 import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
 
 
@@ -29,7 +20,7 @@ function UploadPage() {
 
     const dispatch = useDispatch();
 
-    // For the individualSelection dropdown select: 
+    //For the individualSelection dropdown select: 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -74,9 +65,14 @@ function UploadPage() {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
 
+
+
+
     //data within the form that will be sent to the server then database. 
     const [uploadFormData, setUploadFormData] = useState({
-        files: [],
+        fileName: '',
+        fileType: '',
+        files: [], //possible switch over to fileName and fileType
         description: '',
         houseNumber: '',
         streetAddress: '',
@@ -89,33 +85,44 @@ function UploadPage() {
         individualSelection: '',
     });
 
+    const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
 
-    //switched from using for loop to promise loop to allow uploads to happen at the same time. 
-    const fileChangedHandler = (event) => {
-        console.log(event.target.value);
-        const selectedFiles = Array.from(event.target.files); // directly converting FileList to array
-
+    const fileChangedHandler = async (event) => {
+        const selectedFiles = Array.from(event.target.files);
+        const validFiles = [];
         const newPreviewUrlsArray = [];
 
-        // usedPromise.allSettled to ensure all promises either fulfill or reject
-        Promise.allSettled(selectedFiles.map(file => {
-            return new Promise((resolve, reject) => {
+        for (const file of selectedFiles) {
+            if (acceptedImageTypes.includes(file.type)) {
+                validFiles.push(file);
                 const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result); // Resolve the promise with the reader result
-                reader.onerror = reject; // Reject the promise if there's an error
+                reader.onloadend = () => newPreviewUrlsArray.push(reader.result);
                 reader.readAsDataURL(file);
-            });
-        })).then(results => {
-            const newPreviewUrlsArray = results.map(result => result.status === "fulfilled" ? result.value : null);
-            setUploadFormData(prevState => ({
-                ...prevState,
-                files: selectedFiles
-            }));
-            setPreviewUrls(newPreviewUrlsArray);
-            setCurrentPreviewIndex(0); // Reset the preview index
-            setIsFileUploaded(true); // Indicate that files are uploaded
-        });
+            } else {
+                alert('Please select a valid image file');
+            }
+        }
+
+        setUploadFormData(prevState => ({
+            ...prevState,
+            files: validFiles
+        }));
+
+        setPreviewUrls(newPreviewUrlsArray);
+        setCurrentPreviewIndex(0);
+        setIsFileUploaded(true);
     };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setUploadFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+
+
 
     const goToNextPreview = () => {
         setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % uploadFormData.files.length); // Go to the next preview, loop back to the first after the last
@@ -146,26 +153,42 @@ function UploadPage() {
         setCurrentPreviewIndex(0); // Reset the preview index
     };
 
-
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setUploadFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('payload being recieved', uploadFormData);
-        dispatch({
-            type: 'SEND_POST_SERVER', payload: uploadFormData
+
+        // Create a new FormData object to hold the form data
+        const formData = new FormData();
+
+        // Append all selected files to the FormData object
+        uploadFormData.files.forEach(file => {
+            formData.append('files', file);
         });
-        console.log('action was dispatched')
-        // Reset the state to initial values
+
+        // Append other form fields to the FormData object
+        formData.append('description', uploadFormData.description);
+        formData.append('houseNumber', uploadFormData.houseNumber);
+        formData.append('streetAddress', uploadFormData.streetAddress);
+        formData.append('city', uploadFormData.city);
+        formData.append('state', uploadFormData.state);
+        formData.append('zipcode', uploadFormData.zipcode);
+        formData.append('country', uploadFormData.country);
+        formData.append('price', uploadFormData.price);
+        formData.append('rating', uploadFormData.rating);
+        formData.append('individualSelection', uploadFormData.individualSelection);
+
+        // Dispatch an action to send the form data to the server
+        dispatch({
+            type: 'SEND_POST_SERVER',
+            payload: formData
+        });
+
+        // Log to the console for debugging purposes
+        console.log('Action dispatched with payload:', formData);
+
+        // Reset the state to clear the form and remove the file previews
         setUploadFormData({
+            fileName: '',
+            fileType: '',
             files: [],
             description: '',
             houseNumber: '',
@@ -178,12 +201,12 @@ function UploadPage() {
             rating: '',
             individualSelection: ''
         });
-
         setPreviewUrls([]);
         setIsFileUploaded(false);
         setCurrentPreviewIndex(0);
-        console.log('Items were reset')
 
+        // Log to the console for debugging purposes
+        console.log('Form and state reset');
     };
 
 
@@ -204,7 +227,7 @@ function UploadPage() {
                                 <div className="upload-container">
                                     {!isFileUploaded && (
                                         <>
-                                            <input name="files" type="file" onChange={fileChangedHandler} multiple />
+                                            <input name="files" type="file" accept='image/*' onChange={fileChangedHandler} multiple />
                                         </>
                                     )}
                                     {isFileUploaded && previewUrls.length > 0 && (
@@ -364,5 +387,3 @@ function UploadPage() {
 };
 
 export default UploadPage;
-
-//commit css updated 
