@@ -149,6 +149,6 @@ AWS_ACESS_KEY_ID=
 
 
 
-npm install @aws-sdk/client-s3
+npm install @aws-sdk/client-s3 //DONE 
 npm install express-fileupload
-npm install browser-image-resizer
+npm install browser-image-resizer /DONE 

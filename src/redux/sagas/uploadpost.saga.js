@@ -8,7 +8,7 @@ function* uploadContent(action) {
     console.log('Dispatch made it to saga:', action.payload);
     const formData = new FormData();
     formData.append('image', action.payload.selectedFile);
-    const postUrl = `/api/images?imageName=${encodeURIComponent(action.payload.fileName)}&imageType=${encodeURIComponent(action.payload.fileType)}`;
+    const postUrl = `/api/image?imageName=${encodeURIComponent(action.payload.fileName)}&imageType=${encodeURIComponent(action.payload.fileType)}`;
     const response = yield call(axios.post, postUrl, formData);
     console.log('Content was sent to server');
     yield put({ type: 'SET_UPLOADED_CONTENT', payload: response.data });

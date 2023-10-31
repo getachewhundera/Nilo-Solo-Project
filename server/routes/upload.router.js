@@ -5,11 +5,11 @@ const router = express.Router();
 const aws = require('aws-sdk');
 
 
-// const {
-//   GetObjectCommand,
-//   PutObjectCommand,
-//   S3Client,
-// } = require('@aws-sdk/client-s3');
+const {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} = require('@aws-sdk/client-s3');
 
 //different from code down below 
 // const s3Client = new aws.S3({
@@ -18,11 +18,12 @@ const aws = require('aws-sdk');
 //     region: process.env.AWS_REGION,
 // });
 
-const s3Client = new s3Client({
+const s3Client = new S3Client({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
+
 
 
 /**

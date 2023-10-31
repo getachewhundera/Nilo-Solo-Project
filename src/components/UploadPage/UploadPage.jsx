@@ -64,6 +64,7 @@ function UploadPage() {
     const [previewUrls, setPreviewUrls] = useState([]);
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);  //state variable for loading status of files 
 
 
 
@@ -85,33 +86,111 @@ function UploadPage() {
         individualSelection: '',
     });
 
-    const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+    // Limit to specific file types.
+    const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/wepb'];
 
     const fileChangedHandler = async (event) => {
-        const selectedFiles = Array.from(event.target.files);
-        const validFiles = [];
-        const newPreviewUrlsArray = [];
 
-        for (const file of selectedFiles) {
-            if (acceptedImageTypes.includes(file.type)) {
-                validFiles.push(file);
-                const reader = new FileReader();
-                reader.onloadend = () => newPreviewUrlsArray.push(reader.result);
-                reader.readAsDataURL(file);
-            } else {
-                alert('Please select a valid image file');
-            }
+        setIsLoading(true);
+        const selectedFiles = Array.from(event.target.files); //event.target.files returns a FileList object(its array-like, but not  an array). Array.from converts it to an array. 
+
+        console.log('files being filtered for acceptedtypes:', selectedFiles);
+        //checks if the file's type is included in the acceptedImagesTypes array. 
+        //file represents a single file object from the selectedFiles array
+        //file.type. 
+        const validFiles = selectedFiles.filter(file => acceptedImageTypes.includes(file.type));
+        //checking if they are not equal (!== strict inequality:two operands are not equal, returning boolean results)
+        if (validFiles.length !== selectedFiles.length) {
+            alert('Some files are not valid image types');
         }
 
-        setUploadFormData(prevState => ({
-            ...prevState,
-            files: validFiles
-        }));
+        const newPreviewUrlsArray = [];
 
-        setPreviewUrls(newPreviewUrlsArray);
-        setCurrentPreviewIndex(0);
-        setIsFileUploaded(true);
+        // usedPromise.allSettled to ensure all promises either fulfill or reject
+        Promise.allSettled(validFiles.map(file => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result); // Resolve the promise with the reader result
+                reader.onerror = reject; // Reject the promise if there's an error
+                reader.readAsDataURL(file);
+            });
+        })).then(results => {
+            const newPreviewUrlsArray = results.map(result => result.status === "fulfilled" ? result.value : null);
+            setUploadFormData(prevState => ({
+                ...prevState,
+                files: validFiles
+            }));
+            setPreviewUrls(newPreviewUrlsArray);
+            setCurrentPreviewIndex(0); // Reset the preview index
+            setIsFileUploaded(true); // Indicate that files are uploaded
+        });
+        setIsLoading(false);
     };
+
+
+
+    //     const previewUrlsPromises = validFiles.map((file, index) => {
+    //         return new Promise((resolve, reject) => {
+    //             const reader = new FileReader();
+    //             reader.onloadend = () => resolve({ status: 'fulfilled', value: reader.result }) ;
+    //             console.log(reader.result)
+    //             reader.onerror = () => reject({ status: 'rejected', reason: `Failed to load image ${index + 1}: ${file.name}` });
+    //             reader.readAsDataURL(file);
+    //         });
+    //     });
+
+    //     const results = await Promise.allSettled(previewUrlsPromises);
+    //     const successfulResults = results.filter(result => result.status === 'fulfilled').map(result => result.value);
+    //     const failedResults = results.filter(result => result.status === 'rejected');
+
+    //     failedResults.forEach(result => {
+    //         alert(result.reason);
+    //     });
+
+    //     if (successfulResults.length === 0) {
+    //         alert('Failed to load all images');
+    //     } else {
+    //         setPreviewUrls(prevUrls => [...prevUrls, ...successfulResults]);
+    //         setCurrentPreviewIndex(0);
+    //         setIsFileUploaded(true);
+    //     }
+
+    //     setUploadFormData(prevState => ({
+    //         ...prevState,
+    //         files: [...prevState.files, ...validFiles]
+    //     }));
+
+    //     setIsLoading(false);
+    // };
+
+    //   const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+
+    // const fileChangedHandler = async (event) => {
+    //     const selectedFiles = Array.from(event.target.files);
+
+    //     const validFiles = [];
+    //     const newPreviewUrlsArray = [];
+
+    //     for (const file of selectedFiles) {
+    //         if (acceptedImageTypes.includes(file.type)) {
+    //             validFiles.push(file);
+    //             const reader = new FileReader();
+    //             reader.onloadend = () => newPreviewUrlsArray.push(reader.result);
+    //             reader.readAsDataURL(file);
+    //         } else {
+    //             alert('Please select a valid image file');
+    //         }
+    //     }
+
+    //     setUploadFormData(prevState => ({
+    //         ...prevState,
+    //         files: validFiles
+    //     }));
+
+    //     setPreviewUrls(newPreviewUrlsArray);
+    //     setCurrentPreviewIndex(0);
+    //     setIsFileUploaded(true);
+    // };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -153,6 +232,8 @@ function UploadPage() {
         setCurrentPreviewIndex(0); // Reset the preview index
     };
 
+
+    //---------Submitting formData------------------//
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -228,11 +309,12 @@ function UploadPage() {
                                     {!isFileUploaded && (
                                         <>
                                             <input name="files" type="file" accept='image/*' onChange={fileChangedHandler} multiple />
+                                            {isLoading && <div className="loading-spinner">Loading...</div>}
                                         </>
                                     )}
                                     {isFileUploaded && previewUrls.length > 0 && (
                                         <div className="image-preview">
-                                            <img src={previewUrls[currentPreviewIndex]} alt="Preview" />
+                                            <img src={previewUrls[currentPreviewIndex]} alt="Preview" onError={(e) => console.error("Error loading image", e)} />
                                             <button className="button-left" onClick={goToPreviousPreview}>Left</button>
                                             <button className="button-right" onClick={goToNextPreview}>Right</button>
                                             {/* <button className="plus-button" onClick={handleChangeFile}>+</button> */}
