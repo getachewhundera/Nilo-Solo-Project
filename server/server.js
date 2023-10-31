@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
@@ -34,7 +35,6 @@ app.use(passport.session());
 app.use('/api/user', userRouter);
 app.use('/api/upload', uploadRouter); 
 app.use('/api/list', listRouter); 
-app.use('/api/image', uploadRouter);
 
 // Serve static files
 app.use(express.static('build'));

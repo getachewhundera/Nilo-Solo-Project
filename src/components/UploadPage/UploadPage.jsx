@@ -14,7 +14,7 @@ import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 //Page Buttons 
 import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
-
+import { readAndCompressImage } from 'browser-image-resizer';
 
 function UploadPage() {
 
@@ -65,15 +65,13 @@ function UploadPage() {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);  //state variable for loading status of files 
-
-
+    const [selectedFile, setSelectedFile] = useState();
 
 
     //data within the form that will be sent to the server then database. 
     const [uploadFormData, setUploadFormData] = useState({
         fileName: '',
         fileType: '',
-        files: [], //possible switch over to fileName and fileType
         description: '',
         houseNumber: '',
         streetAddress: '',
@@ -92,15 +90,39 @@ function UploadPage() {
     const fileChangedHandler = async (event) => {
 
         setIsLoading(true);
-        const selectedFiles = Array.from(event.target.files); //event.target.files returns a FileList object(its array-like, but not  an array). Array.from converts it to an array. 
+        const fileToUpload = event.target.files[0]; //event.target.files returns a FileList object(its array-like, but not  an array). Array.from converts it to an array.
 
-        console.log('files being filtered for acceptedtypes:', selectedFiles);
+        // Resize and compress the image. 
+        const copyFile = new Blob([fileToUpload], { type: fileToUpload.type, name: fileToUpload.name });
+        const resizedFile = await readAndCompressImage(copyFile, {
+            quality: 1.0,    // 100% quality
+            maxHeight: 1000, // max height of the image
+        });
+
+
+        // Check if the file is one of the allowed types.
+        if (acceptedImageTypes.includes(fileToUpload.type)) {
+            // Resizing the image removes the name, store it in a separate variable
+            setUploadFormData(prevState => ({
+                ...prevState,
+                fileName: (encodeURIComponent(fileToUpload.name)), 
+                fileType: (encodeURIComponent(fileToUpload.type)),
+            }));
+            
+            // Save the resized file
+            setSelectedFile(resizedFile);
+
+        } else {
+            alert('Please select an image');
+        }
+
+        console.log('files being filtered for acceptedtypes:', fileToUpload);
         //checks if the file's type is included in the acceptedImagesTypes array. 
         //file represents a single file object from the selectedFiles array
         //file.type. 
-        const validFiles = selectedFiles.filter(file => acceptedImageTypes.includes(file.type));
+        const validFiles = [fileToUpload];//fileToUpload.filter(file => acceptedImageTypes.includes(file.type));
         //checking if they are not equal (!== strict inequality:two operands are not equal, returning boolean results)
-        if (validFiles.length !== selectedFiles.length) {
+        if (validFiles.length !== fileToUpload.length) {
             alert('Some files are not valid image types');
         }
 
@@ -116,10 +138,10 @@ function UploadPage() {
             });
         })).then(results => {
             const newPreviewUrlsArray = results.map(result => result.status === "fulfilled" ? result.value : null);
-            setUploadFormData(prevState => ({
-                ...prevState,
-                files: validFiles
-            }));
+            // setUploadFormData(prevState => ({
+            //     ...prevState,
+            //     files: validFiles
+            // }));
             setPreviewUrls(newPreviewUrlsArray);
             setCurrentPreviewIndex(0); // Reset the preview index
             setIsFileUploaded(true); // Indicate that files are uploaded
@@ -237,34 +259,14 @@ function UploadPage() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        // Create a new FormData object to hold the form data
-        const formData = new FormData();
-
-        // Append all selected files to the FormData object
-        uploadFormData.files.forEach(file => {
-            formData.append('files', file);
-        });
-
-        // Append other form fields to the FormData object
-        formData.append('description', uploadFormData.description);
-        formData.append('houseNumber', uploadFormData.houseNumber);
-        formData.append('streetAddress', uploadFormData.streetAddress);
-        formData.append('city', uploadFormData.city);
-        formData.append('state', uploadFormData.state);
-        formData.append('zipcode', uploadFormData.zipcode);
-        formData.append('country', uploadFormData.country);
-        formData.append('price', uploadFormData.price);
-        formData.append('rating', uploadFormData.rating);
-        formData.append('individualSelection', uploadFormData.individualSelection);
-
         // Dispatch an action to send the form data to the server
         dispatch({
             type: 'SEND_POST_SERVER',
-            payload: formData
+            payload: uploadFormData,
+            selectedFile,
         });
 
         // Log to the console for debugging purposes
-        console.log('Action dispatched with payload:', formData);
 
         // Reset the state to clear the form and remove the file previews
         setUploadFormData({

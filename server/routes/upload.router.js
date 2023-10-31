@@ -41,23 +41,25 @@ router.get('/', (req, res) => {
 router.post('/image', async (req, res) => {
   try {
     const { imageName } = req.query;
-    const { imageData } = req.files.image.data;
+    const  imageData  = req.files.image.data;
 
-    const uploadedFile = await s3Client.upload({
+    //for key you would have to add a identfier so photos with same names being uploaded don't overwrite themselves
+    //maybe have a userid and number and have folders for each user. Key: `images/1/timeStamp_${imageName}`, //folder file
+    const command = new PutObjectCommand({
       Bucket: 'prime-nilo-project',
-      Key: `images/${imageName}`, //folder file
+      Key: `images/${req.user.id}/${imageName}`, //folder file
       Body: imageData, //image data to upload 
-      // ACL: 'public-read'   //might not be needed 
-    });
+    })
+    const uploadedFile = await s3Client.send(command); 
     //Thi is the URL the file can be accessed at 
     //if the read is not public it is not just a url that is going to be sent back 
-    console.log(uploadedFile.Location);
+    console.log(uploadedFile);
 
 
     //TODO: insert the URL into the database 
 
     // send OK  back to client 
-    res.sendStatus(201);
+    res.send({file_url:`https://prime-nilo-project.s3.us-east-2.amazonaws.com/images/${req.user.id}/${imageName}`}); 
   } catch (error) {
     console.log(error)
     res.sendStatus(500);
