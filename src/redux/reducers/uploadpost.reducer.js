@@ -1,5 +1,5 @@
 const initialState = {
-  uploadedContent: null,
+  uploadedContent: [],
   fileName: '',
   fileType: '',
   selectedFile: null,
@@ -12,6 +12,8 @@ function uploadPostReducer(state = initialState, action) {
       return { ...state, uploadedContent: action.payload };
     case 'CLEAR_FORM':
       return { ...state, fileName: '', fileType: '', selectedFile: null, imagePreview: null };
+    case 'UPDATE_ALL_ITEMS_FOR_VIEWING':
+      return { ...state, uploadedContent: [...state.uploadedContent, ...action.payload] };
     default:
       return state;
   }

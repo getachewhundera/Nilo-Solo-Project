@@ -29,9 +29,50 @@ const s3Client = new S3Client({
 /**
  * GET route template
  */
-router.get('/', (req, res) => {
-  // GET route code here
+
+router.get('/', async (req, res) => {
+  try {
+    const queryText = `SELECT * FROM uploadPost`;
+    const result = await pool.query(queryText);
+    res.send(result.rows);
+  } catch (err) {
+    console.error('Error completing SELECT uploadPost query', err.stack);
+    res.sendStatus(500);
+  }
 });
+
+
+
+// router.get('/', async (req, res) => {
+//   try {
+//   const queryText = `SELECT * FROM uploadPost 
+//   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+//   RETURNING *`;
+//   const queryValues = [
+//     newUpload.file_url,
+//     newUpload.description,
+//     newUpload.house_number,
+//     newUpload.street_address,
+//     newUpload.zip_code,
+//     newUpload.city,
+//     newUpload.state,
+//     newUpload.country,
+//     newUpload.latitude,
+//     newUpload.longitude,
+//     newUpload.price,
+//     newUpload.rating,
+//     newUpload.individual_selection,
+//   ];
+//   pool.query(queryText, queryValues)
+//     .then((result) => {
+//       res.sendStatus(result.rows[0]);
+//     })
+//     .catch((err) => {
+//       console.error('Error completing Insert uploadPost query', err.stack);
+//       res.sendStatus(500);
+//     });
+// };
+// }
 
 /**
  * POST route template
@@ -41,7 +82,7 @@ router.get('/', (req, res) => {
 router.post('/image', async (req, res) => {
   try {
     const { imageName } = req.query;
-    const  imageData  = req.files.image.data;
+    const imageData = req.files.image.data;
 
     //for key you would have to add a identfier so photos with same names being uploaded don't overwrite themselves
     //maybe have a userid and number and have folders for each user. Key: `images/1/timeStamp_${imageName}`, //folder file
@@ -50,7 +91,7 @@ router.post('/image', async (req, res) => {
       Key: `images/${req.user.id}/${imageName}`, //folder file
       Body: imageData, //image data to upload 
     })
-    const uploadedFile = await s3Client.send(command); 
+    const uploadedFile = await s3Client.send(command);
     //Thi is the URL the file can be accessed at 
     //if the read is not public it is not just a url that is going to be sent back 
     console.log(uploadedFile);
@@ -59,7 +100,7 @@ router.post('/image', async (req, res) => {
     //TODO: insert the URL into the database 
 
     // send OK  back to client 
-    res.send({file_url:`https://prime-nilo-project.s3.us-east-2.amazonaws.com/images/${req.user.id}/${imageName}`}); 
+    res.send({ file_url: `https://prime-nilo-project.s3.us-east-2.amazonaws.com/images/${req.user.id}/${imageName}` });
   } catch (error) {
     console.log(error)
     res.sendStatus(500);
@@ -69,7 +110,12 @@ router.post('/image', async (req, res) => {
 
 router.post('/', (req, res) => {
   console.log('formdata payload made it to router', req.body);
-  const newUpload = req.body;
+  const newUpload = { ...req.body }; //create shallow copy of req.body(avoids modifying req.body)
+  // const newUpload = req.body;
+
+   // Standardize the format of the file URL
+   newUpload.file_url = newUpload.file_url.toLowerCase().replace(/\s+/g, '');
+
   const queryText = `INSERT INTO uploadpost ("file_url", "description", "house_number", "street_address", "zip_code" , "city" , "state", "country", 
     "latitude", "longitude", "price", "rating", "individual_selection")
                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)

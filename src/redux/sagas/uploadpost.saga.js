@@ -13,9 +13,10 @@ function* uploadContent(action) {
     const response = yield axios.post(postUrl, formData);
     console.log(response.data)
     // submit the form data along with the image url
-    yield axios.post('/api/upload', {...action.payload, file_url: response.data.file_url})
+    const results = yield axios.post('/api/upload', {...action.payload, file_url: response.data.file_url})
     console.log('Content was sent to server');
-    yield put({ type: 'SET_UPLOADED_CONTENT', payload: response.data });
+    
+    yield put({ type: 'SET_UPLOADED_CONTENT', payload: results.data });
     yield put({ type: 'CLEAR_FORM' }); // Dispatch an action to clear the form
   } catch (error) {
     console.log('Upload content to server failed', error);
