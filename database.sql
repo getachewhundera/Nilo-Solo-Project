@@ -18,9 +18,9 @@ CREATE TABLE "user" (
 
 
 --* possibly take out latitude and longitude and put in its own seprate table and refrence it in uploadpost table instead. 
-CREATE TABLE uploadpost (
+CREATE TABLE uploadpost(
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES user(id),
+    user_id INTEGER REFERENCES "user"(id),
     file_url TEXT NOT NULL, 
     description TEXT NOT NULL, 
     house_number TEXT, 
@@ -31,9 +31,10 @@ CREATE TABLE uploadpost (
     country TEXT NOT NULL,
     latitude NUMERIC,
     longitude NUMERIC,
-    price NUMERIC, 
+    price NUMERIC(14, 2), 
     rating INTEGER NOT NULL, 
-    individual_selection TEXT CHECK (individual_selection IN ('Solo', 'Group')));
+    individual_selection TEXT CHECK (individual_selection IN ('Solo', 'Group'))
+);
 
 
 
