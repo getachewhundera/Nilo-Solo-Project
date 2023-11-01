@@ -36,8 +36,8 @@ function UserPage() {
         </div>
 
         <div className='greeting'>
-          <h2>Welcome, {user.username}!</h2>
-          <p>Your ID is: {user.id}</p>
+          <h2>Welcome, {user.firstname}!</h2>
+          {/* <p>Your ID is: {user.id}</p> */}
           <p> My Feed:  </p>
         </div>
 

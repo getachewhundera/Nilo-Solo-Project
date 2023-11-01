@@ -13,10 +13,18 @@ function uploadPostReducer(state = initialState, action) {
     case 'CLEAR_FORM':
       return { ...state, fileName: '', fileType: '', selectedFile: null, imagePreview: null };
     case 'UPDATE_ALL_ITEMS_FOR_VIEWING':
-      return { ...state, uploadedContent: [...state.uploadedContent, ...action.payload] };
+      return { 
+        ...state, 
+        uploadedContent: [...action.payload], 
+      };
     default:
       return state;
   }
 }
 
 export default uploadPostReducer;
+
+
+//Items on the UserPage when HomeButton and Navtitle were being clicked on were being duplicated when i had this in the code: replaced the code now working
+// case 'UPDATE_ALL_ITEMS_FOR_VIEWING':
+//   return { ...state, uploadedContent: [...state.uploadedContent, ...action.payload] };
