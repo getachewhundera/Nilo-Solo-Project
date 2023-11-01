@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .homepagebuttons {
+    margin-bottom: 20px;
+  }
+  
+  .greeting {
+    text-align: center;
+    border: 2px solid black;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .itemsContainers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+  }
+  
+  .itemsContainers > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 23%; 
+    box-sizing: border-box;
+    border: 2px solid black; /* Border for each item container */
+    padding: 10px; /* Padding inside each item container */
+  }
+  
+  .itemsContainers img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px; /* Space between image and text */
+  }
+  
+  .homepageLogoutButton {
+    margin-top: 20px;
+    align-self: flex-end;
+  }
+  
