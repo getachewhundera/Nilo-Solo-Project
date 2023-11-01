@@ -349,14 +349,14 @@ function UploadPage() {
                                         <input
                                             name="houseNumber"
                                             type="number"
-                                            placeholder="House Number"
+                                            placeholder="House Number - optional"
                                             value={uploadFormData.houseNumber || ''}
                                             onChange={handleChange}
                                         />
                                         <input
                                             name="streetAddress"
                                             type="text"
-                                            placeholder="Street Address"
+                                            placeholder="Street Address - optional"
                                             value={uploadFormData.streetAddress || ''}
                                             onChange={handleChange}
                                         />
@@ -378,7 +378,7 @@ function UploadPage() {
                                         <input
                                             name="zipcode"
                                             type="number"
-                                            placeholder="Zipcode"
+                                            placeholder="Zipcode - optional"
                                             value={uploadFormData.zipcode || ''}
                                             onChange={handleChange}
                                         />
@@ -397,7 +397,7 @@ function UploadPage() {
                                         <input
                                             name="price"
                                             type="number"
-                                            placeholder="Price"
+                                            placeholder="Price - optional"
                                             value={uploadFormData.price || ''}
                                             onChange={handleChange}
                                         />
