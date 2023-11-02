@@ -1,35 +1,26 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
+import './UploadPage.css';
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
-
-
-
-
 //Import for dropdown selection for individualselection input. 
-
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
-import './UploadPage.css';
-
-
 //Material UI dialog box 
 import Button from '@mui/material/Button';
-
-
+//Page Buttons 
 import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
-
+import { readAndCompressImage } from 'browser-image-resizer';
 
 function UploadPage() {
 
     const dispatch = useDispatch();
 
-    // For the individualSelection dropdown select: 
+    //For the individualSelection dropdown select: 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -73,10 +64,14 @@ function UploadPage() {
     const [previewUrls, setPreviewUrls] = useState([]);
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);  //state variable for loading status of files 
+    const [selectedFile, setSelectedFile] = useState();
+
 
     //data within the form that will be sent to the server then database. 
     const [uploadFormData, setUploadFormData] = useState({
-        files: [],
+        fileName: '',
+        fileType: '',
         description: '',
         houseNumber: '',
         streetAddress: '',
@@ -89,16 +84,52 @@ function UploadPage() {
         individualSelection: '',
     });
 
+    // Limit to specific file types.
+    const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/wepb'];
 
-    //switched from using for loop to promise loop to allow uploads to happen at the same time. 
-    const fileChangedHandler = (event) => {
-        console.log(event.target.value);
-        const selectedFiles = Array.from(event.target.files); // directly converting FileList to array
+    const fileChangedHandler = async (event) => {
+
+        setIsLoading(true);
+        const fileToUpload = event.target.files[0]; //event.target.files returns a FileList object(its array-like, but not  an array). Array.from converts it to an array.
+
+        // Resize and compress the image. 
+        const copyFile = new Blob([fileToUpload], { type: fileToUpload.type, name: fileToUpload.name });
+        const resizedFile = await readAndCompressImage(copyFile, {
+            quality: 1.0,    // 100% quality
+            maxHeight: 1000, // max height of the image
+        });
+
+
+        // Check if the file is one of the allowed types.
+        if (acceptedImageTypes.includes(fileToUpload.type)) {
+            // Resizing the image removes the name, store it in a separate variable
+            setUploadFormData(prevState => ({
+                ...prevState,
+                fileName: (encodeURIComponent(fileToUpload.name)), 
+                fileType: (encodeURIComponent(fileToUpload.type)),
+            }));
+            
+            // Save the resized file
+            setSelectedFile(resizedFile);
+
+        } else {
+            alert('Please select an image');
+        }
+
+        console.log('files being filtered for acceptedtypes:', fileToUpload);
+        //checks if the file's type is included in the acceptedImagesTypes array. 
+        //file represents a single file object from the selectedFiles array
+        //file.type. 
+        const validFiles = [fileToUpload];//fileToUpload.filter(file => acceptedImageTypes.includes(file.type));
+        //checking if they are not equal (!== strict inequality:two operands are not equal, returning boolean results)
+        if (validFiles.length !== fileToUpload.length) {
+            alert('Some files are not valid image types');
+        }
 
         const newPreviewUrlsArray = [];
 
         // usedPromise.allSettled to ensure all promises either fulfill or reject
-        Promise.allSettled(selectedFiles.map(file => {
+        Promise.allSettled(validFiles.map(file => {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result); // Resolve the promise with the reader result
@@ -107,15 +138,92 @@ function UploadPage() {
             });
         })).then(results => {
             const newPreviewUrlsArray = results.map(result => result.status === "fulfilled" ? result.value : null);
-            setUploadFormData(prevState => ({
-                ...prevState,
-                files: selectedFiles
-            }));
+            // setUploadFormData(prevState => ({
+            //     ...prevState,
+            //     files: validFiles
+            // }));
             setPreviewUrls(newPreviewUrlsArray);
             setCurrentPreviewIndex(0); // Reset the preview index
             setIsFileUploaded(true); // Indicate that files are uploaded
         });
+        setIsLoading(false);
     };
+
+
+
+    //     const previewUrlsPromises = validFiles.map((file, index) => {
+    //         return new Promise((resolve, reject) => {
+    //             const reader = new FileReader();
+    //             reader.onloadend = () => resolve({ status: 'fulfilled', value: reader.result }) ;
+    //             console.log(reader.result)
+    //             reader.onerror = () => reject({ status: 'rejected', reason: `Failed to load image ${index + 1}: ${file.name}` });
+    //             reader.readAsDataURL(file);
+    //         });
+    //     });
+
+    //     const results = await Promise.allSettled(previewUrlsPromises);
+    //     const successfulResults = results.filter(result => result.status === 'fulfilled').map(result => result.value);
+    //     const failedResults = results.filter(result => result.status === 'rejected');
+
+    //     failedResults.forEach(result => {
+    //         alert(result.reason);
+    //     });
+
+    //     if (successfulResults.length === 0) {
+    //         alert('Failed to load all images');
+    //     } else {
+    //         setPreviewUrls(prevUrls => [...prevUrls, ...successfulResults]);
+    //         setCurrentPreviewIndex(0);
+    //         setIsFileUploaded(true);
+    //     }
+
+    //     setUploadFormData(prevState => ({
+    //         ...prevState,
+    //         files: [...prevState.files, ...validFiles]
+    //     }));
+
+    //     setIsLoading(false);
+    // };
+
+    //   const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+
+    // const fileChangedHandler = async (event) => {
+    //     const selectedFiles = Array.from(event.target.files);
+
+    //     const validFiles = [];
+    //     const newPreviewUrlsArray = [];
+
+    //     for (const file of selectedFiles) {
+    //         if (acceptedImageTypes.includes(file.type)) {
+    //             validFiles.push(file);
+    //             const reader = new FileReader();
+    //             reader.onloadend = () => newPreviewUrlsArray.push(reader.result);
+    //             reader.readAsDataURL(file);
+    //         } else {
+    //             alert('Please select a valid image file');
+    //         }
+    //     }
+
+    //     setUploadFormData(prevState => ({
+    //         ...prevState,
+    //         files: validFiles
+    //     }));
+
+    //     setPreviewUrls(newPreviewUrlsArray);
+    //     setCurrentPreviewIndex(0);
+    //     setIsFileUploaded(true);
+    // };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setUploadFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+
+
 
     const goToNextPreview = () => {
         setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % uploadFormData.files.length); // Go to the next preview, loop back to the first after the last
@@ -147,25 +255,23 @@ function UploadPage() {
     };
 
 
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setUploadFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-
+    //---------Submitting formData------------------//
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('payload being recieved', uploadFormData);
+
+        // Dispatch an action to send the form data to the server
         dispatch({
-            type: 'SEND_POST_SERVER', payload: uploadFormData
+            type: 'SEND_POST_SERVER',
+            payload: uploadFormData,
+            selectedFile,
         });
-        console.log('action was dispatched')
-        // Reset the state to initial values
+
+        // Log to the console for debugging purposes
+
+        // Reset the state to clear the form and remove the file previews
         setUploadFormData({
+            fileName: '',
+            fileType: '',
             files: [],
             description: '',
             houseNumber: '',
@@ -178,12 +284,12 @@ function UploadPage() {
             rating: '',
             individualSelection: ''
         });
-
         setPreviewUrls([]);
         setIsFileUploaded(false);
         setCurrentPreviewIndex(0);
-        console.log('Items were reset')
 
+        // Log to the console for debugging purposes
+        console.log('Form and state reset');
     };
 
 
@@ -204,12 +310,13 @@ function UploadPage() {
                                 <div className="upload-container">
                                     {!isFileUploaded && (
                                         <>
-                                            <input name="files" type="file" onChange={fileChangedHandler} multiple />
+                                            <input name="files" type="file" accept='image/*' onChange={fileChangedHandler} multiple />
+                                            {isLoading && <div className="loading-spinner">Loading...</div>}
                                         </>
                                     )}
                                     {isFileUploaded && previewUrls.length > 0 && (
                                         <div className="image-preview">
-                                            <img src={previewUrls[currentPreviewIndex]} alt="Preview" />
+                                            <img src={previewUrls[currentPreviewIndex]} alt="Preview" onError={(e) => console.error("Error loading image", e)} />
                                             <button className="button-left" onClick={goToPreviousPreview}>Left</button>
                                             <button className="button-right" onClick={goToNextPreview}>Right</button>
                                             {/* <button className="plus-button" onClick={handleChangeFile}>+</button> */}
@@ -242,14 +349,14 @@ function UploadPage() {
                                         <input
                                             name="houseNumber"
                                             type="number"
-                                            placeholder="House Number"
+                                            placeholder="House Number - optional"
                                             value={uploadFormData.houseNumber || ''}
                                             onChange={handleChange}
                                         />
                                         <input
                                             name="streetAddress"
                                             type="text"
-                                            placeholder="Street Address"
+                                            placeholder="Street Address - optional"
                                             value={uploadFormData.streetAddress || ''}
                                             onChange={handleChange}
                                         />
@@ -271,7 +378,7 @@ function UploadPage() {
                                         <input
                                             name="zipcode"
                                             type="number"
-                                            placeholder="Zipcode"
+                                            placeholder="Zipcode - optional"
                                             value={uploadFormData.zipcode || ''}
                                             onChange={handleChange}
                                         />
@@ -290,7 +397,7 @@ function UploadPage() {
                                         <input
                                             name="price"
                                             type="number"
-                                            placeholder="Price"
+                                            placeholder="Price - optional"
                                             value={uploadFormData.price || ''}
                                             onChange={handleChange}
                                         />
@@ -364,5 +471,3 @@ function UploadPage() {
 };
 
 export default UploadPage;
-
-//commit css updated 
