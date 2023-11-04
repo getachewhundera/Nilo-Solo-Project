@@ -1,7 +1,7 @@
 import React from "react";
 import './ViewMyListPage.css';
 
-import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../../MyListButtons/MyListButtons.jsx";
+import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../MyListButtons/MyListButtons.jsx";
 import { UploadPageButton } from "../RouteButtons/RouteButtons.jsx";
 
 import { useEffect } from 'react';

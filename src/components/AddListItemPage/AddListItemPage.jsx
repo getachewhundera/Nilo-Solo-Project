@@ -1,5 +1,5 @@
 import React from "react";
-import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../../MyListButtons/MyListButtons";
+import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../MyListButtons/MyListButtons";
 import './AddListItemPage.css';
 
 import { UploadPageButton } from "../RouteButtons/RouteButtons";
@@ -78,7 +78,7 @@ function AddListItemPage() {
               backgroundColor: 'darkgrey' // example for hover state
             }
           }} />
-          
+
         <MapPageButton
           sx={{
             color: 'white',

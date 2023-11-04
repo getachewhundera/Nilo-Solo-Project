@@ -1,18 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { Button, ThemeProvider } from '@mui/material';
+import theme from './RouteButtonstheme';
 
 
 
 export function ViewMyListPageButton() {
     return (
-        <Link to="/ViewMyListPage"><button> View My List </button></Link>
+        <ThemeProvider theme={theme}>
+            <Link to="/ViewMyListPage">
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}  > View My List </Button>
+            </Link>
+        </ThemeProvider>
     );
 };
 
 export function UploadPageButton() {
     return (
-        <Link to="/UploadPage"><button> Upload </button></Link>
+        <ThemeProvider theme={theme}>
+            <Link to="/UploadPage">
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}  > Upload </Button>
+            </Link>
+        </ThemeProvider>
+
     );
 };
 
