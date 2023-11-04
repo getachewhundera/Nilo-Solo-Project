@@ -1,13 +1,14 @@
 import React from "react";
-
 import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../../MyListButtons/MyListButtons";
+import './AddListItemPage.css';
+
 import { UploadPageButton } from "../RouteButtons/RouteButtons";
 
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 
-import './AddListItemPage.css';
+
 
 function AddListItemPage() {
 
@@ -32,15 +33,62 @@ function AddListItemPage() {
 
     <>
 
-      <div className="addnewexpimportedbuttons">
-        <UploadPageButton />
-        <br></br>
-        <AddListItemButton />
-        <ViewMyListButton />
-        <CompletedButton />
-        <MapPageButton />
+      <div className="MuiButton">
 
+        <UploadPageButton
+          sx={{
+            color: 'white',
+            backgroundColor: 'black',
+            width: 120, // you can use numbers for pixel values
+            height: 40,
+            '&:hover': {
+              backgroundColor: 'darkgrey' // example for hover state
+            }
+          }} />
 
+        <AddListItemButton
+          sx={{
+            color: 'white',
+            backgroundColor: 'black',
+            width: 120, // you can use numbers for pixel values
+            height: 40,
+            '&:hover': {
+              backgroundColor: 'darkgrey' // example for hover state
+            }
+          }} />
+
+        <ViewMyListButton
+          sx={{
+            color: 'white',
+            backgroundColor: 'black',
+            width: 120, // you can use numbers for pixel values
+            height: 40,
+            '&:hover': {
+              backgroundColor: 'darkgrey' // example for hover state
+            }
+          }} />
+
+        <CompletedButton
+          sx={{
+            color: 'white',
+            backgroundColor: 'black',
+            width: 120, // you can use numbers for pixel values
+            height: 40,
+            '&:hover': {
+              backgroundColor: 'darkgrey' // example for hover state
+            }
+          }} />
+          
+        <MapPageButton
+          sx={{
+            color: 'white',
+            backgroundColor: 'black',
+            width: 120, // you can use numbers for pixel values
+            height: 40,
+            '&:hover': {
+              backgroundColor: 'darkgrey' // example for hover state
+            }
+          }} />
       </div>
 
 
@@ -65,6 +113,7 @@ function AddListItemPage() {
               value={addNewItem}
               onChange={(event) => setNewItem(event.target.value)}
             />
+
 
             <Button onClick={handleInput} variant="contained" color="primary">
               Add Experience
