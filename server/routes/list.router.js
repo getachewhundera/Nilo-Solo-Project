@@ -40,10 +40,10 @@ router.post('/', (req, res, next) => {
     console.log('Received add item payload:', req.body);
     const newExperience = req.body;
     const userId = req.user.id; // Accessing the user's ID from the req.user object
-    const queryText = `INSERT INTO list (description, user_id)
-                       VALUES ($1, $2)
+    const queryText = `INSERT INTO list (description, date, user_id)
+                       VALUES ($1, $2, $3)
                        RETURNING *`; // RETURNING * will return all columns of the inserted row
-    const queryValues = [newExperience.description, userId];
+    const queryValues = [newExperience.description,newExperience.date, userId];
   
     console.log('Query values:', queryValues);
   
