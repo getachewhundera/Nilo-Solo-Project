@@ -20,9 +20,16 @@ function AddListItemPage() {
 
   const handleInput = (event) => {
     event.preventDefault();
-    console.log('Action was dispatched');
-    dispatch({ type: 'ADD_NEW_ITEM', payload: addNewItem, newExperienceCreatedDate });
+    
+    const addBucketListItem = {
+      description: addNewItem, 
+      date: newExperienceCreatedDate
+  }; 
+  
+    console.log('AddListItemPage.jsx line 23: Action was dispatched');
+    dispatch({ type: 'ADD_NEW_ITEM', payload: addBucketListItem });
     setNewItem('');
+    setNewExperienceCreatedDate(''); 
   };
 
 
