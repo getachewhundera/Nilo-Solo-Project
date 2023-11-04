@@ -12,7 +12,7 @@ export function AddListItemButton() {
         <Link to="/AddListItemPage">
            
                 
-                <Button variant='contained' color='primary'  > Add New Item </Button>
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1}}  > Add New Item </Button>
             
         </Link>
         </ThemeProvider>
@@ -23,7 +23,7 @@ export function ViewMyListButton() {
     return (
         <Link to="/ViewMyListPage">
             <ThemeProvider theme={theme}>
-                <Button variant='contained' color='primary' > List </Button>
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1 }} > List </Button>
             </ThemeProvider>
         </Link>
     );
@@ -32,7 +32,7 @@ export function CompletedButton() {
     return (
         <Link to="/CompletedListPage">
             <ThemeProvider theme={theme}>
-                <Button variant='contained' color='primary'> Completed  </Button>
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1 }}> Completed  </Button>
             </ThemeProvider>
         </Link>
 
@@ -42,7 +42,7 @@ export function MapPageButton() {
     return (
         <Link to="/MapPage">
             <ThemeProvider theme={theme}>
-                <Button variant='contained' color='primary'> Map </Button>
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1 }}> Map </Button>
             </ThemeProvider>
         </Link>
     );
