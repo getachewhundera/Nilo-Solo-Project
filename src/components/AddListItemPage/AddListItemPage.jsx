@@ -1,38 +1,55 @@
-import React from "react";
-import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../MyListButtons/MyListButtons";
+import React, {useState} from "react";
+import { useDispatch } from "react-redux";
+import { Button } from "@mui/material";
 import './AddListItemPage.css';
 
+// Imported button components
+import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../MyListButtons/MyListButtons";
 import { UploadPageButton } from "../RouteButtons/RouteButtons";
 
-import { Button } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
+// Imported the CustomizedSnackbars component
+import CustomizedSnackbars from "./AddItemAlert";
 
+// Imported the Alert component from MUI
+import MuiAlert from '@mui/material/Alert';
 
+// Created an Alert component using MUI's Alert
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function AddListItemPage() {
-
-
   const dispatch = useDispatch();
-
+  const [customSnackbarOpen, setCustomSnackbarOpen] = useState(false);
   const [addNewItem, setNewItem] = useState('');
   const [newExperienceCreatedDate, setNewExperienceCreatedDate] = useState('');
 
   const handleInput = (event) => {
     event.preventDefault();
-    
+
     const addBucketListItem = {
-      description: addNewItem, 
+      description: addNewItem,
       date: newExperienceCreatedDate
-  }; 
-  
+    };
+
     console.log('AddListItemPage.jsx line 23: Action was dispatched');
+    // Dispatch the action to add a new item
     dispatch({ type: 'ADD_NEW_ITEM', payload: addBucketListItem });
+
+    //Open the custom Snackbar 
+    setCustomSnackbarOpen(true);
+
+    // Reset the form fields
     setNewItem('');
-    setNewExperienceCreatedDate(''); 
+    setNewExperienceCreatedDate('');
   };
 
-
+  const handleCloseCustomSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setCustomSnackbarOpen(false);
+  };
 
 
 
@@ -126,6 +143,13 @@ function AddListItemPage() {
               Add Experience
             </Button>
           </form>
+
+          <CustomizedSnackbars open={customSnackbarOpen} autoHideDuration={6000} onClose={handleCloseCustomSnackbar}>
+            <Alert onClose={handleCloseCustomSnackbar} severity="success" sx={{ width: '100%' }}>
+              Bucket list item added.
+            </Alert>
+          </CustomizedSnackbars>
+          
         </div>
 
       </div >
