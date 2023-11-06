@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "@mui/material";
 import './AddListItemPage.css';
@@ -13,6 +13,8 @@ import CustomizedSnackbars from "./AddItemAlert";
 // Imported the Alert component from MUI
 import MuiAlert from '@mui/material/Alert';
 
+import { useSelector } from "react-redux";
+
 // Created an Alert component using MUI's Alert
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -20,35 +22,42 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function AddListItemPage() {
   const dispatch = useDispatch();
-  const [customSnackbarOpen, setCustomSnackbarOpen] = useState(false);
   const [addNewItem, setNewItem] = useState('');
   const [newExperienceCreatedDate, setNewExperienceCreatedDate] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
-  const handleInput = (event) => {
+  const error = useSelector(state => state.listReducer.error);
+
+  const handleInput = async (event) => {
     event.preventDefault();
-
     const addBucketListItem = {
       description: addNewItem,
       date: newExperienceCreatedDate
     };
 
-    console.log('AddListItemPage.jsx line 23: Action was dispatched');
-    // Dispatch the action to add a new item
-    dispatch({ type: 'ADD_NEW_ITEM', payload: addBucketListItem });
-
-    //Open the custom Snackbar 
-    setCustomSnackbarOpen(true);
-
-    // Reset the form fields
-    setNewItem('');
-    setNewExperienceCreatedDate('');
+    try {
+      // Dispatch the action to add a new item
+      dispatch({ type: 'ADD_NEW_ITEM', payload: addBucketListItem });
+   
+      setSnackbarMessage('Bucket list item added successfully!');
+      setSnackbarSeverity('success');
+    } catch (error) {
+      setSnackbarMessage('Failed to add bucket list item.');
+      setSnackbarSeverity('error');
+    } finally {
+      setSnackbarOpen(true);
+      setNewItem('');
+      setNewExperienceCreatedDate('');
+    }
   };
 
-  const handleCloseCustomSnackbar = (event, reason) => {
+  const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    setCustomSnackbarOpen(false);
+    setSnackbarOpen(false);
   };
 
 
@@ -63,10 +72,10 @@ function AddListItemPage() {
           sx={{
             color: 'white',
             backgroundColor: 'black',
-            width: 120, // you can use numbers for pixel values
+            width: 120, 
             height: 40,
             '&:hover': {
-              backgroundColor: 'darkgrey' // example for hover state
+              backgroundColor: 'darkgrey'
             }
           }} />
 
@@ -74,10 +83,10 @@ function AddListItemPage() {
           sx={{
             color: 'white',
             backgroundColor: 'black',
-            width: 120, // you can use numbers for pixel values
+            width: 120, 
             height: 40,
             '&:hover': {
-              backgroundColor: 'darkgrey' // example for hover state
+              backgroundColor: 'darkgrey' 
             }
           }} />
 
@@ -85,10 +94,10 @@ function AddListItemPage() {
           sx={{
             color: 'white',
             backgroundColor: 'black',
-            width: 120, // you can use numbers for pixel values
+            width: 120, 
             height: 40,
             '&:hover': {
-              backgroundColor: 'darkgrey' // example for hover state
+              backgroundColor: 'darkgrey' 
             }
           }} />
 
@@ -96,10 +105,10 @@ function AddListItemPage() {
           sx={{
             color: 'white',
             backgroundColor: 'black',
-            width: 120, // you can use numbers for pixel values
+            width: 120, 
             height: 40,
             '&:hover': {
-              backgroundColor: 'darkgrey' // example for hover state
+              backgroundColor: 'darkgrey'
             }
           }} />
 
@@ -107,10 +116,10 @@ function AddListItemPage() {
           sx={{
             color: 'white',
             backgroundColor: 'black',
-            width: 120, // you can use numbers for pixel values
+            width: 120,
             height: 40,
             '&:hover': {
-              backgroundColor: 'darkgrey' // example for hover state
+              backgroundColor: 'darkgrey'
             }
           }} />
       </div>
@@ -118,6 +127,14 @@ function AddListItemPage() {
 
 
       <div className="addnewexperiencecontainer" >
+
+      <CustomizedSnackbars  
+          className="custom-snackbar"
+          open={snackbarOpen}
+          onClose={handleCloseSnackbar}
+          message={snackbarMessage}
+          severity={snackbarSeverity}
+        />
 
         <h1> Add New Experience </h1>
         <div className="addingnewexp-inputsandbutton">
@@ -144,12 +161,8 @@ function AddListItemPage() {
             </Button>
           </form>
 
-          <CustomizedSnackbars open={customSnackbarOpen} autoHideDuration={6000} onClose={handleCloseCustomSnackbar}>
-            <Alert onClose={handleCloseCustomSnackbar} severity="success" sx={{ width: '100%' }}>
-              Bucket list item added.
-            </Alert>
-          </CustomizedSnackbars>
-          
+
+
         </div>
 
       </div >

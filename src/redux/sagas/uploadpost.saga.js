@@ -24,23 +24,6 @@ function* uploadContent(action) {
   }
 }
 
-// const sendPhotoToServer = (event) => {
-//   event.preventDefault();
-//   const formData = new FormData();
-//   formData.append('image', selectedFile);
-//   let postUrl = `/api/images?imageName=${fileName}&imageType=${fileType}`;
-//   axios.post(postUrl, formData).then(response => {
-//     console.log('Success!');
-//     alert('Success!');
-//     clearForm();
-//     getImages();
-//   }).catch(error => {
-//     console.log('error', error);
-//     alert('Something went wrong');
-//   })
-// }
-
-
 function* uploadPost() {
   yield takeLatest('SEND_POST_SERVER', uploadContent);
 }

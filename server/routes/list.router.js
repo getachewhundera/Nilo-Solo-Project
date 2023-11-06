@@ -10,22 +10,21 @@ const router = express.Router();
  */
 router.get('/', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
-  const queryText = 'SELECT * FROM list WHERE user_id = $1'; 
-  const queryValues = [userId]
-  pool.query(queryText, queryValues)
-    .then((result) => { res.send[result.rows]})
+  const queryText = 'SELECT * FROM list WHERE user_id = $1';
+  pool.query(queryText, [userId])
+    .then((result) => res.send(result.rows))
     .catch((err) => {
-      console.log('Error completing SELECT list query', err);
+      console.error('Error completing SELECT list query', err);
       res.sendStatus(500);
     });
 });
 
 router.get('/completed', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
-  const queryText = 'SELECT * FROM list WHERE user_id = $1 AND is_completed = TRUE' ; 
+  const queryText = 'SELECT * FROM list WHERE user_id = $1 AND is_completed = TRUE';
   const queryValues = [userId]
   pool.query(queryText, queryValues)
-    .then((result) => { res.send(result.rows)})
+    .then((result) => { res.send(result.rows) })
     .catch((err) => {
       console.log('Error completing SELECT list query', err);
       res.sendStatus(500);
@@ -36,29 +35,24 @@ router.get('/completed', rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
-router.post('/', (req, res, next) => {
-    console.log('Received add item payload:', req.body);
-    const newExperience = req.body;
-    const userId = req.user.id; // Accessing the user's ID from the req.user object
-    const queryText = `INSERT INTO list (description, date, user_id)
-                       VALUES ($1, $2, $3)
-                       RETURNING *`; // RETURNING * will return all columns of the inserted row
-    const queryValues = [newExperience.description,newExperience.date, userId];
-  
-    console.log('Query values:', queryValues);
-  
-    pool.query(queryText, queryValues)
-      .then((result) => {
-        console.log('Item inserted:', result.rows[0]);
-        res.status(200).send(result.rows[0]); // Send the inserted item back to the client
-      })
-      .catch((err) => {
-        console.log('Error INSERTING feedback query', err);
-        res.sendStatus(500).send('Error adding item');
-      });
-  });
+router.post('/', rejectUnauthenticated, (req, res) => {
+  const newExperience = req.body;
+  const userId = req.user.id;
+  const queryText = `INSERT INTO list (description, date, user_id)
+                     VALUES ($1, $2, $3)
+                     RETURNING *`;
+  const queryValues = [newExperience.description, newExperience.date, userId];
 
-module.exports = router;
+  pool.query(queryText, queryValues)
+    .then((result) => {
+      res.status(200).send(result.rows[0]);
+    })
+    .catch((err) => {
+      console.error('Error INSERTING feedback query', err);
+      res.status(500).send('Error adding item');
+    });
+});
+
 
 /**
  * PUT route template
@@ -117,3 +111,7 @@ router.delete('/:id', (req, res) => {
       res.status(500).send('Server Error');
     });
 });
+
+
+
+module.exports = router;
