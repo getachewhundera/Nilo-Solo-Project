@@ -37,13 +37,14 @@ function UserPage() {
         </div>
 
 
-        <div className='itemsContainers'>
+
+        <div class="gallery">
           {
             uploadList.length > 0 ? (
               uploadList.map(item => (
-                <div key={item.id}>
-                  <img style={{ maxHeight: '200px' }} src={item.file_url} alt='IMAGE' />
-                  <div>{item.description}</div>
+                <div key={item.id} class="gallery-item" tabindex="0" >
+                  <img style={{ maxHeight: '200px' }} src={item.file_url} class="gallery-image" alt='IMAGE' />
+                  <div className="gallery-text">{item.description}</div>
                   <div>{item.house_number}</div>
                   <div>{item.street_address}</div>
                   <div>{item.zip_code}</div>
@@ -61,6 +62,33 @@ function UserPage() {
             )
           }
         </div>
+
+
+        {/* <div className='itemsContainers'>
+              {
+                uploadList.length > 0 ? (
+                  uploadList.map(item => (
+                    <div key={item.id}>
+                      <img style={{ maxHeight: '200px' }} src={item.file_url} alt='IMAGE' />
+                      <div>{item.description}</div>
+                      <div>{item.house_number}</div>
+                      <div>{item.street_address}</div>
+                      <div>{item.zip_code}</div>
+                      <div>{item.city}</div>
+                      <div>{item.state}</div>
+                      <div>{item.country}</div>
+                      <div> {item.price}</div>
+                      <div>{item.rating}</div>
+                      <div>{item.individual_selection}</div>
+
+                    </div>
+                  ))
+                ) : (
+                  <p>No items to display</p>
+                )
+              }
+            </div> */}
+
         <div className='homepageLogoutButton'>
 
           <LogOutButton className="btn" />

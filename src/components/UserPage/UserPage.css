@@ -17,50 +17,51 @@
   align-self: flex-end;
 } 
 
-.itemsContainers {
+
+/* Gallery Section */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  grid-gap: 2rem;
+  padding-bottom: 3rem;
+}
+
+.gallery-item {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px; /* Adjust as needed */
-  box-sizing: border-box;
-  margin-bottom: 10px;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: start; /* Align items to the top */
+  margin: 1rem;
+  background: #fff; /* background color */
+  border: 1px solid #ccc; 
+  border-radius: 8px; /* Rounds the corners */
+  overflow: hidden; /* Hide overflow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /*  shadow for depth */
 }
 
-.itemsContainers > div {
-  display: inline-block; /* Adjust width based on content */
-  box-sizing: border-box;
-  padding: 16px; /* Adjust as needed */
-  border: 1px solid #ccc; /* Adjust color and thickness as needed */
-  border-radius: 8px; /* Optional: for rounded corners */
-  vertical-align: top; /* Align items to the top */
+.gallery-image {
+  width: 100%; 
+  height: 200px; 
+  object-fit: cover; 
 }
 
-.itemsContainers img {
-  max-width: 100%; /* Ensure image does not overflow */
-  height: auto;
-  object-fit: cover; /* This ensures that the aspect ratio is maintained */
-  box-sizing: border-box;
+.gallery-text {
+  padding: 0.5rem; /* Add some padding around the text */
+  text-align: center; /* Center the text */
+  font-size: 0.9rem; 
+  line-height: 1.2; /* Adjust line height */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add ellipsis to text overflow */
 }
 
-.itemsContainers div {
-  font-size: 16px; /* Adjust as needed */
-  line-height: 1.5; /* Adjust as needed */
-  white-space: normal; /* Allow text to wrap */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-}
-
+/* smaller screens */
 @media (max-width: 768px) {
-  .itemsContainers {
-    flex-direction: column;
-    align-items: center; /* Center align the items */
-  }
-
-  .itemsContainers > div {
-    min-width: 100%;
-  }
-
-  .itemsContainers div {
-    font-size: 14px;
+  .gallery {
+    grid-template-columns: 1fr; /* Full width columns for small screens */
   }
 }
+
+
+
+
