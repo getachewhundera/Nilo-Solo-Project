@@ -1,0 +1,71 @@
+
+  /* Centers the addnewexperiencecontainer on the page and add a border */
+.addnewexperiencecontainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 30vh); /* Adjusts the value to account for your navbar height */
+    text-align: center;
+    border: 2px solid black;
+    padding: 20px;
+    margin: 20px auto; /* Center the container horizontally */
+    width: auto; /* Adjust width based on content */
+    min-width: 500px; 
+    max-width: 600px; 
+    box-sizing: border-box;
+  }
+  
+  /* styles the container that holds the inputs and button and add a border */
+  .addingnewexp-inputsandbutton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid black;
+    padding: 10px;
+    width: auto; /* Adjust width based on the content */
+    min-width: 350px; 
+    max-width: 100%; /* makes sure it doesn't exceed the parent container */
+    box-sizing: border-box;
+  }
+
+
+  /* Styles form to remove default browser styles */
+  #taskFormInput {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* This adds space between the form elements */
+  }
+  
+/* Style for the created date input */
+#createdDateInput {
+    width: 100%; /* Full width of the form */
+    padding: 15px; /* Increased padding for larger touch area */
+    margin-bottom: 15px; /* Increased margin for more space between elements */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem; /*  font size  */
+  }
+  
+  /* Style for the description textarea */
+  textarea {
+    width: 100%; /* Full width of the form */
+    padding: 15px; /* Increased padding for larger touch area */
+    margin-bottom: 15px; /* Increased margin for more space between elements */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem; 
+    height: 150px; 
+  }
+  
+/* Adjust the .custom-snackbar class */
+.custom-snackbar {
+    position: absolute;
+    top: -5px; /*  positions snackbar above the h1 */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }

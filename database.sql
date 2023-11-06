@@ -42,5 +42,6 @@ CREATE TABLE list(
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES "user"(id),
   description TEXT,
+  date DATE, 
   is_completed BOOLEAN DEFAULT false
 );

@@ -1,5 +1,5 @@
 import React from "react";
-import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../../MyListButtons/MyListButtons.jsx";
+import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../MyListButtons/MyListButtons.jsx";
 import { UploadPageButton } from "../RouteButtons/RouteButtons";
 
 import { useDispatch, useSelector } from "react-redux";

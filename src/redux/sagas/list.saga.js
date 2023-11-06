@@ -5,7 +5,7 @@ import axios from 'axios';
 function* fetchListItems() {
     try {
         const response = yield axios.get('/api/list');
-        const action = { type: 'SET_LIST_ITEMS', payload: response.data };
+        const action = { type: 'FETCH_UPDATED_LIST_ITEMS', payload: response.data };
         yield put(action)
     } catch (error) {
         console.log(`Erorr in fetchListItems: ${error}`);
