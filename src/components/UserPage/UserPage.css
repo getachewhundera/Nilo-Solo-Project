@@ -31,7 +31,7 @@
   display: flex;
   flex-direction: column; 
   align-items: center; 
-  justify-content: start; /* Align items to the top */
+  justify-content: flex-start; /* Align items to the top */
   margin: 1rem;
   background: #fff; /* background color */
   border: 1px solid #ccc; 
@@ -47,12 +47,16 @@
 }
 
 .gallery-text {
-  padding: 0.5rem; /* Add some padding around the text */
-  text-align: center; /* Center the text */
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  gap: 0.5rem; 
+  padding: 0.5rem; 
+  text-align: center; 
   font-size: 0.9rem; 
-  line-height: 1.2; /* Adjust line height */
-  overflow: hidden; /* Hide overflow */
-  text-overflow: ellipsis; /* Add ellipsis to text overflow */
+  line-height: 1.2; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
 }
 
 /* smaller screens */
