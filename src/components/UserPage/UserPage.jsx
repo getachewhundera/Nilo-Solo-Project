@@ -11,21 +11,16 @@ import './UserPage.css';
 function UserPage() {
   const dispatch = useDispatch();
 
-  const getItems = () => {
-    dispatch({
-      type: 'FETCH_ITEMS_FOR_FEED',
-    });
-  }
+  const user = useSelector((store) => store.user);
+  const uploadList = useSelector((store) => store.uploadPostReducer.uploadedContent);
 
   useEffect(() => {
-    getItems();
+    getUploadedPost();
   }, []);
 
-  // this component doesn't do much to start, just renders some user reducer info to the DOM
-  const user = useSelector((store) => store.user);
-  const fetchItems = useSelector((store) => store.uploadPostReducer.uploadedContent);
-  console.log('these are the items', fetchItems);
-  // const fetchItems = useSelector((store) => store.uploadPostReducer);
+  const getUploadedPost = () => {
+    dispatch({ type: 'FETCH_ITEMS_FOR_FEED' })
+  }
 
   return (
     <>
@@ -44,10 +39,10 @@ function UserPage() {
 
         <div className='itemsContainers'>
           {
-            fetchItems.length > 0 ? (
-              fetchItems.map(item => (
+            uploadList.length > 0 ? (
+              uploadList.map(item => (
                 <div key={item.id}>
-                  <img style={{ maxHeight: '200px' }} src={item.file_url} alt={item.description} />
+                  <img style={{ maxHeight: '200px' }} src={item.file_url} alt='IMAGE' />
                   <div>{item.description}</div>
                   <div>{item.house_number}</div>
                   <div>{item.street_address}</div>
@@ -75,7 +70,6 @@ function UserPage() {
   );
 }
 
-// this allows us to use <App /> in index.js
 export default UserPage;
 
 
