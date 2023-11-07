@@ -13,6 +13,8 @@ import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import GradeOutlinedIcon from '@mui/icons-material/GradeOutlined';
 import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined';
 
+import Tooltip from '@mui/material/Tooltip';
+
 
 function UserPage() {
   const dispatch = useDispatch();
@@ -39,7 +41,7 @@ function UserPage() {
         <div className='greeting'>
           <h2>Welcome, {user.firstname}!</h2>
           {/* <p>Your ID is: {user.id}</p> */}
-          <p> My Feed:  </p>
+          <p> Experiences:  </p>
         </div>
 
 
@@ -50,23 +52,45 @@ function UserPage() {
               uploadList.map(item => (
                 <div key={item.id} class="gallery-item" tabindex="0" >
                   <img style={{ maxHeight: '200px' }} src={item.file_url} class="gallery-image" alt='IMAGE' />
-                  <div className="gallery-text">
-                    <DescriptionOutlinedIcon />{item.description}
-                  </div>
-                  <div className="gallery-text">
-                    <PlaceOutlinedIcon /> {item.house_number}{item.street_address}, {item.city}, {item.state}{item.zip_code}
-                  </div>
-                  <div className="gallery-text">{item.country}</div>
-                  <div className="gallery-text">
-                    <AttachMoneyOutlinedIcon />{item.price}
-                  </div>
-                  <div className="gallery-text">
-                    <GradeOutlinedIcon />{item.rating}
-                  </div>
-                  <div className="gallery-text">
-                    <InsertEmoticonOutlinedIcon />{item.individual_selection}
-                  </div>
 
+                  <div className="gallery-item-content">
+                    <Tooltip title={item.description} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><DescriptionOutlinedIcon /></span>
+                        <span>{item.description}</span>
+                      </div>
+                    </Tooltip>
+
+                    <Tooltip title={`Location: ${item.house_number} ${item.street_address}, ${item.city}, ${item.state} ${item.zip_code}`} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><PlaceOutlinedIcon /></span>
+                        {`${item.house_number} ${item.street_address}, ${item.city}, ${item.state} ${item.zip_code}`}
+                      </div>
+                    </Tooltip>
+
+                    <Tooltip title={`Price: ${item.price}`} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><AttachMoneyOutlinedIcon /></span>
+                        {item.price}
+                      </div>
+                    </Tooltip>
+
+                    <Tooltip title={`Rating: ${item.rating}`} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><GradeOutlinedIcon /></span>
+                        {item.rating}
+                      </div>
+                    </Tooltip>
+
+                    <Tooltip title={`Selection: ${item.individual_selection}`} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><InsertEmoticonOutlinedIcon /></span>
+                        {item.individual_selection}
+                      </div>
+                    </Tooltip>
+
+                  </div>
+                  <button className="delete-button" onClick={() => handleDelete(item.id)}>Delete</button>
                 </div>
               ))
             ) : (
