@@ -1,20 +1,18 @@
 import { takeLatest, put } from 'redux-saga/effects';
 import axios from 'axios';
 
-
 function* fetchListItems() {
     try {
         const response = yield axios.get('/api/list');
-        const action = { type: 'FETCH_UPDATED_LIST_ITEMS', payload: response.data };
-        yield put(action)
+        yield put({ type: 'SET_LIST_ITEMS', payload: response.data }); 
     } catch (error) {
-        console.log(`Erorr in fetchListItems: ${error}`);
-        throw error
+        console.log(`Error in fetchListItems: ${error}`);
+        yield put({ type: 'FETCH_LIST_ITEMS_FAILED', payload: error.message }); 
     }
 }
 
-function* setList() {
-    yield takeLatest('GET_ADDED_LIST_ITEMS', fetchListItems);
+function* listSaga() {
+    yield takeLatest('FETCH_LIST_ITEMS', fetchListItems); 
 };
 
-export default setList;  
+export default listSaga;

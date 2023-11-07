@@ -49,14 +49,14 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
   // Extracting variables from the request body
   const { description, date, is_completed } = req.body;
   const listItemId = req.params.id;
-  const userId = req.user.id; // Assuming you have the user's ID from session/authentication
+  const userId = req.user.id;
 
   // Construct the SQL query for the update
   const queryText = `
     UPDATE list
     SET description = $1, date = $2, is_completed = $3
     WHERE id = $4 AND user_id = $5
-    RETURNING *;  // This will return the updated row
+    RETURNING *;
   `;
 
   const queryValues = [description, date, is_completed, listItemId, userId];
@@ -64,20 +64,21 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
   pool.query(queryText, queryValues)
     .then((result) => {
       if (result.rows.length > 0) {
-        // If the update was successful, send back the updated list item
         res.send(result.rows[0]);
       } else {
-        // If no rows were updated, it means the list item didn't exist or the user didn't have permission to update it
         res.status(404).send('List item not found or user not authorized to update the item.');
       }
     })
     .catch((err) => {
-      // If there was an error with the database query, log it and send back a server error status
       console.error('Error executing UPDATE list item query', err);
+      console.error('Error details', {
+        body: req.body,
+        userId: req.user.id,
+        params: req.params,
+      });
       res.status(500).send('Server error while updating list item');
     });
 });
-
 
 /**
  * DELETE route template

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './ViewMyListPage.css';
 import {
-  AddListItemButton,
-  ViewMyListButton,
-  CompletedButton,
-  MapPageButton
+    AddListItemButton,
+    ViewMyListButton,
+    CompletedButton,
+    MapPageButton
 } from "../MyListButtons/MyListButtons.jsx";
 import { UploadPageButton } from "../RouteButtons/RouteButtons.jsx";
 import axios from 'axios';
@@ -21,6 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 function ViewMyListPage() {
     const dispatch = useDispatch();
@@ -53,18 +54,21 @@ function ViewMyListPage() {
         dispatch({
             type: 'UPDATE_ITEM',
             payload: {
-                ...listItem,
+                id: listItem.id, // make sure you send the id
                 description: newDescription,
                 date: newDate,
+                is_completed: listItem.is_completed, // make sure this matches your database schema
             }
         });
+
         setEditMode({ ...editMode, [listItem.id]: false });
     };
+
+
 
     return (
         <div>
             <div className="buttons-container">
-                {/* ...other buttons... */}
                 <div className="mylistbuttons">
                     <AddListItemButton />
                     <ViewMyListButton />
@@ -141,7 +145,7 @@ function ViewMyListPage() {
                                     <TableCell align="right">
                                         {editMode[listItem.id] ? (
                                             <IconButton edge="end" aria-label="save" onClick={() => handleSave(listItem, listItem.description, listItem.date)}>
-                                                <SaveIcon />
+                                                <CheckBoxIcon />
                                             </IconButton>
                                         ) : (
                                             <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(listItem)}>

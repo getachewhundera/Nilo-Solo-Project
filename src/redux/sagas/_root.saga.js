@@ -4,8 +4,8 @@ import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
 import uploadPost from './uploadpost.saga';
 import addItem from './addnewitem.saga';
-import setList from './fetchlist.saga';
-import mysaveditemsaga from './saveditemvml.saga';
+import listSaga from './fetchlist.saga'
+import myUpdateItemSaga from './updatelistitemvml.saga';
 import deleteitemSaga from './deleteitemvml.saga';
 import fetchFiles from './fetchfiles.saga';
 
@@ -23,8 +23,8 @@ export default function* rootSaga() {
     userSaga(),
     uploadPost(), 
     addItem(), 
-    setList(), 
-    mysaveditemsaga(), 
+    listSaga(),
+    myUpdateItemSaga(), 
     deleteitemSaga(), 
     fetchFiles(), 
 
