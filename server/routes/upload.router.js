@@ -1,7 +1,11 @@
 const express = require('express');
+const {
+  rejectUnauthenticated,
+} = require('../modules/authentication-middleware');
 const pool = require('../modules/pool');
 const router = express.Router();
 const aws = require('aws-sdk');
+
 
 
 const {
@@ -110,6 +114,19 @@ router.post('/', (req, res) => {
 /**
  * DELETE route template
  */
+
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
+  const postId = req.params.id;
+  const queryText = 'DELETE FROM uploadpost WHERE id = $1';
+  pool.query(queryText, [postId])
+    .then(() => {
+      res.sendStatus(204); // No Content, successful deletion
+    })
+    .catch((err) => {
+      console.error('Error completing DELETE uploadPost query', err.stack);
+      res.sendStatus(500);
+    });
+});
 
 
 module.exports = router;

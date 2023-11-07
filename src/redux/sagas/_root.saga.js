@@ -8,6 +8,7 @@ import listSaga from './fetchlist.saga'
 import myUpdateItemSaga from './updatelistitemvml.saga';
 import deleteitemSaga from './deleteitemvml.saga';
 import fetchFiles from './fetchfiles.saga';
+import deletePostSaga from './deletepost.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -27,6 +28,7 @@ export default function* rootSaga() {
     myUpdateItemSaga(), 
     deleteitemSaga(), 
     fetchFiles(), 
+    deletePostSaga(),
 
   
   ]);

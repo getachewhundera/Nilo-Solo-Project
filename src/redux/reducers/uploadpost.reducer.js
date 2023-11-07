@@ -13,9 +13,17 @@ function uploadPostReducer(state = initialState, action) {
     case 'CLEAR_FORM':
       return { ...state, fileName: '', fileType: '', selectedFile: null, imagePreview: null };
     case 'UPDATE_ALL_ITEMS_FOR_VIEWING':
-      return { 
-        ...state, 
-        uploadedContent: [...action.payload], 
+      return {
+        ...state,
+        uploadedContent: [...action.payload],
+      };
+    case 'DELETE_POST_SUCCESS':
+      return state.filter((post) => post.id !== action.payload);
+
+    case 'DELETE_POST_FAILURE':
+      return {
+        ...state,
+        error: action.payload,
       };
     default:
       return state;
