@@ -19,18 +19,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.get('/completed', rejectUnauthenticated, (req, res) => {
-  const userId = req.user.id;
-  const queryText = 'SELECT * FROM list WHERE user_id = $1 AND is_completed = TRUE';
-  const queryValues = [userId]
-  pool.query(queryText, queryValues)
-    .then((result) => { res.send(result.rows) })
-    .catch((err) => {
-      console.log('Error completing SELECT list query', err);
-      res.sendStatus(500);
-    });
-});
-
 
 /**
  * POST route template
@@ -58,59 +46,61 @@ router.post('/', rejectUnauthenticated, (req, res) => {
  * PUT route template
  */
 router.put('/:id', rejectUnauthenticated, (req, res) => {
-  const queryText = 'UPDATE list SET is_completed = NOT is_completed WHERE id = $1 AND user_id = $2 RETURNING *';
-  const queryValues = [req.params.id, req.user.id];
+  // Extracting variables from the request body
+  const { description, date, is_completed } = req.body;
+  const listItemId = req.params.id;
+  const userId = req.user.id; // Assuming you have the user's ID from session/authentication
+
+  // Construct the SQL query for the update
+  const queryText = `
+    UPDATE list
+    SET description = $1, date = $2, is_completed = $3
+    WHERE id = $4 AND user_id = $5
+    RETURNING *;  // This will return the updated row
+  `;
+
+  const queryValues = [description, date, is_completed, listItemId, userId];
 
   pool.query(queryText, queryValues)
     .then((result) => {
-      res.send(result.rows[0]);
+      if (result.rows.length > 0) {
+        // If the update was successful, send back the updated list item
+        res.send(result.rows[0]);
+      } else {
+        // If no rows were updated, it means the list item didn't exist or the user didn't have permission to update it
+        res.status(404).send('List item not found or user not authorized to update the item.');
+      }
     })
     .catch((err) => {
-      console.error('Error updating list item:', err);
-      res.status(500).send('Server Error');
+      // If there was an error with the database query, log it and send back a server error status
+      console.error('Error executing UPDATE list item query', err);
+      res.status(500).send('Server error while updating list item');
     });
 });
+
 
 /**
  * DELETE route template
  */
-router.delete('/:id', (req, res) => {
-  const isCompleted = req.query.isCompleted === 'true';
-  const queryText = 'DELETE FROM list WHERE id = $1 AND is_completed = $2';
-  const queryValues = [req.params.id, isCompleted];
+
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
+  const queryText = 'DELETE FROM list WHERE id = $1 AND user_id = $2';
+  const queryValues = [req.params.id, req.user.id];
 
   pool.query(queryText, queryValues)
     .then((result) => {
       if (result.rowCount > 0) {
         res.send('List item deleted');
       } else {
-        res.status(400).send('Item does not exist');
+        res.status(400).send('Item does not exist or not allowed to delete');
       }
     })
     .catch((err) => {
       console.error('Error deleting list item:', err);
-      res.status(500).send('Server Error');
+      res.sendStatus(500);
     });
 });
 
-router.delete('/:id', (req, res) => {
-  const queryText = 'DELETE FROM list WHERE id = $1';
-  // const queryText = 'DELETE FROM list WHERE id = $1 AND is_completed = false';
-  const queryValues = [req.params.id];
-
-  pool.query(queryText, queryValues)
-    .then((result) => {
-      if (result.rowCount > 0) {
-        res.send('List item deleted');
-      } else {
-        res.status(400).send('Item is already completed or does not exist');
-      }
-    })
-    .catch((err) => {
-      console.error('Error deleting list item:', err);
-      res.status(500).send('Server Error');
-    });
-});
 
 
 

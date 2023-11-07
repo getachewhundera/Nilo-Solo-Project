@@ -4,10 +4,9 @@ import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
 import uploadPost from './uploadpost.saga';
 import addItem from './addnewitem.saga';
-import setList from './list.saga';
-import mysaveditemsaga from './saveditem.saga';
+import setList from './fetchlist.saga';
+import mysaveditemsaga from './saveditemvml.saga';
 import deleteitemSaga from './deleteitemvml.saga';
-import completedListSaga from './completeditem.saga';
 import fetchFiles from './fetchfiles.saga';
 
 // rootSaga is the primary saga.
@@ -27,7 +26,6 @@ export default function* rootSaga() {
     setList(), 
     mysaveditemsaga(), 
     deleteitemSaga(), 
-    completedListSaga(), 
     fetchFiles(), 
 
   

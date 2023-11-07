@@ -16,6 +16,11 @@ import Button from '@mui/material/Button';
 import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
 import { readAndCompressImage } from 'browser-image-resizer';
 
+//Material ui rating component (rating input)
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
+
 function UploadPage() {
 
     const dispatch = useDispatch();
@@ -41,22 +46,32 @@ function UploadPage() {
     function getStyles(selectOption, uploadFormData, theme) {
         return {
             fontWeight:
-                uploadFormData.individualSelection.indexOf(selectOption) === -1 //=== -1 ternary conditional expression that checks if the result of indexOf found selectOption if not -1 is returned. 
-                    ? theme.typography.fontWeightRegular
-                    : theme.typography.fontWeightMedium,
+                uploadFormData.individualSelection === selectOption
+                    ? theme.typography.fontWeightMedium
+                    : theme.typography.fontWeightRegular,
         };
     }
+
+    // function getStyles(selectOption, uploadFormData, theme) {
+    //     return {
+    //         fontWeight:
+                // uploadFormData.individualSelection.indexOf(selectOption) === -1 //=== -1 ternary conditional expression that checks if the 
+                //result of indexOf found selectOption if not -1 is returned. 
+    //            theme.typography.fontWeightRegular
+    //                 : theme.typography.fontWeightMedium,
+    //     };
+    // }
 
 
     const theme = useTheme();
 
-    const handleOptionChange = (event) => {
-        const newSelection = event.target.value;
-        setUploadFormData(prevState => ({
-            ...prevState,
-            individualSelection: newSelection, // updates the individualSelection field within the state object.
-        }));
-    };
+    // const handleOptionChange = (event) => {
+    //     const newSelection = event.target.value;
+    //     setUploadFormData(prevState => ({
+    //         ...prevState,
+    //         individualSelection: newSelection, // updates the individualSelection field within the state object.
+    //     }));
+    // };
 
 
 
@@ -79,14 +94,14 @@ function UploadPage() {
         state: '',
         zipcode: '',
         country: '',
-        price: Number[''],
-        rating: Number[''],
+        price: '',
+        rating: 0,
         individualSelection: '',
     });
 
 
 
-    
+
 
     // Limit to specific file types.
     const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/wepb'];
@@ -192,6 +207,8 @@ function UploadPage() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        console.log('this is right before it gets dispatched:', uploadFormData.individualSelection); 
+
         // Dispatch an action to send the form data to the server
         dispatch({
             type: 'SEND_POST_SERVER',
@@ -214,7 +231,7 @@ function UploadPage() {
             zipcode: '',
             country: '',
             price: '',
-            rating: '',
+            rating: 0,
             individualSelection: ''
         });
         setPreviewUrls([]);
@@ -335,14 +352,20 @@ function UploadPage() {
                                             onChange={handleChange}
                                         />
 
-                                        <input
-                                            name="rating"
-                                            type="number"
-                                            min={1} max={10}
-                                            placeholder="rating: 1-10"
-                                            value={uploadFormData.rating || ''}
-                                            onChange={handleChange}
-                                        />
+                                        <div className='bottom-element-rating'>                                                                                
+                                           <Box
+                                                sx={{
+                                                    '& > legend': { mt: 2 },
+                                                }}
+                                            >
+                                                <Typography component="legend"> Rating: </Typography>
+                                                <Rating
+                                                    name="rating"
+                                                    value={Number(uploadFormData.rating) || 0}                                                   
+                                                    onChange={handleChange}
+                                                />
+                                            </Box>                                    
+                                        </div>
 
                                         <div className='bottom-element-selection'>
 
@@ -352,8 +375,8 @@ function UploadPage() {
                                                     labelId="demo--option-label"
                                                     id="demo-option"
                                                     name="individualSelection"
-                                                    value={uploadFormData.individualSelection}
-                                                    onChange={handleOptionChange}
+                                                    value={uploadFormData.individualSelection || ''}
+                                                    onChange={handleChange}
                                                     input={<OutlinedInput label="Choose Selection" />}
                                                     MenuProps={MenuProps}
                                                 >

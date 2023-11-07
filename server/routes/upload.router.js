@@ -108,17 +108,19 @@ router.post('/image', async (req, res) => {
 
 });
 
+console.log('made it to the router'); 
 router.post('/', (req, res) => {
   console.log('formdata payload made it to router', req.body);
   const newUpload = { ...req.body }; //create shallow copy of req.body(avoids modifying req.body)
   // const newUpload = req.body;
+  console.log(newUpload);
 
    // Standardize the format of the file URL
    newUpload.file_url = newUpload.file_url.toLowerCase().replace(/\s+/g, '');
 
   const queryText = `INSERT INTO uploadpost ("file_url", "description", "house_number", "street_address", "zip_code" , "city" , "state", "country", 
-    "latitude", "longitude", "price", "rating", "individual_selection")
-                      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+    "latitude", "longitude", "price", "rating", "individual_selection", "user_id")
+                      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
                       RETURNING *`;
   const queryValues = [
     newUpload.file_url,
@@ -133,7 +135,8 @@ router.post('/', (req, res) => {
     newUpload.longitude,
     newUpload.price,
     newUpload.rating,
-    newUpload.individual_selection,
+    newUpload.individual_selection, 
+    req.user.id, 
   ];
   pool.query(queryText, queryValues)
     .then((result) => {

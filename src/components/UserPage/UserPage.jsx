@@ -82,10 +82,10 @@ function UserPage() {
                       </div>
                     </Tooltip>
 
-                    <Tooltip title={`Selection: ${item.individual_selection}`} placement="top" arrow>
+                    <Tooltip title={`Selection: ${item.individualSelection}`} placement="top" arrow>
                       <div className="gallery-text">
                         <span className="icon"><InsertEmoticonOutlinedIcon /></span>
-                        {item.individual_selection}
+                        {item.individualSelection}
                       </div>
                     </Tooltip>
 

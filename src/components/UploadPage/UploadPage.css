@@ -122,6 +122,10 @@
 
 }
 
+.bottom-element-rating{
+    border: 1px solid black;
+}
+
 /* css for the Selection box (solo or group) */
 .bottom-element-selection {
     display: flex;
