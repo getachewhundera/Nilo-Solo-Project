@@ -3,12 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import './ViewMyListPage.css';
 import {
     AddListItemButton,
-    ViewMyListButton,
-    CompletedButton,
-    MapPageButton
+    ViewMyListButton
 } from "../MyListButtons/MyListButtons.jsx";
 import { UploadPageButton } from "../RouteButtons/RouteButtons.jsx";
-import axios from 'axios';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -19,7 +16,6 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
@@ -32,10 +28,6 @@ function ViewMyListPage() {
         dispatch({ type: 'FETCH_LIST_ITEMS' }); // Dispatch action to request list items
     }, [dispatch]);
 
-    const handleToggleCompletion = (listItem) => {
-        // Dispatch action to toggle completion status
-        dispatch({ type: 'TOGGLE_ITEM_COMPLETION', payload: listItem.id });
-    };
 
     const handleDelete = (itemId) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
@@ -72,8 +64,6 @@ function ViewMyListPage() {
                 <div className="mylistbuttons">
                     <AddListItemButton />
                     <ViewMyListButton />
-                    <CompletedButton />
-                    <MapPageButton />
                 </div>
                 <div className="vmluploadpagebutton">
                     <UploadPageButton />
@@ -85,8 +75,7 @@ function ViewMyListPage() {
                         <TableRow>
                             <TableCell align="center" colSpan={5}>Experiences</TableCell>
                         </TableRow>
-                        <TableRow>
-                            <TableCell> </TableCell>
+                        <TableRow>                            
                             <TableCell>Date Created</TableCell>
                             <TableCell>Description</TableCell>
                             <TableCell> </TableCell>
@@ -98,16 +87,6 @@ function ViewMyListPage() {
                             const isItemCompleted = listItem.is_completed;
                             return (
                                 <TableRow key={listItem.id} sx={{ textDecoration: isItemCompleted ? 'line-through' : 'none' }}>
-                                    <TableCell padding="checkbox">
-                                        <Checkbox
-                                            edge="start"
-                                            checked={isItemCompleted}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{ 'aria-labelledby': `checkbox-list-label-${listItem.id}` }}
-                                            onChange={() => handleToggleCompletion(listItem)}
-                                        />
-                                    </TableCell>
                                     <TableCell>
                                         {editMode[listItem.id] ? (
                                             <TextField

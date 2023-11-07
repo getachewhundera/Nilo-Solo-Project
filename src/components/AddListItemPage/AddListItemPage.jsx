@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import './AddListItemPage.css';
 
 // Imported button components
-import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../MyListButtons/MyListButtons";
+import { AddListItemButton, ViewMyListButton } from "../MyListButtons/MyListButtons";
 import { UploadPageButton } from "../RouteButtons/RouteButtons";
 
 // Imported the CustomizedSnackbars component
@@ -98,28 +98,6 @@ function AddListItemPage() {
             height: 40,
             '&:hover': {
               backgroundColor: 'darkgrey' 
-            }
-          }} />
-
-        <CompletedButton
-          sx={{
-            color: 'white',
-            backgroundColor: 'black',
-            width: 120, 
-            height: 40,
-            '&:hover': {
-              backgroundColor: 'darkgrey'
-            }
-          }} />
-
-        <MapPageButton
-          sx={{
-            color: 'white',
-            backgroundColor: 'black',
-            width: 120,
-            height: 40,
-            '&:hover': {
-              backgroundColor: 'darkgrey'
             }
           }} />
       </div>

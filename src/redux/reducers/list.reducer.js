@@ -9,7 +9,7 @@ const listReducer = (state = initialState, action) => {
             return {
                 ...state,
                 listItems: [...state.listItems, action.payload],
-                error: null, 
+                error: null,
             };
         case 'ADD_ITEM_FAILED':
             return {
@@ -23,7 +23,7 @@ const listReducer = (state = initialState, action) => {
                 listItems: action.payload,
                 error: null,
             };
-        case 'FETCH_LIST_ITEMS_FAILED': 
+        case 'FETCH_LIST_ITEMS_FAILED':
             return {
                 ...state,
                 error: action.payload,
@@ -40,16 +40,16 @@ const listReducer = (state = initialState, action) => {
                 ...state,
                 error: action.payload,
             };
+        case 'DELETE_ITEM_FAILED':
+            return {
+                ...state,
+                error: action.payload,
+            };       
         case 'REMOVE_ITEM_FROM_LIST':
             return {
                 ...state,
                 listItems: state.listItems.filter(item => item.id !== action.payload),
-            };
-        case 'DELETE_LIST_ITEM':
-            return {
-                ...state,
-                listItems: state.listItems.filter(item => item.id !== action.payload),
-            };
+            };       
         default:
             return state;
 

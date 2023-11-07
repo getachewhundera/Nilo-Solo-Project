@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
-// worker Saga: will be fired on "SEND_POST_SERVER" actions
-
 function* uploadContent(action) {
   try {
     console.log('Dispatch made it to saga:', action.payload);

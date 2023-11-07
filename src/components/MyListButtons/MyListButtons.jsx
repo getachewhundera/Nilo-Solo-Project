@@ -28,26 +28,6 @@ export function ViewMyListButton() {
         </Link>
     );
 };
-export function CompletedButton() {
-    return (
-        <Link to="/CompletedListPage">
-            <ThemeProvider theme={theme}>
-                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}> Completed  </Button>
-            </ThemeProvider>
-        </Link>
-
-    );
-};
-export function MapPageButton() {
-    return (
-        <Link to="/MapPage">
-            <ThemeProvider theme={theme}>
-                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}> Map </Button>
-            </ThemeProvider>
-        </Link>
-    );
-};
-
 
 
 

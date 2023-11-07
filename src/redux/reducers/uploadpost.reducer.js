@@ -24,7 +24,3 @@ function uploadPostReducer(state = initialState, action) {
 
 export default uploadPostReducer;
 
-
-//Items on the UserPage when HomeButton and Navtitle were being clicked on were being duplicated when i had this in the code: replaced the code now working
-// case 'UPDATE_ALL_ITEMS_FOR_VIEWING':
-//   return { ...state, uploadedContent: [...state.uploadedContent, ...action.payload] };

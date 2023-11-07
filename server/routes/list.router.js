@@ -5,6 +5,8 @@ const {
 const pool = require('../modules/pool');
 const router = express.Router();
 
+
+
 /**
  * GET route template
  */
@@ -80,10 +82,11 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
+
+
 /**
  * DELETE route template
  */
-
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const queryText = 'DELETE FROM list WHERE id = $1 AND user_id = $2';
   const queryValues = [req.params.id, req.user.id];
@@ -91,9 +94,9 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
   pool.query(queryText, queryValues)
     .then((result) => {
       if (result.rowCount > 0) {
-        res.send('List item deleted');
+        res.sendStatus(204); // No Content response
       } else {
-        res.status(400).send('Item does not exist or not allowed to delete');
+        res.status(404).send('Item not found or user unauthorized to delete the item');
       }
     })
     .catch((err) => {
@@ -101,6 +104,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
 
 
 

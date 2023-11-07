@@ -23,10 +23,8 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 //NewPages
 import AddListItemPage from '../AddListItemPage/AddListItemPage';
 import ViewMyListPage from '../ViewMyListPage/ViewMyListPage';
-import CompletedListPage from '../CompletedListPage/CompletedListPage';
-// import MapPage from '../MapPage/MapPage';
 import UploadPage from '../UploadPage/UploadPage';
-import UploadSuccessfulPage from '../UploadSuccessfulPage/UploadSuccessfulPage.jsx'; 
+
 
 
 
@@ -79,18 +77,8 @@ function App() {
           <ProtectedRoute path="/ViewMyListPage" >
             <ViewMyListPage />
           </ProtectedRoute>
-          <ProtectedRoute path="/CompletedListPage" >
-            <CompletedListPage />
-          </ProtectedRoute>
-          {/* <ProtectedRoute path="/MapPage" >
-            <MapPage />
-          </ProtectedRoute> */}
           <ProtectedRoute path="/UploadPage" >
             <UploadPage />
-          </ProtectedRoute>
-
-          <ProtectedRoute path="/UploadSuccessfulPage" >
-            <UploadSuccessfulPage />
           </ProtectedRoute>
 
           <ProtectedRoute

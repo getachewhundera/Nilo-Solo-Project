@@ -30,6 +30,12 @@ function UserPage() {
     dispatch({ type: 'FETCH_ITEMS_FOR_FEED' })
   }
 
+  const handleDelete = (itemId) => {
+    if (window.confirm('Are you sure you want to delete this item?')) {
+        dispatch({ type: 'DELETE_POST', payload: itemId }); // Dispatch action to delete item
+    }
+};
+
   return (
     <>
       <div className="container">

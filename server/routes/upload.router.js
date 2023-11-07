@@ -1,7 +1,6 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
-// brought in aws 
 const aws = require('aws-sdk');
 
 
@@ -11,12 +10,6 @@ const {
   S3Client,
 } = require('@aws-sdk/client-s3');
 
-//different from code down below 
-// const s3Client = new aws.S3({
-//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//     region: process.env.AWS_REGION,
-// });
 
 const s3Client = new S3Client({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -42,43 +35,9 @@ router.get('/', async (req, res) => {
 });
 
 
-
-// router.get('/', async (req, res) => {
-//   try {
-//   const queryText = `SELECT * FROM uploadPost 
-//   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-//   RETURNING *`;
-//   const queryValues = [
-//     newUpload.file_url,
-//     newUpload.description,
-//     newUpload.house_number,
-//     newUpload.street_address,
-//     newUpload.zip_code,
-//     newUpload.city,
-//     newUpload.state,
-//     newUpload.country,
-//     newUpload.latitude,
-//     newUpload.longitude,
-//     newUpload.price,
-//     newUpload.rating,
-//     newUpload.individual_selection,
-//   ];
-//   pool.query(queryText, queryValues)
-//     .then((result) => {
-//       res.sendStatus(result.rows[0]);
-//     })
-//     .catch((err) => {
-//       console.error('Error completing Insert uploadPost query', err.stack);
-//       res.sendStatus(500);
-//     });
-// };
-// }
-
 /**
  * POST route template
  */
-
-//POST route code for fileUpload
 router.post('/image', async (req, res) => {
   try {
     const { imageName } = req.query;
@@ -147,6 +106,10 @@ router.post('/', (req, res) => {
       res.sendStatus(500);
     });
 });
+
+/**
+ * DELETE route template
+ */
 
 
 module.exports = router;
