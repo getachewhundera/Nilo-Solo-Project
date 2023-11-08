@@ -7,12 +7,29 @@ body,
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0px;
+  background-color: #C9C7C7;
 }
 
 img {
   display: inline-block;
   max-width: 100%;
 }
+
+
+/* ------------Footer-----------------------*/
+.main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full height of the viewport */
+}
+
+/* Ensures that the content expands to fill the space */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 
 /* --------------------------------------------------------------------------------
 Container

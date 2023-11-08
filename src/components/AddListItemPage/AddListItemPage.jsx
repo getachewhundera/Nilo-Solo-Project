@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import './AddListItemPage.css';
 
 // Imported button components
-import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../MyListButtons/MyListButtons";
+import { AddListItemButton, ViewMyListButton } from "../MyListButtons/MyListButtons";
 import { UploadPageButton } from "../RouteButtons/RouteButtons";
 
 // Imported the CustomizedSnackbars component
@@ -40,7 +40,7 @@ function AddListItemPage() {
     try {
       // Dispatch the action to add a new item
       dispatch({ type: 'ADD_NEW_ITEM', payload: addBucketListItem });
-   
+
       setSnackbarMessage('Bucket list item added successfully!');
       setSnackbarSeverity('success');
     } catch (error) {
@@ -72,7 +72,7 @@ function AddListItemPage() {
           sx={{
             color: 'white',
             backgroundColor: 'black',
-            width: 120, 
+            width: 120,
             height: 40,
             '&:hover': {
               backgroundColor: 'darkgrey'
@@ -83,36 +83,14 @@ function AddListItemPage() {
           sx={{
             color: 'white',
             backgroundColor: 'black',
-            width: 120, 
-            height: 40,
-            '&:hover': {
-              backgroundColor: 'darkgrey' 
-            }
-          }} />
-
-        <ViewMyListButton
-          sx={{
-            color: 'white',
-            backgroundColor: 'black',
-            width: 120, 
-            height: 40,
-            '&:hover': {
-              backgroundColor: 'darkgrey' 
-            }
-          }} />
-
-        <CompletedButton
-          sx={{
-            color: 'white',
-            backgroundColor: 'black',
-            width: 120, 
+            width: 120,
             height: 40,
             '&:hover': {
               backgroundColor: 'darkgrey'
             }
           }} />
 
-        <MapPageButton
+        <ViewMyListButton
           sx={{
             color: 'white',
             backgroundColor: 'black',
@@ -128,7 +106,7 @@ function AddListItemPage() {
 
       <div className="addnewexperiencecontainer" >
 
-      <CustomizedSnackbars  
+        <CustomizedSnackbars
           className="custom-snackbar"
           open={snackbarOpen}
           onClose={handleCloseSnackbar}

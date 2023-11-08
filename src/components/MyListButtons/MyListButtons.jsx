@@ -12,7 +12,7 @@ export function AddListItemButton() {
         <Link to="/AddListItemPage">
            
                 
-                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40}}  > Add New Item </Button>
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40}}  > Add Goal </Button>
             
         </Link>
         </ThemeProvider>
@@ -23,31 +23,11 @@ export function ViewMyListButton() {
     return (
         <Link to="/ViewMyListPage">
             <ThemeProvider theme={theme}>
-                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }} > List </Button>
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }} > Goal Gallery </Button>
             </ThemeProvider>
         </Link>
     );
 };
-export function CompletedButton() {
-    return (
-        <Link to="/CompletedListPage">
-            <ThemeProvider theme={theme}>
-                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}> Completed  </Button>
-            </ThemeProvider>
-        </Link>
-
-    );
-};
-export function MapPageButton() {
-    return (
-        <Link to="/MapPage">
-            <ThemeProvider theme={theme}>
-                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}> Map </Button>
-            </ThemeProvider>
-        </Link>
-    );
-};
-
 
 
 

@@ -16,6 +16,11 @@ import Button from '@mui/material/Button';
 import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteButtons';
 import { readAndCompressImage } from 'browser-image-resizer';
 
+//Material ui rating component (rating input)
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
+
 function UploadPage() {
 
     const dispatch = useDispatch();
@@ -41,22 +46,32 @@ function UploadPage() {
     function getStyles(selectOption, uploadFormData, theme) {
         return {
             fontWeight:
-                uploadFormData.individualSelection.indexOf(selectOption) === -1 //=== -1 ternary conditional expression that checks if the result of indexOf found selectOption if not -1 is returned. 
-                    ? theme.typography.fontWeightRegular
-                    : theme.typography.fontWeightMedium,
+                uploadFormData.individualSelection === selectOption
+                    ? theme.typography.fontWeightMedium
+                    : theme.typography.fontWeightRegular,
         };
     }
+
+    // function getStyles(selectOption, uploadFormData, theme) {
+    //     return {
+    //         fontWeight:
+                // uploadFormData.individualSelection.indexOf(selectOption) === -1 //=== -1 ternary conditional expression that checks if the 
+                //result of indexOf found selectOption if not -1 is returned. 
+    //            theme.typography.fontWeightRegular
+    //                 : theme.typography.fontWeightMedium,
+    //     };
+    // }
 
 
     const theme = useTheme();
 
-    const handleOptionChange = (event) => {
-        const newSelection = event.target.value;
-        setUploadFormData(prevState => ({
-            ...prevState,
-            individualSelection: newSelection, // updates the individualSelection field within the state object.
-        }));
-    };
+    // const handleOptionChange = (event) => {
+    //     const newSelection = event.target.value;
+    //     setUploadFormData(prevState => ({
+    //         ...prevState,
+    //         individualSelection: newSelection, // updates the individualSelection field within the state object.
+    //     }));
+    // };
 
 
 
@@ -79,140 +94,76 @@ function UploadPage() {
         state: '',
         zipcode: '',
         country: '',
-        price: Number[''],
-        rating: Number[''],
+        price: '',
+        rating: 0,
         individualSelection: '',
     });
+
+
+
+
 
     // Limit to specific file types.
     const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/wepb'];
 
     const fileChangedHandler = async (event) => {
-
-        setIsLoading(true);
-        const fileToUpload = event.target.files[0]; //event.target.files returns a FileList object(its array-like, but not  an array). Array.from converts it to an array.
-
-        // Resize and compress the image. 
-        const copyFile = new Blob([fileToUpload], { type: fileToUpload.type, name: fileToUpload.name });
-        const resizedFile = await readAndCompressImage(copyFile, {
-            quality: 1.0,    // 100% quality
-            maxHeight: 1000, // max height of the image
-        });
-
-
-        // Check if the file is one of the allowed types.
-        if (acceptedImageTypes.includes(fileToUpload.type)) {
-            // Resizing the image removes the name, store it in a separate variable
-            setUploadFormData(prevState => ({
-                ...prevState,
-                fileName: (encodeURIComponent(fileToUpload.name)), 
-                fileType: (encodeURIComponent(fileToUpload.type)),
-            }));
-            
-            // Save the resized file
-            setSelectedFile(resizedFile);
-
-        } else {
-            alert('Please select an image');
-        }
-
-        console.log('files being filtered for acceptedtypes:', fileToUpload);
-        //checks if the file's type is included in the acceptedImagesTypes array. 
-        //file represents a single file object from the selectedFiles array
-        //file.type. 
-        const validFiles = [fileToUpload];//fileToUpload.filter(file => acceptedImageTypes.includes(file.type));
-        //checking if they are not equal (!== strict inequality:two operands are not equal, returning boolean results)
-        if (validFiles.length !== fileToUpload.length) {
+        const filesToUpload = Array.from(event.target.files); // Convert FileList to Array
+        // Filter out invalid file types
+        const validFiles = filesToUpload.filter(file => acceptedImageTypes.includes(file.type));
+        if (validFiles.length !== filesToUpload.length) {
             alert('Some files are not valid image types');
         }
 
-        const newPreviewUrlsArray = [];
+        const processedFilesPromises = validFiles.map(async (file) => {
+            try {
+                // Resize and compress the image
+                const copyFile = new Blob([file], { type: file.type });
+                const resizedFile = await readAndCompressImage(copyFile, {
+                    quality: 1.0,    // 100% quality
+                    maxHeight: 1000, // max height of the image
+                });
 
-        // usedPromise.allSettled to ensure all promises either fulfill or reject
-        Promise.allSettled(validFiles.map(file => {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result); // Resolve the promise with the reader result
-                reader.onerror = reject; // Reject the promise if there's an error
-                reader.readAsDataURL(file);
-            });
-        })).then(results => {
-            const newPreviewUrlsArray = results.map(result => result.status === "fulfilled" ? result.value : null);
-            // setUploadFormData(prevState => ({
-            //     ...prevState,
-            //     files: validFiles
-            // }));
-            setPreviewUrls(newPreviewUrlsArray);
-            setCurrentPreviewIndex(0); // Reset the preview index
-            setIsFileUploaded(true); // Indicate that files are uploaded
+                // Read the resized file for preview
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve({
+                        resizedFile,
+                        dataUrl: reader.result,
+                        originalName: file.name // Preserve the original file name
+                    });
+                    reader.onerror = reject;
+                    reader.readAsDataURL(resizedFile);
+                });
+            } catch (error) {
+                console.error('Error processing file:', error);
+                return Promise.reject(error);
+            }
         });
-        setIsLoading(false);
+
+        try {
+            const processedFiles = await Promise.all(processedFilesPromises);
+            const newPreviewUrls = processedFiles.map(file => file.dataUrl);
+
+            // Update form data with the first valid (and processed) file's name and type
+            if (processedFiles.length > 0) {
+                const { resizedFile, originalName } = processedFiles[0];
+                setUploadFormData(prevState => ({
+                    ...prevState,
+                    fileName: encodeURIComponent(originalName), // Use the preserved original name
+                    fileType: encodeURIComponent(resizedFile.type),
+                }));
+                setSelectedFile(resizedFile); // Save the resized file
+            }
+
+            setPreviewUrls(newPreviewUrls);
+            setCurrentPreviewIndex(0); // Reset the preview index
+            setIsFileUploaded(true);
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error reading files:', error);
+        }
     };
 
-
-
-    //     const previewUrlsPromises = validFiles.map((file, index) => {
-    //         return new Promise((resolve, reject) => {
-    //             const reader = new FileReader();
-    //             reader.onloadend = () => resolve({ status: 'fulfilled', value: reader.result }) ;
-    //             console.log(reader.result)
-    //             reader.onerror = () => reject({ status: 'rejected', reason: `Failed to load image ${index + 1}: ${file.name}` });
-    //             reader.readAsDataURL(file);
-    //         });
-    //     });
-
-    //     const results = await Promise.allSettled(previewUrlsPromises);
-    //     const successfulResults = results.filter(result => result.status === 'fulfilled').map(result => result.value);
-    //     const failedResults = results.filter(result => result.status === 'rejected');
-
-    //     failedResults.forEach(result => {
-    //         alert(result.reason);
-    //     });
-
-    //     if (successfulResults.length === 0) {
-    //         alert('Failed to load all images');
-    //     } else {
-    //         setPreviewUrls(prevUrls => [...prevUrls, ...successfulResults]);
-    //         setCurrentPreviewIndex(0);
-    //         setIsFileUploaded(true);
-    //     }
-
-    //     setUploadFormData(prevState => ({
-    //         ...prevState,
-    //         files: [...prevState.files, ...validFiles]
-    //     }));
-
-    //     setIsLoading(false);
-    // };
-
-    //   const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-
-    // const fileChangedHandler = async (event) => {
-    //     const selectedFiles = Array.from(event.target.files);
-
-    //     const validFiles = [];
-    //     const newPreviewUrlsArray = [];
-
-    //     for (const file of selectedFiles) {
-    //         if (acceptedImageTypes.includes(file.type)) {
-    //             validFiles.push(file);
-    //             const reader = new FileReader();
-    //             reader.onloadend = () => newPreviewUrlsArray.push(reader.result);
-    //             reader.readAsDataURL(file);
-    //         } else {
-    //             alert('Please select a valid image file');
-    //         }
-    //     }
-
-    //     setUploadFormData(prevState => ({
-    //         ...prevState,
-    //         files: validFiles
-    //     }));
-
-    //     setPreviewUrls(newPreviewUrlsArray);
-    //     setCurrentPreviewIndex(0);
-    //     setIsFileUploaded(true);
-    // };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -221,9 +172,6 @@ function UploadPage() {
             [name]: value
         }));
     };
-
-
-
 
     const goToNextPreview = () => {
         setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % uploadFormData.files.length); // Go to the next preview, loop back to the first after the last
@@ -259,6 +207,8 @@ function UploadPage() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        console.log('this is right before it gets dispatched:', uploadFormData.individualSelection); 
+
         // Dispatch an action to send the form data to the server
         dispatch({
             type: 'SEND_POST_SERVER',
@@ -281,7 +231,7 @@ function UploadPage() {
             zipcode: '',
             country: '',
             price: '',
-            rating: '',
+            rating: 0,
             individualSelection: ''
         });
         setPreviewUrls([]);
@@ -301,7 +251,7 @@ function UploadPage() {
             <ViewMyListPageButton />
             <UploadPageButton />
 
-            <h1> Upload files </h1>
+            <h1> Catalog An Experience: </h1>
             <div className="mainuploadcontainer">
                 <form>
                     <div className="grid-container">
@@ -317,8 +267,8 @@ function UploadPage() {
                                     {isFileUploaded && previewUrls.length > 0 && (
                                         <div className="image-preview">
                                             <img src={previewUrls[currentPreviewIndex]} alt="Preview" onError={(e) => console.error("Error loading image", e)} />
-                                            <button className="button-left" onClick={goToPreviousPreview}>Left</button>
-                                            <button className="button-right" onClick={goToNextPreview}>Right</button>
+                                            {/* <button className="button-left" onClick={goToPreviousPreview}>Left</button>
+                                            <button className="button-right" onClick={goToNextPreview}>Right</button> */}
                                             {/* <button className="plus-button" onClick={handleChangeFile}>+</button> */}
                                             <button className="cancel-button" onClick={handleCancelUpload}>X</button>
                                         </div>
@@ -402,14 +352,20 @@ function UploadPage() {
                                             onChange={handleChange}
                                         />
 
-                                        <input
-                                            name="rating"
-                                            type="number"
-                                            min={1} max={10}
-                                            placeholder="rating: 1-10"
-                                            value={uploadFormData.rating || ''}
-                                            onChange={handleChange}
-                                        />
+                                        <div className='bottom-element-rating'>                                                                                
+                                           <Box
+                                                sx={{
+                                                    '& > legend': { mt: 2 },
+                                                }}
+                                            >
+                                                <Typography component="legend"> Rating: </Typography>
+                                                <Rating
+                                                    name="rating"
+                                                    value={Number(uploadFormData.rating) || 0}                                                   
+                                                    onChange={handleChange}
+                                                />
+                                            </Box>                                    
+                                        </div>
 
                                         <div className='bottom-element-selection'>
 
@@ -419,8 +375,8 @@ function UploadPage() {
                                                     labelId="demo--option-label"
                                                     id="demo-option"
                                                     name="individualSelection"
-                                                    value={uploadFormData.individualSelection}
-                                                    onChange={handleOptionChange}
+                                                    value={uploadFormData.individualSelection || ''}
+                                                    onChange={handleChange}
                                                     input={<OutlinedInput label="Choose Selection" />}
                                                     MenuProps={MenuProps}
                                                 >

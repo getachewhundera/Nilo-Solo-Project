@@ -1,31 +1,25 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put } from 'redux-saga/effects';
 import axios from 'axios';
-
 
 function* deleteListItemSaga(action) {
   try {
-    const response = yield axios.delete(`/api/list/${action.payload.id}?isCompleted=${action.payload.isCompleted}`);
-    console.log('Delete response:', response.data);
-    // You might want to dispatch another action here to refresh the list
+   
+    const response = yield axios.delete(`/api/list/${action.payload}`);
+    if (response.status === 204) {
+      yield put({ type: 'REMOVE_ITEM_FROM_LIST', payload: action.payload });
+    } else {
+    
+      yield put({ type: 'DELETE_ITEM_FAILED', payload: `Unexpected response code: ${response.status}` });
+    }
   } catch (error) {
     console.error('Delete list item request failed', error);
+    
+    yield put({ type: 'DELETE_ITEM_FAILED', payload: error.response?.data || error.message });
   }
 }
 
-// function* deleteListItemSaga(action) {
-//   try {
-//     if (!action.payload.is_completed) {
-//       yield axios.delete(`/api/list/${action.payload.id}`);
-//       yield put({ type: 'DELETE_LIST_ITEM', payload: action.payload.id });
-//     } else {
-//       console.log('Item is already completed and cannot be deleted');
-//     }
-//   } catch (error) {
-//     console.error('Delete list item failed', error);
-//   }
-// }
 function* deleteitemSaga() {
-  yield takeLatest('DELETE_LIST_ITEM_SAGA', deleteListItemSaga);
+  yield takeLatest('DELETE_ITEM', deleteListItemSaga);
 }
 
 export default deleteitemSaga;

@@ -1,75 +1,150 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './ViewMyListPage.css';
-import { AddListItemButton, ViewMyListButton, CompletedButton, MapPageButton } from "../MyListButtons/MyListButtons.jsx";
+import {
+    AddListItemButton,
+    ViewMyListButton
+} from "../MyListButtons/MyListButtons.jsx";
 import { UploadPageButton } from "../RouteButtons/RouteButtons.jsx";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import TextField from '@mui/material/TextField';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 function ViewMyListPage() {
     const dispatch = useDispatch();
-
-    let list = useSelector(store => store.listReducer.listItems);
+    const listItems = useSelector((state) => state.listReducer.listItems);
+    const [editMode, setEditMode] = useState({});
 
     useEffect(() => {
-        console.log('in useEffect');
-        dispatch({ type: 'GET_ADDED_LIST_ITEMS' });
+        dispatch({ type: 'FETCH_LIST_ITEMS' }); 
     }, [dispatch]);
 
-    const handleSave = (listItem) => {
-        console.log('Save item:', listItem);
-        dispatch({ type: 'MARK_ITEM_COMPLETE', payload: listItem });
-    };
 
-    const handleDelete = (listItem) => {
+    const handleDelete = (itemId) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
-            dispatch({ type: 'DELETE_LIST_ITEM_SAGA', payload: listItem });
+            dispatch({ type: 'DELETE_ITEM', payload: itemId }); 
         }
     };
 
-    console.log('List:', list);
+    const handleEdit = (listItem) => {
+        setEditMode({
+            ...editMode,
+            [listItem.id]: !editMode[listItem.id]
+        });
+    };
+
+    const handleSave = (listItem, newDescription, newDate) => {
+        dispatch({
+            type: 'UPDATE_ITEM',
+            payload: {
+                id: listItem.id, 
+                description: newDescription,
+                date: newDate,
+                is_completed: listItem.is_completed, 
+            }
+        });
+
+        setEditMode({ ...editMode, [listItem.id]: false });
+    };
+
 
 
     return (
-        <>
+        <div>
             <div className="buttons-container">
                 <div className="mylistbuttons">
                     <AddListItemButton />
                     <ViewMyListButton />
-                    <CompletedButton />
-                    <MapPageButton />
                 </div>
                 <div className="vmluploadpagebutton">
                     <UploadPageButton />
                 </div>
             </div>
-
-            <div className="viewmylist-title">
-                <h1> Experiences </h1>
-            </div>
-
-            <div className="bucketlistcontainer">
-                <table className="bucket-list-items">
-                    <thead className="tablehead">
-                        <tr>
-                            <th>My List: </th>
-                        </tr>
-                    </thead>
-                    <tbody className="tablebody">
-                        {list.map((listItem, i) => (
-                            <tr key={listItem.id || i}>
-                                <td><StarBorderIcon />{listItem.description}</td>
-                                <td>
-                                    <button onClick={() => handleSave(listItem)}>Save</button>
-                                    <button onClick={() => handleDelete(listItem)}>Delete</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </>
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center" colSpan={5}>Experiences</TableCell>
+                        </TableRow>
+                        <TableRow>                            
+                            <TableCell>Date Created</TableCell>
+                            <TableCell>Description</TableCell>
+                            <TableCell> </TableCell>
+                            <TableCell> </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {listItems.map((listItem) => {
+                            const isItemCompleted = listItem.is_completed;
+                            return (
+                                <TableRow key={listItem.id} sx={{ textDecoration: isItemCompleted ? 'line-through' : 'none' }}>
+                                    <TableCell>
+                                        {editMode[listItem.id] ? (
+                                            <TextField
+                                                type="date"
+                                                defaultValue={listItem.date}
+                                                sx={{ width: 220 }}
+                                                InputLabelProps={{ shrink: true }}
+                                                onChange={(event) => {
+                                                    const updatedList = listItems.map((item) =>
+                                                        item.id === listItem.id ? { ...item, date: event.target.value } : item
+                                                    );
+                                                    dispatch({ type: 'SET_LIST_ITEMS', payload: updatedList });
+                                                }}
+                                            />
+                                        ) : (
+                                            listItem.date
+                                        )}
+                                    </TableCell>
+                                    <TableCell style={{ maxWidth: '200px' }}>
+                                        {editMode[listItem.id] ? (
+                                            <TextField
+                                                fullWidth
+                                                defaultValue={listItem.description}
+                                                onChange={(event) => {
+                                                    const updatedList = listItems.map((item) =>
+                                                        item.id === listItem.id ? { ...item, description: event.target.value } : item
+                                                    );
+                                                    dispatch({ type: 'SET_LIST_ITEMS', payload: updatedList });
+                                                }}
+                                            />
+                                        ) : (
+                                            listItem.description
+                                        )}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {editMode[listItem.id] ? (
+                                            <IconButton edge="end" aria-label="save" onClick={() => handleSave(listItem, listItem.description, listItem.date)}>
+                                                <CheckBoxIcon />
+                                            </IconButton>
+                                        ) : (
+                                            <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(listItem)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        )}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(listItem.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
-};
+}
 
-export default ViewMyListPage; 
+export default ViewMyListPage;

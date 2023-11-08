@@ -3,7 +3,6 @@ import errors from './errors.reducer';
 import user from './user.reducer';
 import uploadPostReducer from './uploadpost.reducer';
 import listReducer from './list.reducer';
-import completedReducer from './completeditem.reducer';
 
 
 // rootReducer is the primary reducer for our entire project
@@ -17,7 +16,6 @@ const rootReducer = combineReducers({
   user, // will have an id and username if someone is logged in
   uploadPostReducer,
   listReducer, 
-  completedReducer, 
 });
 
 export default rootReducer;

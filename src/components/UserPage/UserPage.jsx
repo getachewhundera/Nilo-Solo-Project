@@ -6,26 +6,37 @@ import { ViewMyListPageButton, UploadPageButton } from '../RouteButtons/RouteBut
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import './UserPage.css';
+//Material UI Icons 
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import GradeOutlinedIcon from '@mui/icons-material/GradeOutlined';
+import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined';
+
+import Tooltip from '@mui/material/Tooltip';
 
 
 function UserPage() {
   const dispatch = useDispatch();
 
-  const getItems = () => {
-    dispatch({
-      type: 'FETCH_ITEMS_FOR_FEED',
-    });
-  }
+  const user = useSelector((store) => store.user);
+  const uploadList = useSelector((store) => store.uploadPostReducer.uploadedContent);
 
   useEffect(() => {
-    getItems();
+    getUploadedPost();
   }, []);
 
-  // this component doesn't do much to start, just renders some user reducer info to the DOM
-  const user = useSelector((store) => store.user);
-  const fetchItems = useSelector((store) => store.uploadPostReducer.uploadedContent);
-  console.log('these are the items', fetchItems);
-  // const fetchItems = useSelector((store) => store.uploadPostReducer);
+  const getUploadedPost = () => {
+    dispatch({ type: 'FETCH_ITEMS_FOR_FEED' })
+  }
+
+  const handleDelete = (itemId) => {
+    if (window.confirm('Are you sure you want to delete this item?')) {
+        dispatch({ type: 'DELETE_POST', payload: itemId }); // Dispatch action to delete item
+    }
+    dispatch({ type: 'FETCH_ITEMS_FOR_FEED' })
+
+};
 
   return (
     <>
@@ -38,27 +49,56 @@ function UserPage() {
         <div className='greeting'>
           <h2>Welcome, {user.firstname}!</h2>
           {/* <p>Your ID is: {user.id}</p> */}
-          <p> My Feed:  </p>
+          <p> Experiences:  </p>
         </div>
 
 
-        <div className='itemsContainers'>
-          {
-            fetchItems.length > 0 ? (
-              fetchItems.map(item => (
-                <div key={item.id}>
-                  <img style={{ maxHeight: '200px' }} src={item.file_url} alt={item.description} />
-                  <div>{item.description}</div>
-                  <div>{item.house_number}</div>
-                  <div>{item.street_address}</div>
-                  <div>{item.zip_code}</div>
-                  <div>{item.city}</div>
-                  <div>{item.state}</div>
-                  <div>{item.country}</div>
-                  <div> {item.price}</div>
-                  <div>{item.rating}</div>
-                  <div>{item.individual_selection}</div>
 
+        <div class="gallery">
+          {
+            uploadList.length > 0 ? (
+              uploadList.map(item => (
+                <div key={item.id} class="gallery-item" tabindex="0" >
+                  <img style={{ maxHeight: '200px' }} src={item.file_url} class="gallery-image" alt='IMAGE' />
+
+                  <div className="gallery-item-content">
+                    <Tooltip title={item.description} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><DescriptionOutlinedIcon /></span>
+                        <span>{item.description}</span>
+                      </div>
+                    </Tooltip>
+
+                    <Tooltip title={`Location: ${item.house_number} ${item.street_address}, ${item.city}, ${item.state} ${item.zip_code}`} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><PlaceOutlinedIcon /></span>
+                        {`${item.house_number} ${item.street_address}, ${item.city}, ${item.state} ${item.zip_code}`}
+                      </div>
+                    </Tooltip>
+
+                    <Tooltip title={`Price: ${item.price}`} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><AttachMoneyOutlinedIcon /></span>
+                        {item.price}
+                      </div>
+                    </Tooltip>
+
+                    <Tooltip title={`Rating: ${item.rating}`} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><GradeOutlinedIcon /></span>
+                        {item.rating}
+                      </div>
+                    </Tooltip>
+
+                    <Tooltip title={`Selection: ${item.individualSelection}`} placement="top" arrow>
+                      <div className="gallery-text">
+                        <span className="icon"><InsertEmoticonOutlinedIcon /></span>
+                        {item.individualSelection}
+                      </div>
+                    </Tooltip>
+
+                  </div>
+                  <button className="delete-button" onClick={() => handleDelete(item.id)}>Delete</button>
                 </div>
               ))
             ) : (
@@ -66,6 +106,7 @@ function UserPage() {
             )
           }
         </div>
+
         <div className='homepageLogoutButton'>
 
           <LogOutButton className="btn" />
@@ -75,7 +116,6 @@ function UserPage() {
   );
 }
 
-// this allows us to use <App /> in index.js
 export default UserPage;
 
 

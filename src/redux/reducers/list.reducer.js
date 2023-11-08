@@ -9,36 +9,47 @@ const listReducer = (state = initialState, action) => {
             return {
                 ...state,
                 listItems: [...state.listItems, action.payload],
-                error: null, // Clear any errors
+                error: null,
             };
         case 'ADD_ITEM_FAILED':
             return {
                 ...state,
-                error: action.payload, // Set the error received from the saga
+                error: action.payload,
             };
-        case 'FETCH_UPDATED_LIST_ITEMS': // case to handle fetched list items
+
+        case 'SET_LIST_ITEMS':
             return {
                 ...state,
                 listItems: action.payload,
                 error: null,
             };
-        case 'UPDATE_LIST_ITEM':
+        case 'FETCH_LIST_ITEMS_FAILED':
+            return {
+                ...state,
+                error: action.payload,
+            };
+        case 'SET_UPDATED_ITEM':
             return {
                 ...state,
                 listItems: state.listItems.map(item =>
-                    item.id === action.payload.id ? { ...item, isCompleted: !item.isCompleted } : item
+                    item.id === action.payload.id ? { ...action.payload } : item
                 ),
             };
+        case 'UPDATE_ITEM_FAILED':
+            return {
+                ...state,
+                error: action.payload,
+            };
+        case 'DELETE_ITEM_FAILED':
+            return {
+                ...state,
+                error: action.payload,
+            };       
         case 'REMOVE_ITEM_FROM_LIST':
             return {
                 ...state,
                 listItems: state.listItems.filter(item => item.id !== action.payload),
-            };
-        case 'DELETE_LIST_ITEM':
-            return {
-                ...state,
-                listItems: state.listItems.filter(item => item.id !== action.payload),
-            };
+            };       
         default:
             return state;
 

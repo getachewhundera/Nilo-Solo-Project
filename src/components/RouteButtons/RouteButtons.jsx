@@ -9,7 +9,7 @@ export function ViewMyListPageButton() {
     return (
         <ThemeProvider theme={theme}>
             <Link to="/ViewMyListPage">
-                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}  > View My List </Button>
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}  > Bucket List</Button>
             </Link>
         </ThemeProvider>
     );
@@ -19,7 +19,7 @@ export function UploadPageButton() {
     return (
         <ThemeProvider theme={theme}>
             <Link to="/UploadPage">
-                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}  > Upload </Button>
+                <Button variant='contained' color='primary' sx={{ width: "9rem", padding: 1, margin: 1, height: 40 }}  > Snapshot  </Button>
             </Link>
         </ThemeProvider>
 
