@@ -120,13 +120,13 @@
 }
 
 /* css for the Selection box (solo or group) */
-.bottom-element-selection {
+/* .bottom-element-selection {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
     margin-right: 9%; 
 
-}
+} */
 
 /* css for the upload form submit button */
 .uploadFormButton{

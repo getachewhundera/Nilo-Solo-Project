@@ -1,5 +1,5 @@
-const express = require('express');
 const bodyParser = require('body-parser');
+const express = require('express');
 const sessionMiddleware = require('./modules/session-middleware');
 const passport = require('./strategies/user.strategy');
 // for file upload 

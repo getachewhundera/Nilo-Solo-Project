@@ -52,26 +52,17 @@ function UploadPage() {
         };
     }
 
-    // function getStyles(selectOption, uploadFormData, theme) {
-    //     return {
-    //         fontWeight:
-                // uploadFormData.individualSelection.indexOf(selectOption) === -1 //=== -1 ternary conditional expression that checks if the 
-                //result of indexOf found selectOption if not -1 is returned. 
-    //            theme.typography.fontWeightRegular
-    //                 : theme.typography.fontWeightMedium,
-    //     };
-    // }
 
 
     const theme = useTheme();
 
-    // const handleOptionChange = (event) => {
-    //     const newSelection = event.target.value;
-    //     setUploadFormData(prevState => ({
-    //         ...prevState,
-    //         individualSelection: newSelection, // updates the individualSelection field within the state object.
-    //     }));
-    // };
+    const handleOptionChange = (event) => {
+        const newSelection = event.target.value;
+        setUploadFormData(prevState => ({
+            ...prevState,
+            individualSelection: newSelection, // updates the individualSelection field within the state object.
+        }));
+    };
 
 
 
@@ -88,15 +79,15 @@ function UploadPage() {
         fileName: '',
         fileType: '',
         description: '',
-        houseNumber: '',
-        streetAddress: '',
+        // houseNumber: '',
+        // streetAddress: '',
+        // zipcode: '',
         city: '',
-        state: '',
-        zipcode: '',
+        state: '',        
         country: '',
         price: '',
         rating: 0,
-        individualSelection: '',
+        // individualSelection: '',
     });
 
 
@@ -165,36 +156,39 @@ function UploadPage() {
     };
 
 
+
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setUploadFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
+        // Here we are updating the state based on input changes
+        setUploadFormData({
+          ...uploadFormData,
+          [name]: value
+        });
+      };
+    
 
-    const goToNextPreview = () => {
-        setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % uploadFormData.files.length); // Go to the next preview, loop back to the first after the last
-    };
+    // const goToNextPreview = () => {
+    //     setCurrentPreviewIndex((prevIndex) => (prevIndex + 1) % uploadFormData.files.length); // Go to the next preview, loop back to the first after the last
+    // };
 
-    const goToPreviousPreview = () => {
-        setCurrentPreviewIndex((prevIndex) => (prevIndex - 1 + uploadFormData.files.length) % uploadFormData.files.length); // Go to the previous preview, loop back to the last after the first
-    };
+    // const goToPreviousPreview = () => {
+    //     setCurrentPreviewIndex((prevIndex) => (prevIndex - 1 + uploadFormData.files.length) % uploadFormData.files.length); // Go to the previous preview, loop back to the last after the first
+    // };
 
     const handleCancelUpload = () => {
         //  cancel the file upload and reset state variables
         setUploadFormData({
             files: [],
             description: '',
-            houseNumber: '',
-            streetAddress: '',
+            // houseNumber: '',
+            // streetAddress: '',
+            // zipcode: '',
             city: '',
-            state: '',
-            zipcode: '',
+            state: '',           
             country: '',
             price: '',
             rating: '',
-            individualSelection: ''
+            // individualSelection: ''
         });
 
         setPreviewUrls([]);
@@ -202,7 +196,8 @@ function UploadPage() {
         setCurrentPreviewIndex(0); // Reset the preview index
     };
 
-
+     
+       
     //---------Submitting formData------------------//
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -224,15 +219,15 @@ function UploadPage() {
             fileType: '',
             files: [],
             description: '',
-            houseNumber: '',
-            streetAddress: '',
+            // houseNumber: '',
+            // streetAddress: '',
+            // zipcode: '',
             city: '',
-            state: '',
-            zipcode: '',
+            state: '',            
             country: '',
             price: '',
-            rating: 0,
-            individualSelection: ''
+            rating: 0
+            // individualSelection: ''
         });
         setPreviewUrls([]);
         setIsFileUploaded(false);
@@ -241,7 +236,6 @@ function UploadPage() {
         // Log to the console for debugging purposes
         console.log('Form and state reset');
     };
-
 
 
 
@@ -296,9 +290,9 @@ function UploadPage() {
 
                                     {/* address inputs are grouped together  */}
                                     <div className='address-group'>
-                                        <input
+                                        {/* <input
                                             name="houseNumber"
-                                            type="number"
+                                            type="text"
                                             placeholder="House Number - optional"
                                             value={uploadFormData.houseNumber || ''}
                                             onChange={handleChange}
@@ -309,7 +303,7 @@ function UploadPage() {
                                             placeholder="Street Address - optional"
                                             value={uploadFormData.streetAddress || ''}
                                             onChange={handleChange}
-                                        />
+                                        /> */}
                                         <input
                                             name="city"
                                             type="text"
@@ -325,13 +319,13 @@ function UploadPage() {
                                             value={uploadFormData.state || ''}
                                             onChange={handleChange}
                                         />
-                                        <input
+                                        {/* <input
                                             name="zipcode"
-                                            type="number"
+                                            type="text"
                                             placeholder="Zipcode - optional"
                                             value={uploadFormData.zipcode || ''}
                                             onChange={handleChange}
-                                        />
+                                        /> */}
                                         <input
                                             name="country"
                                             type="text"
@@ -366,7 +360,7 @@ function UploadPage() {
                                                 />
                                             </Box>                                    
                                         </div>
-
+{/* 
                                         <div className='bottom-element-selection'>
 
                                             <FormControl sx={{ m: 1, width: 300 }}>
@@ -391,7 +385,7 @@ function UploadPage() {
                                                     ))}
                                                 </Select>
                                             </FormControl>
-                                        </div>
+                                        </div> */}
 
                                     </div>
 
