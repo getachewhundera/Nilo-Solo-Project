@@ -153,3 +153,12 @@ npm install @aws-sdk/client-s3 //DONE
 npm install express-fileupload
 npm install browser-image-resizer /DONE 
 npm install dotenv //done 
+
+"babel": "@babel/plugin-proposal-private-property-in-object",
+        "@babel/plugin-proposal-private-property-in-object": "^7.10.4" 
+
+
+              "devDependencies": {
+        "nodemon": "^2.0.4",
+        "babel": "@babel/plugin-proposal-private-property-in-object",
+        "@babel/plugin-proposal-private-property-in-object": "^7.10.4" 
