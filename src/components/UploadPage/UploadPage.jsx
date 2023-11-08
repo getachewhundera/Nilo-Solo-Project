@@ -251,7 +251,7 @@ function UploadPage() {
             <ViewMyListPageButton />
             <UploadPageButton />
 
-            <h1> Upload files </h1>
+            <h1> Catalog An Experience: </h1>
             <div className="mainuploadcontainer">
                 <form>
                     <div className="grid-container">

@@ -1,8 +1,6 @@
-// updatelistitemvml.saga.js
 import { takeLatest, put, call } from 'redux-saga/effects';
 import axios from 'axios';
 
-// Worker saga to handle the UPDATE_ITEM action
 function* updateListItemSaga(action) {
   try {
     // Destructure the payload

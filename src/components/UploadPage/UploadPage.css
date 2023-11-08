@@ -1,14 +1,10 @@
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* two columns of equal width */
     gap: 5px;
-    /*  gap between the two divs */
-
 }
 
 .grid-item #uploadfilecontainer {
-    /* Styles for the item */
     object-fit: cover;
     position: relative;
     border: 2px dashed #000;
@@ -16,7 +12,6 @@
 }
 
 .grid-item #uploadformcontainer {
-    /* Styles for the item */
     border: 2px solid black;
     min-height: 750px;
 }
@@ -44,8 +39,6 @@
     object-fit: contain;
     /* maintains img ratio */
 }
-
-
 
 
 /* Style the buttons */

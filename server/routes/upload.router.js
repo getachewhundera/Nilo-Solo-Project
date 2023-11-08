@@ -46,9 +46,6 @@ router.post('/image', async (req, res) => {
   try {
     const { imageName } = req.query;
     const imageData = req.files.image.data;
-
-    //for key you would have to add a identfier so photos with same names being uploaded don't overwrite themselves
-    //maybe have a userid and number and have folders for each user. Key: `images/1/timeStamp_${imageName}`, //folder file
     const command = new PutObjectCommand({
       Bucket: 'prime-nilo-project',
       Key: `images/${req.user.id}/${imageName}`, //folder file
@@ -59,10 +56,6 @@ router.post('/image', async (req, res) => {
     //if the read is not public it is not just a url that is going to be sent back 
     console.log(uploadedFile);
 
-
-    //TODO: insert the URL into the database 
-
-    // send OK  back to client 
     res.send({ file_url: `https://prime-nilo-project.s3.us-east-2.amazonaws.com/images/${req.user.id}/${imageName}` });
   } catch (error) {
     console.log(error)

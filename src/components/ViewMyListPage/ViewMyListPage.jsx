@@ -25,13 +25,13 @@ function ViewMyListPage() {
     const [editMode, setEditMode] = useState({});
 
     useEffect(() => {
-        dispatch({ type: 'FETCH_LIST_ITEMS' }); // Dispatch action to request list items
+        dispatch({ type: 'FETCH_LIST_ITEMS' }); 
     }, [dispatch]);
 
 
     const handleDelete = (itemId) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
-            dispatch({ type: 'DELETE_ITEM', payload: itemId }); // Dispatch action to delete item
+            dispatch({ type: 'DELETE_ITEM', payload: itemId }); 
         }
     };
 
@@ -46,10 +46,10 @@ function ViewMyListPage() {
         dispatch({
             type: 'UPDATE_ITEM',
             payload: {
-                id: listItem.id, // make sure you send the id
+                id: listItem.id, 
                 description: newDescription,
                 date: newDate,
-                is_completed: listItem.is_completed, // make sure this matches your database schema
+                is_completed: listItem.is_completed, 
             }
         });
 

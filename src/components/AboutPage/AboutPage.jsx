@@ -32,9 +32,9 @@ function AboutPage() {
         <div className='future-goals'>
           <h2>Future Goals:</h2>
           <ul>
-            <li>Add ability to add multiple Images and short videos </li>
-            <li>Add categories for the bucket list and separate those 
-              categories between like short term, medium, and long term goals. </li>
+            <li>Add ability to upload multiple Images and short video </li>
+            <li>Add categories for the bucket list and separate those
+              categories between short term, medium, and long term goals. </li>
           </ul>
         </div>
       </div>

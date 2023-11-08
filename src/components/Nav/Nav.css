@@ -1,9 +1,7 @@
 .nav {
-  /* flex box layout */
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   margin: 0 0 30px;
   background-color: #F62D45;
   overflow: hidden;
@@ -16,15 +14,10 @@
 .nav-title {
   font-size: 40px;
   font-weight: 700;
-  /* color: #f2f2f2; */
   padding-left: 10px;
   margin: 0;
-  /* position: absolute; */
-  /* width: 656px; */
-  /* height: 237px;   */
   font-family: 'Rubik Moonrocks', sans-serif;
   font-style: normal;
-  /* line-height: 296px; */
   color: #ECECEC;
   mix-blend-mode: color-dodge;
 }
@@ -48,12 +41,6 @@
 .navLink:hover {
   background-color: #008183;
 }
-
-
-
-
-
-
 
 
 

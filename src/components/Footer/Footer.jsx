@@ -34,10 +34,6 @@ function Footer() {
             <Link className="footerLink" to="/about">
               About
             </Link>
-
-            <Link className="footerLink" to="/info">
-              Info Page
-            </Link>
           </>
         )}
       </footer>

@@ -1,11 +1,9 @@
 .container {
     color: black;
-    /* Sets the text color to white for all text inside the container */
     font-family: 'Arial', sans-serif;
-    /* Optional: Sets a default font for the container */
 }
 
-.pagetitle h1{
+.pagetitle h1 {
     text-align: Center;
     margin-top: 5px;
 }
@@ -13,8 +11,8 @@
 
 .text-container {
     display: flex;
-    flex-direction: column; /* Stacks the children vertically */
-    align-items: center; /* Centers the children horizontally */
+    flex-direction: column;
+    align-items: center;
     gap: 20px;
 }
 

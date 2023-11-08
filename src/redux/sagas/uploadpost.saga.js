@@ -17,7 +17,7 @@ function* uploadContent(action) {
     console.log('Content was sent to server');
     
     yield put({ type: 'SET_UPLOADED_CONTENT', payload: results.data });
-    yield put({ type: 'CLEAR_FORM' }); // Dispatch an action to clear the form
+    yield put({ type: 'CLEAR_FORM' });
   } catch (error) {
     console.log('Upload content to server failed', error);
     alert('Something went wrong');
