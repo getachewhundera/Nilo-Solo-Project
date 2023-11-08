@@ -14,7 +14,7 @@ function Footer() {
 
   return (
     <div className='footer-page'>
-      <footer class="footer">
+      <footer className="footer">
         <p id="footer-text"> Nilo: Created By Getachew Hundera</p>
         {/* If no user is logged in, show these links */}
         {!user.id && (

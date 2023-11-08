@@ -18,19 +18,29 @@ CREATE TABLE uploadpost(
     user_id INTEGER REFERENCES "user"(id),
     file_url TEXT NOT NULL, 
     description TEXT NOT NULL, 
-    house_number TEXT, 
-    street_address TEXT, 
-    zip_code TEXT, 
     city TEXT NOT NULL,
     state TEXT NOT NULL,
     country TEXT NOT NULL,
-    latitude NUMERIC,
-    longitude NUMERIC,
     price NUMERIC(14, 2), 
-    rating INTEGER NOT NULL, 
-    individual_selection TEXT CHECK (individual_selection IN ('Solo', 'Group'))
+    rating INTEGER NOT NULL
 );
 
+
+-- CREATE TABLE uploadpost(
+--     id SERIAL PRIMARY KEY,
+--     user_id INTEGER REFERENCES "user"(id),
+--     file_url TEXT NOT NULL, 
+--     description TEXT NOT NULL, 
+--     house_number TEXT, 
+--     street_address TEXT, 
+--     zip_code TEXT, 
+--     city TEXT NOT NULL,
+--     state TEXT NOT NULL,
+--     country TEXT NOT NULL,
+--     price NUMERIC(14, 2), 
+--     rating INTEGER NOT NULL, 
+--     individual_selection TEXT CHECK (individual_selection IN ('Solo', 'Group'))
+-- );
 
 
 CREATE TABLE list(

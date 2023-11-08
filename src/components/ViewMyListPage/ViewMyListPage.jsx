@@ -57,6 +57,12 @@ function ViewMyListPage() {
     };
 
 
+    const formatDate = (dateString) => {
+        const options = { month: '2-digit', day: '2-digit', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    };
+
+
 
     return (
         <div>
@@ -91,7 +97,8 @@ function ViewMyListPage() {
                                         {editMode[listItem.id] ? (
                                             <TextField
                                                 type="date"
-                                                defaultValue={listItem.date}
+                                                defaultValue={formatDate(listItem.date)}
+                                                // defaultValue={listItem.date}
                                                 sx={{ width: 220 }}
                                                 InputLabelProps={{ shrink: true }}
                                                 onChange={(event) => {
@@ -102,7 +109,8 @@ function ViewMyListPage() {
                                                 }}
                                             />
                                         ) : (
-                                            listItem.date
+                                            formatDate(listItem.date)
+                                            // listItem.date
                                         )}
                                     </TableCell>
                                     <TableCell style={{ maxWidth: '200px' }}>
