@@ -9,7 +9,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 
 import Nav from '../Nav/Nav';
-import Footer from '../Footer/Footer';
+
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
@@ -25,6 +25,7 @@ import AddListItemPage from '../AddListItemPage/AddListItemPage';
 import ViewMyListPage from '../ViewMyListPage/ViewMyListPage';
 import UploadPage from '../UploadPage/UploadPage';
 
+import Footer from '../Footer/Footer';
 
 
 
@@ -44,8 +45,9 @@ function App() {
 
   return (
     <Router>
-      <div>
+      <div className='main-content'> 
         <Nav />
+        <div className='content'>
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
           <Redirect exact from="/" to="/home" />
@@ -136,6 +138,7 @@ function App() {
             <h1>404</h1>
           </Route>
         </Switch>
+        </div>
         <Footer />
       </div>
     </Router>

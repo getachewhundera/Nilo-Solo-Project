@@ -1,5 +1,45 @@
-footer {
-  margin-top: 80px;
+/* Footer.css */
+
+.footer-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  background-color: #919191;
+  color: white; 
+  flex-shrink: 0; /* Prevents the footer from shrinking */
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
   text-align: center;
+}
+
+#footer-text {
+  font-size: 1.5em; 
+  font-family: 'Shadows Into Light', cursive;
+}
+
+.footerLink {
+  text-align: center; 
+  padding: 5px;
+  text-decoration: none; 
+  color: white;  
+}
+
+/* Hover, active, and focus states for footer links */
+.footerLink:hover,
+.footerLink:active,
+.footerLink:focus {
+  color: white;
+}
+
+/* Hide all links except login/register when not logged in */
+.footer a:not(.footerLink) {
+  display: none;
 }
