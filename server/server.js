@@ -1,10 +1,10 @@
+require('dotenv').config();
+const passport = require('./strategies/user.strategy');
 const bodyParser = require('body-parser');
 const express = require('express');
 const sessionMiddleware = require('./modules/session-middleware');
-const passport = require('./strategies/user.strategy');
 // for file upload 
 const fileUpload = require('express-fileupload');
-require('dotenv').config();
 
 const app = express();
 

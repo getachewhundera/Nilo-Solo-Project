@@ -2,17 +2,13 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "@mui/material";
 import './AddListItemPage.css';
-
 // Imported button components
 import { AddListItemButton, ViewMyListButton } from "../MyListButtons/MyListButtons";
 import { UploadPageButton } from "../RouteButtons/RouteButtons";
-
 // Imported the CustomizedSnackbars component
 import CustomizedSnackbars from "./AddItemAlert";
-
 // Imported the Alert component from MUI
 import MuiAlert from '@mui/material/Alert';
-
 import { useSelector } from "react-redux";
 
 // Created an Alert component using MUI's Alert
@@ -38,7 +34,6 @@ function AddListItemPage() {
     };
 
     try {
-      // Dispatch the action to add a new item
       dispatch({ type: 'ADD_NEW_ITEM', payload: addBucketListItem });
 
       setSnackbarMessage('Bucket list item added successfully!');
@@ -61,11 +56,8 @@ function AddListItemPage() {
   };
 
 
-
   return (
-
     <>
-
       <div className="MuiButton">
 
         <UploadPageButton
@@ -102,10 +94,7 @@ function AddListItemPage() {
           }} />
       </div>
 
-
-
       <div className="addnewexperiencecontainer" >
-
         <CustomizedSnackbars
           className="custom-snackbar"
           open={snackbarOpen}
@@ -115,8 +104,8 @@ function AddListItemPage() {
         />
 
         <h1> Add New Experience </h1>
-        <div className="addingnewexp-inputsandbutton">
 
+        <div className="addingnewexp-inputsandbutton">
           <form id='taskFormInput'>
             <input id="createdDateInput"
               type="date"
@@ -124,38 +113,18 @@ function AddListItemPage() {
               placeholder='Created Date: DD-MM-YYYY'
               onChange={(event) => setNewExperienceCreatedDate(event.target.value)}
             />
-
-
             <textarea
               type="text"
               placeholder="Description"
               value={addNewItem}
               onChange={(event) => setNewItem(event.target.value)}
             />
-
-
             <Button onClick={handleInput} variant="contained" color="primary">
               Add Experience
             </Button>
           </form>
-
-
-
         </div>
-
       </div >
-
-
-
-
-
-
-
-
-
-
-
-
     </>
   );
 };

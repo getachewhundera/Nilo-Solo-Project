@@ -1,20 +1,9 @@
 const express = require('express');
-const {
-  rejectUnauthenticated,
-} = require('../modules/authentication-middleware');
+const { rejectUnauthenticated,} = require('../modules/authentication-middleware');
 const pool = require('../modules/pool');
 const router = express.Router();
 const aws = require('aws-sdk');
-
-
-
-const {
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} = require('@aws-sdk/client-s3');
-
-
+const { GetObjectCommand, PutObjectCommand, S3Client } = require('@aws-sdk/client-s3');
 const s3Client = new S3Client({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -42,29 +31,6 @@ router.get('/', async (req, res) => {
 /**
  * POST route template
  */
-// router.post('/image', async (req, res) => {
-//   try {
-//     const { imageName } = req.query;
-//     const imageData = req.files.image.data;
-//     const command = new PutObjectCommand({
-//       Bucket: 'prime-nilo-project',
-//       Key: `images/${req.user.id}/${imageName}`, //folder file
-//       Body: imageData, //image data to upload 
-//     })
-//     const uploadedFile = await s3Client.send(command);
-//     //Thi is the URL the file can be accessed at 
-//     //if the read is not public it is not just a url that is going to be sent back 
-//     console.log(uploadedFile);
-
-//     res.send({ file_url: `https://prime-nilo-project.s3.us-east-2.amazonaws.com/images/${req.user.id}/${imageName}` });
-//   } catch (error) {
-//     console.log(error)
-//     res.sendStatus(500);
-//   }
-
-// });
-
-
 router.post('/image', async (req, res) => {
   try {
     const { imageName } = req.query;
@@ -87,11 +53,6 @@ router.post('/image', async (req, res) => {
 
 
 
-
-
-
-
-
 router.post('/', async (req, res) => {
   try {
     const newUpload = { ...req.body };
@@ -108,7 +69,7 @@ router.post('/', async (req, res) => {
       newUpload.state,
       newUpload.country,
       newUpload.price,
-      newUpload.rating,     
+      newUpload.rating,
     ];
 
     const result = await pool.query(queryText, queryValues);
@@ -119,57 +80,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// router.post('/', async, (req, res) => {
-//   console.log('formdata payload made it to router', req.body);
-//   const newUpload = { ...req.body }; //create shallow copy of req.body(avoids modifying req.body)
-//   // const newUpload = req.body;
-//   console.log(newUpload);
-
-//    // Standardize the format of the file URL
-//   //  newUpload.file_url = newUpload.file_url.toLowerCase().replace(/\s+/g, '');
-
-//   const queryText = `INSERT INTO uploadpost ("file_url", "description", "house_number", "street_address", "zip_code" , "city" , "state", "country",
-//   "price", "rating", "individual_selection", "user_id")
-//                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-//                       RETURNING *`;
-//   const queryValues = [
-//     newUpload.file_url,
-//     newUpload.description,
-//     newUpload.house_number,
-//     newUpload.street_address,
-//     newUpload.zip_code,
-//     newUpload.city,
-//     newUpload.state,
-//     newUpload.country,
-//     newUpload.price,
-//     newUpload.rating,
-//     newUpload.individual_selection, 
-//     req.user.id, 
-//   ];
-//   pool.query(queryText, queryValues)
-//     .then((result) => {
-//       res.status(200).send(result.rows[0]);
-//       // res.status(201).json(result.rows[0]);
-//     })
-//     .catch((err) => {
-//       console.error('Error completing Insert uploadPost query', err.stack);
-//       res.sendStatus(500);
-//     });
-// });
 
 /**
  * DELETE route template
@@ -187,6 +97,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
 
 
 module.exports = router;

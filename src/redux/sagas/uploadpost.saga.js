@@ -29,34 +29,3 @@ function* uploadPost() {
 }
 
 export default uploadPost;
-
-
-// function* uploadContent(action) {
-//   try {
-//     console.log(action.payload); 
-//     const formData = new FormData();
-//     formData.append('image', action.selectedFile, action.payload.fileName);
-//     const postUrl = `/api/upload/image?imageName=${encodeURIComponent(action.payload.fileName)}&imageType=${encodeURIComponent(action.payload.fileType)}`;
-
-//     // Upload the image
-//     const response = yield axios.post(postUrl, formData);
-
-//     // Submit the form data along with the image URL
-//     const formResponse = yield axios.post('/api/upload', {
-//       ...action.payload,
-//       file_url: response.data.file_url
-//     });
-
-//     yield put({ type: 'SET_UPLOADED_CONTENT', payload: formResponse.data });
-//     yield put({ type: 'CLEAR_FORM' });
-//   } catch (error) {
-//     console.error('Upload content to server failed:', error);
-//     alert('Something went wrong');
-//   }
-// }
-
-// function* uploadPost() {
-//   yield takeLatest('SEND_POST_SERVER', uploadContent);
-// }
-
-// export default uploadPost;

@@ -204,14 +204,14 @@ function UploadPage() {
 
         console.log('this is right before it gets dispatched:', uploadFormData.individualSelection); 
 
-        // Dispatch an action to send the form data to the server
+       
         dispatch({
             type: 'SEND_POST_SERVER',
             payload: uploadFormData,
             selectedFile,
         });
 
-        // Log to the console for debugging purposes
+       
 
         // Reset the state to clear the form and remove the file previews
         setUploadFormData({
@@ -232,9 +232,6 @@ function UploadPage() {
         setPreviewUrls([]);
         setIsFileUploaded(false);
         setCurrentPreviewIndex(0);
-
-        // Log to the console for debugging purposes
-        console.log('Form and state reset');
     };
 
 
