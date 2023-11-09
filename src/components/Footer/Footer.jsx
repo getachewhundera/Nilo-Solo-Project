@@ -8,14 +8,13 @@ import { useSelector } from 'react-redux';
 // It doesn't dispatch any redux actions or display any part of redux state
 // or even care what the redux state is, so it doesn't need 'connect()'
 
+
 function Footer() {
-
   const user = useSelector((store) => store.user);
-
   return (
     <div className='footer-page'>
-      <footer className="footer">
-        <p id="footer-text"> Nilo: Created By Getachew Hundera</p>
+      <footer className="footercontainer">
+        <span id='webpage-author'>&copy; Created by Getachew Hundera</span>
         {/* If no user is logged in, show these links */}
         {!user.id && (
           // If there's no user, show login/registration links
@@ -23,14 +22,12 @@ function Footer() {
             Login / Register
           </Link>
         )}
-
         {/* If a user is logged in, show these links */}
         {user.id && (
           <>
             <Link className="footerLink" to="/user">
               Home
             </Link>
-
             <Link className="footerLink" to="/about">
               About
             </Link>
@@ -40,6 +37,5 @@ function Footer() {
     </div>
   );
 };
-
 
 export default Footer;
