@@ -98,5 +98,17 @@ Before pushing to Heroku, run `npm run build` in terminal. This will create a bu
 - Tourmaline cohortmates
 
 
+## Wireframes
 
-## Wireframes 
+<p align-items="center">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/Nilo_Feed_Example.png" width="650" alt="Nilo's main feed/landing page that contains samples of uploaded posts.">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/Nilo_Feed_Example_Closeup.png" width="650" alt="Nilo's landing page, that contains close ups of uploaded posts.">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/NiloLandingPage:feed.png" width="650" alt="Nilo's empty landing Page/feed."> 
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/Catalog_An_Experience.png" width="650" alt="Nilo's Catalog experience page. Upload page for photo/descriptions.">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/NIlo_GoalGallery_With_Examples .png" width="650" alt="Nilo's Goal Gallery with examples.">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/goalgallery.png" width="650" alt="Nilo's empty goal gallery">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/Add_A_Goal.png" width="650" alt="Nilo's add a goal page.">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/Login_Page.png" width="650" alt="Nilo's login page">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/Main_Registration_Page.png" width="650" alt="Nilo's registration page.">
+  <img src="./public/Nilo_WebPage_Completed_Wireframes/About_Page.png" width="650" alt="Nilo's about page containing technologies used for project and future goals">
+</p>
